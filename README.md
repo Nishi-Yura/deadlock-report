@@ -25,9 +25,6 @@ deadlock-report/
    - カードの画像（1200×630、スコアと見出し）も `scripts/og.mjs` が自動で作る。見た目を確認したいときは `npm run og` を実行して `public/deadlock-report/N/og.png` を開く
    - Discord は一度読んだカードをしばらく覚えているので、公開後に直した内容はすぐには反映されないことがある
 2. 公開するファイル一式（`index.html`、`1/`、`2/` …、`assets/`）を `dist/deadlock-report/` に書き出す。公開されるのはこのフォルダの中だけ
-
-旧 URL の `/deadlock-report-1/` は、`/deadlock-report/1/` へ転送するだけのページとして `Nishi-Yura.github.io` 側に残しています。
-
 ---
 
 ## 2. 新しいレポートを作る手順
