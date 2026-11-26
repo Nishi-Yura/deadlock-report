@@ -1,7 +1,7 @@
 # Deadlock レポートの作り方
 
-`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）を作るためのフォルダです。
-先頭が `_` なので、GitHub Pages（Jekyll）はこのフォルダを公開しません。ビルドした結果だけがサイト直下にコピーされます。
+`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）を作るリポジトリです。
+サイト本体の `Nishi-Yura.github.io` とは別のリポジトリで、リポジトリ名が `deadlock-report` なので URL もそのまま `/deadlock-report/` になります。
 
 デザインの決まりは [design/DESIGN.md](design/DESIGN.md)。見た目を変えるときは、先にそちらを直してください。
 
@@ -10,7 +10,8 @@
 ## 1. 仕組み
 
 ```
-_deadlock/
+deadlock-report/
+  .github/workflows/deploy.yml   ← main に push するとビルドして公開する
   reports/1.json            ← レポートの中身（ここだけ書けばページになる）
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
@@ -18,15 +19,14 @@ _deadlock/
   design/                   ← DESIGN.md、参考サイトのスクショ、比較した3案
 ```
 
-`npm run build` を実行すると：
+`main` に push すると、GitHub Actions が `npm run build` を実行して公開します（反映まで1〜2分。進み具合はリポジトリの Actions タブで見られる）。
+`npm run build` がやること：
 1. `reports/*.json` を全部読んで、目次とレポートのページを作る（Discord や X に貼ったときのカード用のタグも入る）
    - カードの画像（1200×630、スコアと見出し）も `scripts/og.mjs` が自動で作る。見た目を確認したいときは `npm run og` を実行して `public/deadlock-report/N/og.png` を開く
    - Discord は一度読んだカードをしばらく覚えているので、公開後に直した内容はすぐには反映されないことがある
-2. `../deadlock-report/`（中に `1/`、`2/` …）と `../deadlock-assets/` をサイト直下に書き出す（他のページには触らない）
+2. 公開するファイル一式（`index.html`、`1/`、`2/` …、`assets/`）を `dist/deadlock-report/` に書き出す。公開されるのはこのフォルダの中だけ
 
-あとは `git add` → `commit` → `push` で公開されます（反映まで1分ほど）。
-
-旧 URL の `/deadlock-report-1/` は、`/deadlock-report/1/` へ転送するだけのページとしてサイト直下に残しています。
+旧 URL の `/deadlock-report-1/` は、`/deadlock-report/1/` へ転送するだけのページとして `Nishi-Yura.github.io` 側に残しています。
 
 ---
 
@@ -36,7 +36,7 @@ _deadlock/
 学校のネットワークでは npm にプロキシが必要です（`HTTPS_PROXY` が設定されていれば自動で使われます）。
 
 ```powershell
-cd "$env:USERPROFILE\OneDrive\デスクトップ\github\Nishi-Yura.github.io\_deadlock"
+cd "$env:USERPROFILE\OneDrive\デスクトップ\github\deadlock-report"
 npm install
 ```
 
@@ -72,9 +72,8 @@ npm run dev
 
 ### ⑤ 公開する
 ```powershell
-npm run build
-cd ..
-git add _deadlock deadlock-report deadlock-assets
+npm run build   # 手元でエラーが出ないか確かめるだけ（dist は push されない）
+git add -A
 git commit -m "Add Deadlock report N"
 git push
 ```
