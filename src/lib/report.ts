@@ -28,7 +28,17 @@ export function seriesMaps(r: Report, s: Series): MapData[] {
 /** 決勝 → チャレンジャー → 予選 の順に並べた地域ごとのシリーズ */
 export function seriesByRegion(r: Report): { region: string; series: Series[] }[] {
   const regions = [...new Set(r.series.map((s) => s.region))]
-  return regions.map((region) => ({ region, series: r.series.filter((s) => s.region === region) }))
+  return regions.map((region) => ({
+    region,
+    series: r.series.filter((s) => s.region === region).sort((a, b) => stageRank(a) - stageRank(b)),
+  }))
+}
+
+/** 行われた順（予選 → チャレンジャー → 決勝）。ここにないステージは決勝の直前に、JSON の順で入る */
+const STAGES = ["予選", "チャレンジャー", FINAL]
+function stageRank(s: Series) {
+  const i = STAGES.indexOf(stageOf(s))
+  return i === -1 ? STAGES.length - 1.5 : i
 }
 
 export function mapLabel(m: MapData) {

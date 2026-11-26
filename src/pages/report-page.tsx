@@ -1,6 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HeroIcon, Label, Panel, Score, SiteBar, SiteFoot } from "@/components/report/parts"
 import { MapDetail } from "@/components/report/map-detail"
+import { Bracket } from "@/components/report/bracket"
+import { useState } from "react"
 import {
   banCounts, draftMapCount, formatDate, heroRecords, isFinal, kills, reportPath,
   seriesByRegion, seriesKey, seriesKills, seriesMaps, stageOf,
@@ -14,8 +16,14 @@ export function ReportPage({ report: r }: { report: Report }) {
   const bans = banCounts(r)
   const banMaps = draftMapCount(r)
   const maxPlays = Math.max(...heroes.map((h) => h.win + h.lose))
-  // タブは 地域ごとに 決勝 → それ以外（JSON の順）
-  const ordered = seriesByRegion(r).flatMap((g) => [...g.series.filter(isFinal), ...g.series.filter((s) => !isFinal(s))])
+  const groups = seriesByRegion(r)
+  // タブも勝ち上がり表と同じ 予選 → チャレンジャー → 決勝 の順。最初に開くのは最初の決勝
+  const ordered = groups.flatMap((g) => g.series)
+  const [tab, setTab] = useState(seriesKey(ordered.find(isFinal) ?? ordered[0]))
+  const pick = (key: string) => {
+    setTab(key)
+    document.getElementById("maps")?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
 
   return (
     <>
@@ -28,40 +36,21 @@ export function ReportPage({ report: r }: { report: Report }) {
             <span className="py-3 text-[12px] text-mute">{formatDate(r.date)} ・ レポート #{r.id}</span>
           </div>
           <h1 className="px-4 pt-4 text-[17px] leading-snug font-bold">{r.headline}</h1>
-          {seriesByRegion(r).map(({ region, series }) => {
-            const others = series.filter((s) => !isFinal(s))
-            return (
-              <div key={region} className="border-b border-line pb-4 last:border-0">
-                {series.filter(isFinal).map((s) => <FinalBlock key={seriesKey(s)} r={r} s={s} />)}
-                {others.length > 0 && (
-                  <div className="mx-4 mt-3 border-t border-line pt-1">
-                    {others.map((s) => {
-                      const winA = s.score[0] > s.score[1]
-                      return (
-                        <div key={seriesKey(s)} className="grid grid-cols-[96px_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 py-1.5 text-[13px] max-sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-                          <span className="text-[11px] text-mute max-sm:col-span-3">
-                            {s.region} {stageOf(s)}
-                            {s.date && <span className="num sm:block"><span className="sm:hidden"> ・ </span>{formatDate(s.date).replace(/^\d+年/, "")}</span>}
-                          </span>
-                          <span className={cn("truncate text-right font-num text-[15px] font-semibold", !winA && "text-mute")}>{s.teams[0]}</span>
-                          <span className="num font-num text-[15px] font-bold">
-                            <span className={winA ? "text-win" : ""}>{s.score[0]}</span>
-                            <span className="px-1 text-mute/50">:</span>
-                            <span className={!winA ? "text-win" : ""}>{s.score[1]}</span>
-                          </span>
-                          <span className={cn("truncate font-num text-[15px] font-semibold", winA && "text-mute")}>{s.teams[1]}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {groups.map(({ region, series }) => (
+            <div key={region} className="border-b border-line pb-4 last:border-0">
+              {series.filter(isFinal).map((s) => <FinalBlock key={seriesKey(s)} r={r} s={s} />)}
+              {series.length > 1 && (
+                <div className="mx-4 mt-4 border-t border-line pt-3">
+                  <div className="lab mb-1">{region} の勝ち上がり</div>
+                  <Bracket series={series} onPick={pick} />
+                </div>
+              )}
+            </div>
+          ))}
         </Panel>
 
         {/* 2. マップ別（シリーズごと） */}
-        <Tabs defaultValue={seriesKey(r.series[0])} className="min-w-0 gap-3">
+        <Tabs id="maps" value={tab} onValueChange={(v) => setTab(String(v))} className="min-w-0 scroll-mt-3 gap-3">
           <Panel>
             <TabsList variant="line" className="h-auto! w-full justify-start gap-0 overflow-x-auto px-2 [scrollbar-width:none]">
               {ordered.map((s) => (
