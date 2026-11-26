@@ -18,7 +18,7 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
     <div className="grid grid-cols-[minmax(0,1fr)] gap-3">
       <div className="grid grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
         <Panel>
-          <Label>ドラフト（ピック順）</Label>
+          <Label>{map.draftUnknown ? "使用ヒーロー（配信なし・ピック順と BAN は不明）" : "ドラフト（ピック順）"}</Label>
           <Draft map={map} />
         </Panel>
         <Panel>
@@ -31,7 +31,7 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
             <dt className="text-mute">キル</dt>
             <dd className="num">{wk} - {lk}</dd>
             <dt className="text-mute">先行ピック</dt>
-            <dd>{map.firstPick}</dd>
+            <dd className={cn(!map.firstPick && "text-mute")}>{map.firstPick || "不明"}</dd>
             <dt className="text-mute">マッチ ID</dt>
             <dd className="num">{map.matchId}</dd>
           </dl>
@@ -81,21 +81,25 @@ function Draft({ map }: { map: MapData }) {
   )
   return (
     <div className="grid grid-cols-2 gap-x-4 px-4 pt-2.5 pb-4">
-      {head(a, true)}
-      {head(b, false)}
+      {head(a, !!map.firstPick && a.name === map.firstPick)}
+      {head(b, !!map.firstPick && b.name === map.firstPick)}
       {a.picks.map((h, i) => (
-        <PickRow key={"a" + i} n={i + 1} hero={h} />
-      )).flatMap((el, i) => [el, <PickRow key={"b" + i} n={i + 1} hero={b.picks[i]} />])}
-      <BanRow bans={a.bans} />
-      <BanRow bans={b.bans} />
+        <PickRow key={"a" + i} n={map.draftUnknown ? undefined : i + 1} hero={h} />
+      )).flatMap((el, i) => [el, <PickRow key={"b" + i} n={map.draftUnknown ? undefined : i + 1} hero={b.picks[i]} />])}
+      {!map.draftUnknown && (
+        <>
+          <BanRow bans={a.bans} />
+          <BanRow bans={b.bans} />
+        </>
+      )}
     </div>
   )
 }
 
-function PickRow({ n, hero }: { n: number; hero: string }) {
+function PickRow({ n, hero }: { n?: number; hero: string }) {
   return (
     <div className="flex min-w-0 items-center gap-2 py-[3px]">
-      <span className="num w-3 shrink-0 text-right text-[11px] text-mute">{n}</span>
+      {n !== undefined && <span className="num w-3 shrink-0 text-right text-[11px] text-mute">{n}</span>}
       <HeroIcon hero={hero} />
       <span className="truncate">{hero}</span>
     </div>

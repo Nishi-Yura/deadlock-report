@@ -1,9 +1,9 @@
 {
   "id": 2,
   "event": "Deadlock Night Shift #66",
-  "title": "Deadlock Night Shift #66 決勝",
+  "title": "Deadlock Night Shift #66",
   "date": "2026-11-25",
-  "headline": "5マップすべて、最後の Mid-Boss を取ったチームが勝った",
+  "headline": "12マップ中11マップで、最後の Mid-Boss を取ったチームが勝った",
   "series": [
     {
       "region": "EU",
@@ -18,6 +18,31 @@
       "note": "Leviathan が優勝（2連覇）。MVP は overseas"
     },
     {
+      "region": "EU",
+      "stage": "チャレンジャー",
+      "teams": [
+        "Buff Enjoyers",
+        "Kastalia"
+      ],
+      "score": [
+        1,
+        0
+      ]
+    },
+    {
+      "region": "EU",
+      "stage": "予選",
+      "date": "2026-11-23",
+      "teams": [
+        "Kastalia",
+        "Lost Whisper"
+      ],
+      "score": [
+        2,
+        0
+      ]
+    },
+    {
       "region": "NA",
       "teams": [
         "Cloud9",
@@ -28,6 +53,31 @@
         0
       ],
       "note": "Cloud9 が優勝（9連覇）。MVP は Zeno"
+    },
+    {
+      "region": "NA",
+      "stage": "チャレンジャー",
+      "teams": [
+        "YFP",
+        "NTMR"
+      ],
+      "score": [
+        1,
+        0
+      ]
+    },
+    {
+      "region": "NA",
+      "stage": "予選",
+      "date": "2026-11-24",
+      "teams": [
+        "NTMR",
+        "AIMERZ"
+      ],
+      "score": [
+        2,
+        1
+      ]
     }
   ],
   "maps": [
@@ -541,6 +591,501 @@
       ]
     },
     {
+      "id": "euc1",
+      "region": "EU",
+      "stage": "チャレンジャー",
+      "no": 1,
+      "winner": "Buff Enjoyers",
+      "firstPick": "Buff Enjoyers",
+      "duration": "33:28",
+      "matchId": 143684336,
+      "screenshot": "img/eu_c1.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "Buff Enjoyers が序盤からソウルでリードし、25分で1.36万差。27:45 の Mid-Boss を取ってから差が開き、30分で4.58万差。",
+      "teams": [
+        {
+          "name": "Buff Enjoyers",
+          "picks": [
+            "Mina",
+            "Venator",
+            "Paradox",
+            "Kelvin",
+            "Yamato",
+            "Baba"
+          ],
+          "bans": [
+            "Lady Geist",
+            "Wraith",
+            "Grey Talon"
+          ],
+          "players": [
+            [
+              "vraic",
+              "Paradox",
+              14,
+              4,
+              14,
+              39953,
+              58055,
+              1952
+            ],
+            [
+              "hoot",
+              "Baba",
+              6,
+              5,
+              20,
+              39051,
+              40577,
+              11372
+            ],
+            [
+              "lystic",
+              "Yamato",
+              6,
+              5,
+              18,
+              40176,
+              37793,
+              13440
+            ],
+            [
+              "Zerggy",
+              "Mina",
+              10,
+              1,
+              17,
+              50789,
+              35131,
+              13322
+            ],
+            [
+              "cosmetical",
+              "Venator",
+              7,
+              6,
+              19,
+              39132,
+              34117,
+              2266
+            ],
+            [
+              "obikym",
+              "Kelvin",
+              4,
+              0,
+              29,
+              37825,
+              26271,
+              22193
+            ]
+          ]
+        },
+        {
+          "name": "Kastalia",
+          "picks": [
+            "Ivy",
+            "Billy",
+            "Holliday",
+            "Violet",
+            "Drifter",
+            "Dynamo"
+          ],
+          "bans": [
+            "Silver",
+            "Abrams",
+            "Mirage"
+          ],
+          "players": [
+            [
+              "zxcbobi",
+              "Drifter",
+              7,
+              10,
+              7,
+              30036,
+              33645,
+              5780
+            ],
+            [
+              "Tas",
+              "Holliday",
+              1,
+              5,
+              9,
+              37280,
+              33401,
+              5377
+            ],
+            [
+              "oses",
+              "Ivy",
+              3,
+              6,
+              9,
+              30690,
+              30351,
+              25582
+            ],
+            [
+              "Reyache",
+              "Violet",
+              5,
+              9,
+              7,
+              29894,
+              22126,
+              3954
+            ],
+            [
+              "kapten",
+              "Billy",
+              2,
+              11,
+              5,
+              30589,
+              20086,
+              6344
+            ],
+            [
+              "balaclava",
+              "Dynamo",
+              3,
+              6,
+              7,
+              29622,
+              17788,
+              8760
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "euq1",
+      "region": "EU",
+      "stage": "予選",
+      "no": 1,
+      "winner": "Kastalia",
+      "firstPick": "",
+      "draftUnknown": true,
+      "duration": "31:29",
+      "matchId": 142592828,
+      "flow": "9分は Lost Whisper が2,900リード。Kastalia が20分で1.55万リードし、28:46 の Mid-Boss を取って勝った。",
+      "teams": [
+        {
+          "name": "Kastalia",
+          "picks": [
+            "Deadman Danny",
+            "Grey Talon",
+            "Ivy",
+            "Billy",
+            "Holliday",
+            "Paige"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "zxcbobi",
+              "Deadman Danny",
+              7,
+              2,
+              13,
+              40958,
+              32956,
+              9111
+            ],
+            [
+              "Reyache",
+              "Grey Talon",
+              5,
+              3,
+              15,
+              35419,
+              32235,
+              1202
+            ],
+            [
+              "oses",
+              "Ivy",
+              5,
+              3,
+              8,
+              43648,
+              23690,
+              15730
+            ],
+            [
+              "kapten",
+              "Billy",
+              6,
+              3,
+              14,
+              35728,
+              20877,
+              6166
+            ],
+            [
+              "Tas",
+              "Holliday",
+              4,
+              3,
+              11,
+              39378,
+              18644,
+              2744
+            ],
+            [
+              "balaclava",
+              "Paige",
+              3,
+              3,
+              14,
+              31525,
+              13099,
+              3372
+            ]
+          ]
+        },
+        {
+          "name": "Lost Whisper",
+          "picks": [
+            "Lash",
+            "Paradox",
+            "Wraith",
+            "Venator",
+            "Shiv",
+            "Solomon"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "lorence",
+              "Lash",
+              2,
+              3,
+              6,
+              35304,
+              21580,
+              10599
+            ],
+            [
+              "pomson",
+              "Paradox",
+              3,
+              7,
+              5,
+              25182,
+              20301,
+              1664
+            ],
+            [
+              "arzo",
+              "Wraith",
+              5,
+              2,
+              3,
+              39964,
+              19325,
+              3516
+            ],
+            [
+              "saintmxsm",
+              "Venator",
+              5,
+              2,
+              5,
+              29893,
+              18181,
+              1766
+            ],
+            [
+              "cantsaymeow",
+              "Shiv",
+              2,
+              7,
+              8,
+              24686,
+              17059,
+              4928
+            ],
+            [
+              "iRezUmi",
+              "Solomon",
+              0,
+              9,
+              6,
+              25134,
+              12164,
+              1530
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "euq2",
+      "region": "EU",
+      "stage": "予選",
+      "no": 2,
+      "winner": "Kastalia",
+      "firstPick": "",
+      "draftUnknown": true,
+      "duration": "36:34",
+      "matchId": 142617065,
+      "flow": "30分は Lost Whisper が1.06万リード（25:58 の Mid-Boss も Lost Whisper）。Kastalia が 36:09 の Mid-Boss を取り、36:34 に勝った。",
+      "teams": [
+        {
+          "name": "Kastalia",
+          "picks": [
+            "Paradox",
+            "Wraith",
+            "Drifter",
+            "Pocket",
+            "Paige",
+            "Billy"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "Reyache",
+              "Paradox",
+              5,
+              6,
+              21,
+              43046,
+              52997,
+              3331
+            ],
+            [
+              "oses",
+              "Wraith",
+              12,
+              2,
+              12,
+              53136,
+              50052,
+              6169
+            ],
+            [
+              "zxcbobi",
+              "Drifter",
+              6,
+              5,
+              13,
+              39628,
+              30257,
+              11011
+            ],
+            [
+              "Tas",
+              "Pocket",
+              1,
+              3,
+              12,
+              49014,
+              24065,
+              2810
+            ],
+            [
+              "balaclava",
+              "Paige",
+              5,
+              5,
+              23,
+              36881,
+              22411,
+              4511
+            ],
+            [
+              "kapten",
+              "Billy",
+              6,
+              8,
+              13,
+              41506,
+              20296,
+              4652
+            ]
+          ]
+        },
+        {
+          "name": "Lost Whisper",
+          "picks": [
+            "Celeste",
+            "Ivy",
+            "Shiv",
+            "Violet",
+            "Mo & Krill",
+            "Holliday"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "lorence",
+              "Celeste",
+              2,
+              4,
+              5,
+              41922,
+              29207,
+              8108
+            ],
+            [
+              "arzo",
+              "Ivy",
+              6,
+              4,
+              11,
+              43473,
+              26303,
+              19991
+            ],
+            [
+              "cantsaymeow",
+              "Shiv",
+              8,
+              8,
+              7,
+              32911,
+              26028,
+              7877
+            ],
+            [
+              "iRezUmi",
+              "Violet",
+              2,
+              8,
+              16,
+              32345,
+              23423,
+              5183
+            ],
+            [
+              "saintmxsm",
+              "Mo & Krill",
+              8,
+              5,
+              8,
+              35561,
+              20589,
+              15593
+            ],
+            [
+              "pomson",
+              "Holliday",
+              3,
+              6,
+              13,
+              30856,
+              20311,
+              5657
+            ]
+          ]
+        }
+      ]
+    },
+    {
       "id": "na1",
       "region": "NA",
       "no": 1,
@@ -879,18 +1424,675 @@
           ]
         }
       ]
-    }
-  ],
-  "heroNote": "Kelvin は4マップで使われて4勝（残る EU Map 1 では Leviathan が BAN）。Venator は5マップすべてで使われ、2勝3敗。Holliday は4マップで使われて4敗。5マップしかないので、傾向ではなく今回の結果として読む。",
-  "banNote": "Lady Geist は Buff Enjoyers が3マップとも BAN。Cloud9 は2マップとも Paradox・Wraith・Silver を BAN した。",
-  "takeaways": [
-    {
-      "title": "最後の Mid-Boss を取ったチームが、5マップすべて勝った",
-      "body": "Mid-Boss が2回以上出た4マップでは、最初の Mid-Boss を取ったチームが4マップとも負けている。EU Map 2 の Buff Enjoyers は20分で2.86万ソウル負けていたが、25:39 と 33:00 の Mid-Boss を取って逆転した。"
     },
     {
-      "title": "1万ソウル以上のリードでも、EU では3マップとも逆転された",
-      "body": "EU Map 1 は30分で Buff Enjoyers が1.30万リードして負けた。Map 2 は20分で Leviathan が2.86万リードして負けた。Map 3 は Leviathan の1.29万リードを Buff Enjoyers が一度ひっくり返し、最後にまた Leviathan が逆転した。"
+      "id": "nac1",
+      "region": "NA",
+      "stage": "チャレンジャー",
+      "no": 1,
+      "winner": "YFP",
+      "firstPick": "YFP",
+      "duration": "31:23",
+      "matchId": 143802104,
+      "screenshot": "img/na_c1.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "20分は NTMR が4,300リード。YFP が 20:40 と 28:59 の Mid-Boss を取り、25分で2.76万リード。Braeden（Mirage）が14キル。",
+      "teams": [
+        {
+          "name": "YFP",
+          "picks": [
+            "Billy",
+            "Mirage",
+            "Paradox",
+            "Rem",
+            "Wraith",
+            "Lash"
+          ],
+          "bans": [
+            "Nurse Harrow",
+            "Shiv",
+            "Violet"
+          ],
+          "players": [
+            [
+              "Goober",
+              "Paradox",
+              9,
+              2,
+              19,
+              34921,
+              45850,
+              1568
+            ],
+            [
+              "rocaine",
+              "Lash",
+              4,
+              2,
+              20,
+              37988,
+              32513,
+              13923
+            ],
+            [
+              "Lefaa",
+              "Wraith",
+              3,
+              1,
+              15,
+              42517,
+              27486,
+              3634
+            ],
+            [
+              "Braeden",
+              "Mirage",
+              14,
+              2,
+              14,
+              38760,
+              26568,
+              8273
+            ],
+            [
+              "Calc",
+              "Billy",
+              2,
+              5,
+              18,
+              35717,
+              20846,
+              7853
+            ],
+            [
+              "Zirbzy",
+              "Rem",
+              1,
+              2,
+              25,
+              35310,
+              9990,
+              24825
+            ]
+          ]
+        },
+        {
+          "name": "NTMR",
+          "picks": [
+            "Holliday",
+            "Mina",
+            "Lady Geist",
+            "Venator",
+            "Viscous",
+            "Mo & Krill"
+          ],
+          "bans": [
+            "Kelvin",
+            "Abrams",
+            "Baba"
+          ],
+          "players": [
+            [
+              "1Worst",
+              "Lady Geist",
+              2,
+              4,
+              10,
+              34084,
+              35186,
+              22944
+            ],
+            [
+              "LaroKashi",
+              "Mina",
+              3,
+              4,
+              6,
+              34644,
+              25586,
+              6772
+            ],
+            [
+              "Sniper",
+              "Holliday",
+              4,
+              7,
+              4,
+              29255,
+              22377,
+              1777
+            ],
+            [
+              "machine",
+              "Viscous",
+              1,
+              5,
+              4,
+              26814,
+              12572,
+              1463
+            ],
+            [
+              "soyer",
+              "Mo & Krill",
+              0,
+              7,
+              9,
+              25047,
+              11792,
+              7861
+            ],
+            [
+              "bacas",
+              "Venator",
+              4,
+              6,
+              4,
+              26978,
+              10819,
+              3203
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "naq1",
+      "region": "NA",
+      "stage": "予選",
+      "no": 1,
+      "winner": "AIMERZ",
+      "firstPick": "",
+      "draftUnknown": true,
+      "duration": "28:17",
+      "matchId": 142742481,
+      "flow": "AIMERZ が序盤からリードし、25分で4.50万差。キル 35-5。",
+      "teams": [
+        {
+          "name": "AIMERZ",
+          "picks": [
+            "Billy",
+            "Mirage",
+            "Bebop",
+            "Holliday",
+            "Ivy",
+            "Rem"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "snakes",
+              "Billy",
+              8,
+              1,
+              22,
+              39416,
+              24318,
+              4206
+            ],
+            [
+              "Arctic",
+              "Mirage",
+              9,
+              1,
+              10,
+              42939,
+              21206,
+              8323
+            ],
+            [
+              "Erebus",
+              "Bebop",
+              5,
+              2,
+              18,
+              33195,
+              19000,
+              5948
+            ],
+            [
+              "Spooky",
+              "Holliday",
+              3,
+              1,
+              14,
+              34456,
+              18947,
+              3798
+            ],
+            [
+              "Hydration",
+              "Ivy",
+              5,
+              0,
+              15,
+              38120,
+              15493,
+              13234
+            ],
+            [
+              "Konr",
+              "Rem",
+              5,
+              0,
+              23,
+              35707,
+              13104,
+              16053
+            ]
+          ]
+        },
+        {
+          "name": "NTMR",
+          "picks": [
+            "Lady Geist",
+            "Shiv",
+            "Mina",
+            "Grey Talon",
+            "Abrams",
+            "Paige"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "1Worst",
+              "Lady Geist",
+              0,
+              5,
+              2,
+              33861,
+              24293,
+              15472
+            ],
+            [
+              "bacas",
+              "Shiv",
+              3,
+              5,
+              2,
+              26627,
+              16983,
+              2230
+            ],
+            [
+              "LaroKashi",
+              "Mina",
+              2,
+              7,
+              3,
+              28931,
+              15400,
+              6622
+            ],
+            [
+              "Sniper",
+              "Grey Talon",
+              0,
+              5,
+              3,
+              21648,
+              14461,
+              332
+            ],
+            [
+              "soyer",
+              "Abrams",
+              0,
+              8,
+              3,
+              20771,
+              12114,
+              2857
+            ],
+            [
+              "machine",
+              "Paige",
+              0,
+              5,
+              4,
+              22476,
+              8257,
+              3484
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "naq2",
+      "region": "NA",
+      "stage": "予選",
+      "no": 2,
+      "winner": "NTMR",
+      "firstPick": "",
+      "draftUnknown": true,
+      "duration": "39:18",
+      "matchId": 142764911,
+      "flow": "15分は AIMERZ が1.48万リード。NTMR が 20:55 と 30:29 の Mid-Boss を取って逆転した。37:59 の Mid-Boss は AIMERZ が取ったが、39:18 に NTMR が勝った。",
+      "teams": [
+        {
+          "name": "NTMR",
+          "picks": [
+            "Vyper",
+            "Holliday",
+            "Shiv",
+            "Billy",
+            "Mirage",
+            "Paige"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "1Worst",
+              "Vyper",
+              10,
+              5,
+              21,
+              55262,
+              51222,
+              9978
+            ],
+            [
+              "Sniper",
+              "Holliday",
+              7,
+              1,
+              31,
+              41137,
+              48633,
+              2849
+            ],
+            [
+              "bacas",
+              "Shiv",
+              12,
+              9,
+              25,
+              38733,
+              47171,
+              1348
+            ],
+            [
+              "soyer",
+              "Billy",
+              5,
+              8,
+              25,
+              35125,
+              42609,
+              8512
+            ],
+            [
+              "LaroKashi",
+              "Mirage",
+              7,
+              2,
+              24,
+              45717,
+              40824,
+              18119
+            ],
+            [
+              "machine",
+              "Paige",
+              4,
+              5,
+              28,
+              37377,
+              31049,
+              8947
+            ]
+          ]
+        },
+        {
+          "name": "AIMERZ",
+          "picks": [
+            "Seven",
+            "Lady Geist",
+            "Paradox",
+            "Abrams",
+            "Violet",
+            "Viscous"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "Spooky",
+              "Seven",
+              5,
+              6,
+              16,
+              52437,
+              54591,
+              10369
+            ],
+            [
+              "Hydration",
+              "Lady Geist",
+              3,
+              6,
+              9,
+              44199,
+              53307,
+              31776
+            ],
+            [
+              "Arctic",
+              "Paradox",
+              5,
+              8,
+              7,
+              40491,
+              39574,
+              5424
+            ],
+            [
+              "snakes",
+              "Abrams",
+              10,
+              10,
+              11,
+              38755,
+              37709,
+              17073
+            ],
+            [
+              "Erebus",
+              "Violet",
+              4,
+              10,
+              10,
+              35927,
+              27614,
+              4701
+            ],
+            [
+              "Konr",
+              "Viscous",
+              3,
+              5,
+              12,
+              34719,
+              27071,
+              14727
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "naq3",
+      "region": "NA",
+      "stage": "予選",
+      "no": 3,
+      "winner": "NTMR",
+      "firstPick": "",
+      "draftUnknown": true,
+      "duration": "46:35",
+      "matchId": 142790409,
+      "flow": "15分は AIMERZ が7,800リード。Mid-Boss は4回出て2回ずつ取り合い、最後の 45:25 を NTMR が取って勝った。",
+      "teams": [
+        {
+          "name": "AIMERZ",
+          "picks": [
+            "Lady Geist",
+            "Wraith",
+            "Yamato",
+            "Grey Talon",
+            "Abrams",
+            "Violet"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "Hydration",
+              "Lady Geist",
+              4,
+              4,
+              12,
+              55593,
+              115069,
+              67357
+            ],
+            [
+              "Spooky",
+              "Wraith",
+              5,
+              7,
+              12,
+              51627,
+              53533,
+              10643
+            ],
+            [
+              "Arctic",
+              "Yamato",
+              7,
+              15,
+              12,
+              44671,
+              50011,
+              26974
+            ],
+            [
+              "Konr",
+              "Grey Talon",
+              3,
+              4,
+              14,
+              45769,
+              49711,
+              2969
+            ],
+            [
+              "snakes",
+              "Abrams",
+              5,
+              7,
+              10,
+              44863,
+              37438,
+              21625
+            ],
+            [
+              "Erebus",
+              "Violet",
+              5,
+              10,
+              9,
+              40870,
+              26803,
+              9773
+            ]
+          ]
+        },
+        {
+          "name": "NTMR",
+          "picks": [
+            "Vyper",
+            "Shiv",
+            "Billy",
+            "Mirage",
+            "Mina",
+            "Nurse Harrow"
+          ],
+          "bans": [],
+          "players": [
+            [
+              "1Worst",
+              "Vyper",
+              10,
+              5,
+              22,
+              65718,
+              73257,
+              21380
+            ],
+            [
+              "bacas",
+              "Shiv",
+              16,
+              4,
+              21,
+              56991,
+              67596,
+              2066
+            ],
+            [
+              "soyer",
+              "Billy",
+              4,
+              4,
+              29,
+              54631,
+              60989,
+              10745
+            ],
+            [
+              "LaroKashi",
+              "Mirage",
+              9,
+              4,
+              24,
+              70664,
+              59713,
+              21364
+            ],
+            [
+              "Sniper",
+              "Mina",
+              7,
+              5,
+              20,
+              51894,
+              54463,
+              14236
+            ],
+            [
+              "machine",
+              "Nurse Harrow",
+              1,
+              7,
+              25,
+              46366,
+              10119,
+              72507
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "heroNote": "Billy は12マップすべてで使われて8勝4敗。Kelvin は5マップで使われて5勝し、ほかの2マップでは BAN された。Lady Geist は5戦全敗、Violet は1勝7敗。予選を含めても12マップなので、今回の結果として読む。",
+  "banNote": "Lady Geist は Buff Enjoyers が4マップとも BAN した（使われた5マップはすべて負け）。Cloud9 は決勝の2マップとも Paradox・Wraith・Silver を BAN。予選は配信がないので BAN が分からず、ここには入れていない。",
+  "takeaways": [
+    {
+      "title": "最後の Mid-Boss を取ったチームが、12マップ中11マップで勝った",
+      "body": "例外は NA 予選 Map 2 だけ。AIMERZ が 37:59 の Mid-Boss を取ったが、その前の2回（20:55・30:29）を取っていた NTMR が 39:18 に勝った。EU 決勝 Map 2 の Buff Enjoyers は20分で2.86万ソウル負けていたが、25:39 と 33:00 の Mid-Boss を取って逆転した。"
+    },
+    {
+      "title": "1万ソウル以上リードしたチームが負けたマップが5つあった",
+      "body": "EU 決勝は3マップすべて（Map 1 は Buff Enjoyers が30分で1.30万、Map 2 は Leviathan が20分で2.86万、Map 3 は Buff Enjoyers が45分で1.47万リードして負け）。ほかに EU 予選 Map 2（Lost Whisper が30分で1.06万）と NA 予選 Map 2（AIMERZ が15分で1.48万）。"
     }
   ],
   "practice": [

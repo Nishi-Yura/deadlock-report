@@ -1,4 +1,4 @@
-import type { MapData, Report } from "@/types"
+import type { MapData, Report, Series } from "@/types"
 
 const modules = import.meta.glob<Report>("../../reports/*.json", { eager: true, import: "default" })
 
@@ -15,8 +15,24 @@ export const reportPath = (id: number) => `/deadlock-report/${id}/`
 
 export const fmt = (n: number) => n.toLocaleString("en-US")
 
+export const FINAL = "決勝"
+export const stageOf = (x: { stage?: string }) => x.stage ?? FINAL
+export const isFinal = (x: { stage?: string }) => stageOf(x) === FINAL
+export const seriesKey = (s: Series) => `${s.region}-${stageOf(s)}`
+
+/** そのシリーズのマップ */
+export function seriesMaps(r: Report, s: Series): MapData[] {
+  return r.maps.filter((m) => m.region === s.region && stageOf(m) === stageOf(s))
+}
+
+/** 決勝 → チャレンジャー → 予選 の順に並べた地域ごとのシリーズ */
+export function seriesByRegion(r: Report): { region: string; series: Series[] }[] {
+  const regions = [...new Set(r.series.map((s) => s.region))]
+  return regions.map((region) => ({ region, series: r.series.filter((s) => s.region === region) }))
+}
+
 export function mapLabel(m: MapData) {
-  return `${m.region} Map ${m.no}`
+  return `${m.region} ${stageOf(m)} Map ${m.no}`
 }
 
 export function kills(m: MapData): [number, number] {
@@ -30,18 +46,21 @@ export function winnerFirst(m: MapData) {
   return a.name === m.winner ? ([a, b] as const) : ([b, a] as const)
 }
 
-export function seriesKills(r: Report, teams: [string, string]): [number, number] {
+export function seriesKills(r: Report, s: Series): [number, number] {
   let a = 0
   let b = 0
-  for (const m of r.maps) {
+  for (const m of seriesMaps(r, s)) {
     for (const t of m.teams) {
-      const k = t.players.reduce((s, p) => s + p[2], 0)
-      if (t.name === teams[0]) a += k
-      if (t.name === teams[1]) b += k
+      const k = t.players.reduce((sum, p) => sum + p[2], 0)
+      if (t.name === s.teams[0]) a += k
+      if (t.name === s.teams[1]) b += k
     }
   }
   return [a, b]
 }
+
+/** BAN が分かっている（配信のある）マップの数 */
+export const draftMapCount = (r: Report) => r.maps.filter((m) => !m.draftUnknown).length
 
 export interface HeroRecord {
   hero: string

@@ -14,9 +14,14 @@ export interface MapTeam {
 export interface MapData {
   id: string
   region: string
+  /** "決勝" | "チャレンジャー" | "予選" など。省略すると "決勝" */
+  stage?: string
   no: number
   winner: string
+  /** 配信がなくて分からないときは "" */
   firstPick: string
+  /** 配信がなく、ピック順と BAN が分からないマップ。picks は使用ヒーローを書く（順不同）、bans は [] */
+  draftUnknown?: boolean
   /** "36:32" */
   duration: string
   matchId: number
@@ -30,6 +35,10 @@ export interface MapData {
 
 export interface Series {
   region: string
+  /** 省略すると "決勝"。決勝以外は小さく表示される */
+  stage?: string
+  /** 大会当日と違う日に行われた場合（予選など）"2026-11-23" */
+  date?: string
   teams: [string, string]
   score: [number, number]
   note?: string

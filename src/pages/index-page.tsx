@@ -1,5 +1,5 @@
 import { Panel, SiteBar, SiteFoot } from "@/components/report/parts"
-import { reportPath, reports } from "@/lib/report"
+import { isFinal, reportPath, reports } from "@/lib/report"
 
 export function IndexPage() {
   return (
@@ -30,7 +30,7 @@ export function IndexPage() {
                     <span className="mt-1 block">{r.headline}</span>
                   </span>
                   <span className="text-right text-[12px] leading-6 max-sm:col-start-2 max-sm:text-left">
-                    {r.series.map((s) => {
+                    {r.series.filter(isFinal).map((s) => {
                       const winner = s.score[0] > s.score[1] ? s.teams[0] : s.teams[1]
                       return (
                         <span key={s.region} className="block whitespace-nowrap">

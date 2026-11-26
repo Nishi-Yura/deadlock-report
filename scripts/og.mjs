@@ -43,10 +43,12 @@ const frame = (...children) =>
 const label = (text) => h("div", { fontSize: 22, fontWeight: 700, letterSpacing: 2, color: C.mute }, text)
 
 function reportCard(r) {
-  const many = r.series.length > 2
+  // カードには決勝だけ載せる（stage を省略したものが決勝）
+  const finals = r.series.filter((s) => (s.stage ?? "決勝") === "決勝")
+  const many = finals.length > 2
   const teamSize = many ? 40 : 52
   const scoreSize = many ? 56 : 76
-  const series = r.series.map((s) => {
+  const series = finals.map((s) => {
     const winA = s.score[0] > s.score[1]
     return h("div", { alignItems: "center", padding: many ? "6px 0" : "12px 0", borderTop: `2px solid ${C.line}` },
       h("div", { width: 70, fontSize: 22, fontWeight: 700, color: C.mute }, s.region),
