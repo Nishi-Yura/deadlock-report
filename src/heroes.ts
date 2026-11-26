@@ -9,6 +9,7 @@ const FILES: Record<string, string> = {
   Bebop: "bebop_mm.webp",
   Billy: "punkgoat_mm.webp",
   Calico: "nano_mm.webp",
+  Celeste: "unicorn_mm.webp",
   "Deadman Danny": "deadpack_mm.webp",
   Doorman: "doorman_mm.webp",
   "The Doorman": "doorman_mm.webp",

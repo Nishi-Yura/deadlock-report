@@ -1,0 +1,926 @@
+{
+  "id": 2,
+  "event": "Deadlock Night Shift #66",
+  "title": "Deadlock Night Shift #66 決勝",
+  "date": "2026-11-25",
+  "headline": "5マップすべて、最後の Mid-Boss を取ったチームが勝った",
+  "series": [
+    {
+      "region": "EU",
+      "teams": [
+        "Leviathan",
+        "Buff Enjoyers"
+      ],
+      "score": [
+        2,
+        1
+      ],
+      "note": "Leviathan が優勝（2連覇）。MVP は overseas"
+    },
+    {
+      "region": "NA",
+      "teams": [
+        "Cloud9",
+        "YFP"
+      ],
+      "score": [
+        2,
+        0
+      ],
+      "note": "Cloud9 が優勝（9連覇）。MVP は Zeno"
+    }
+  ],
+  "maps": [
+    {
+      "id": "eu1",
+      "region": "EU",
+      "no": 1,
+      "winner": "Leviathan",
+      "firstPick": "Leviathan",
+      "duration": "39:51",
+      "matchId": 143715272,
+      "screenshot": "img/eu_m1.png",
+      "flow": "Buff Enjoyers が30分の時点で1.30万ソウルリード。Leviathan が 33:04 の Mid-Boss を取ってから逆転し、35分には2.64万リード。キル 33-16 で勝った。",
+      "teams": [
+        {
+          "name": "Leviathan",
+          "picks": [
+            "Wraith",
+            "Mirage",
+            "Violet",
+            "Paradox",
+            "Baba",
+            "Graves"
+          ],
+          "bans": [
+            "Kelvin",
+            "Pocket",
+            "Nurse Harrow"
+          ],
+          "players": [
+            [
+              "ABL",
+              "Paradox",
+              2,
+              3,
+              21,
+              43129,
+              47062,
+              2852
+            ],
+            [
+              "empty dreams",
+              "Graves",
+              6,
+              3,
+              16,
+              57029,
+              44699,
+              16263
+            ],
+            [
+              "overseas",
+              "Baba",
+              5,
+              3,
+              21,
+              44261,
+              41111,
+              16686
+            ],
+            [
+              "together",
+              "Mirage",
+              5,
+              1,
+              18,
+              45127,
+              33807,
+              8193
+            ],
+            [
+              "Sanya_sniper",
+              "Wraith",
+              9,
+              3,
+              11,
+              50275,
+              33252,
+              5518
+            ],
+            [
+              "Dimov",
+              "Violet",
+              6,
+              3,
+              21,
+              43029,
+              33075,
+              4223
+            ]
+          ]
+        },
+        {
+          "name": "Buff Enjoyers",
+          "picks": [
+            "Venator",
+            "Ivy",
+            "Billy",
+            "Shiv",
+            "Haze",
+            "Holliday"
+          ],
+          "bans": [
+            "Abrams",
+            "Lady Geist",
+            "Mina"
+          ],
+          "players": [
+            [
+              "hoot",
+              "Shiv",
+              4,
+              6,
+              7,
+              39695,
+              33058,
+              11835
+            ],
+            [
+              "vraic",
+              "Holliday",
+              4,
+              5,
+              10,
+              35137,
+              30194,
+              7623
+            ],
+            [
+              "Zerggy",
+              "Ivy",
+              4,
+              2,
+              9,
+              51444,
+              28592,
+              34097
+            ],
+            [
+              "lystic",
+              "Billy",
+              2,
+              7,
+              9,
+              40187,
+              20628,
+              5804
+            ],
+            [
+              "obikym",
+              "Haze",
+              2,
+              5,
+              9,
+              37300,
+              17983,
+              3138
+            ],
+            [
+              "cosmetical",
+              "Venator",
+              0,
+              8,
+              6,
+              41381,
+              15510,
+              3002
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eu2",
+      "region": "EU",
+      "no": 2,
+      "winner": "Buff Enjoyers",
+      "firstPick": "Buff Enjoyers",
+      "duration": "33:25",
+      "matchId": 143741712,
+      "screenshot": "img/eu_m2.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "Leviathan が20分で2.86万ソウルリード。Buff Enjoyers が 25:39 と 33:00 の Mid-Boss を取って追いつき、そのまま勝った。キルは 24-36 で Buff Enjoyers の方が少ない。",
+      "teams": [
+        {
+          "name": "Buff Enjoyers",
+          "picks": [
+            "Ivy",
+            "Kelvin",
+            "Shiv",
+            "Paradox",
+            "Billy",
+            "Doorman"
+          ],
+          "bans": [
+            "Nurse Harrow",
+            "Lady Geist",
+            "Mirage"
+          ],
+          "players": [
+            [
+              "vraic",
+              "Paradox",
+              1,
+              4,
+              17,
+              35377,
+              39231,
+              2539
+            ],
+            [
+              "cosmetical",
+              "Shiv",
+              10,
+              6,
+              12,
+              44057,
+              31448,
+              3025
+            ],
+            [
+              "hoot",
+              "Doorman",
+              2,
+              6,
+              12,
+              34962,
+              27752,
+              11661
+            ],
+            [
+              "Zerggy",
+              "Ivy",
+              8,
+              3,
+              15,
+              46153,
+              26342,
+              26209
+            ],
+            [
+              "lystic",
+              "Billy",
+              2,
+              9,
+              15,
+              39628,
+              18336,
+              5548
+            ],
+            [
+              "obikym",
+              "Kelvin",
+              1,
+              8,
+              21,
+              36104,
+              13590,
+              21795
+            ]
+          ]
+        },
+        {
+          "name": "Leviathan",
+          "picks": [
+            "Venator",
+            "Wraith",
+            "Violet",
+            "Abrams",
+            "Holliday",
+            "Celeste"
+          ],
+          "bans": [
+            "Pocket",
+            "Mina",
+            "Baba"
+          ],
+          "players": [
+            [
+              "ABL",
+              "Celeste",
+              6,
+              2,
+              15,
+              37395,
+              41219,
+              11648
+            ],
+            [
+              "Sanya_sniper",
+              "Wraith",
+              6,
+              2,
+              10,
+              44371,
+              31998,
+              3529
+            ],
+            [
+              "empty dreams",
+              "Venator",
+              12,
+              6,
+              11,
+              35028,
+              30630,
+              2238
+            ],
+            [
+              "Dimov",
+              "Violet",
+              3,
+              5,
+              20,
+              30462,
+              27586,
+              3069
+            ],
+            [
+              "together",
+              "Holliday",
+              4,
+              4,
+              10,
+              31123,
+              23816,
+              2082
+            ],
+            [
+              "overseas",
+              "Abrams",
+              5,
+              5,
+              18,
+              33198,
+              18956,
+              9366
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eu3",
+      "region": "EU",
+      "no": 3,
+      "winner": "Leviathan",
+      "firstPick": "Buff Enjoyers",
+      "duration": "50:44",
+      "matchId": 143765824,
+      "screenshot": "img/eu_m3.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "50分の長期戦。30分は Leviathan が1.29万リード、45分は Buff Enjoyers が1.47万リード。Leviathan が 48:42 の Mid-Boss を取り、50:44 に勝った。",
+      "teams": [
+        {
+          "name": "Buff Enjoyers",
+          "picks": [
+            "Venator",
+            "Violet",
+            "Shiv",
+            "Paradox",
+            "Abrams",
+            "Holliday"
+          ],
+          "bans": [
+            "Silver",
+            "Lady Geist",
+            "Mirage"
+          ],
+          "players": [
+            [
+              "vraic",
+              "Paradox",
+              9,
+              5,
+              12,
+              58423,
+              72592,
+              2452
+            ],
+            [
+              "Zerggy",
+              "Holliday",
+              4,
+              4,
+              14,
+              67285,
+              51481,
+              6519
+            ],
+            [
+              "hoot",
+              "Venator",
+              7,
+              8,
+              13,
+              55782,
+              48326,
+              17070
+            ],
+            [
+              "cosmetical",
+              "Shiv",
+              2,
+              7,
+              11,
+              55782,
+              34544,
+              3689
+            ],
+            [
+              "lystic",
+              "Abrams",
+              2,
+              5,
+              19,
+              56840,
+              34238,
+              21955
+            ],
+            [
+              "obikym",
+              "Violet",
+              4,
+              8,
+              15,
+              50624,
+              32890,
+              7199
+            ]
+          ]
+        },
+        {
+          "name": "Leviathan",
+          "picks": [
+            "Kelvin",
+            "Wraith",
+            "Pocket",
+            "Baba",
+            "Billy",
+            "Doorman"
+          ],
+          "bans": [
+            "Ivy",
+            "Mina",
+            "Celeste"
+          ],
+          "players": [
+            [
+              "empty dreams",
+              "Pocket",
+              4,
+              6,
+              19,
+              69512,
+              80503,
+              2180
+            ],
+            [
+              "ABL",
+              "Doorman",
+              8,
+              2,
+              22,
+              63798,
+              54629,
+              13398
+            ],
+            [
+              "Sanya_sniper",
+              "Wraith",
+              10,
+              4,
+              20,
+              64004,
+              47068,
+              4974
+            ],
+            [
+              "overseas",
+              "Baba",
+              6,
+              3,
+              27,
+              58187,
+              46415,
+              14693
+            ],
+            [
+              "Dimov",
+              "Kelvin",
+              6,
+              4,
+              26,
+              57542,
+              38568,
+              47848
+            ],
+            [
+              "together",
+              "Billy",
+              3,
+              9,
+              18,
+              52363,
+              25043,
+              7247
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "na1",
+      "region": "NA",
+      "no": 1,
+      "winner": "Cloud9",
+      "firstPick": "Cloud9",
+      "duration": "26:34",
+      "matchId": 143834373,
+      "screenshot": "img/na_m1.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "9分は YFP が2,800ソウルリード。Cloud9 が 20:17 の Mid-Boss を取ってから差が開き、25分で3.58万リード。",
+      "teams": [
+        {
+          "name": "Cloud9",
+          "picks": [
+            "Baba",
+            "Kelvin",
+            "Venator",
+            "Seven",
+            "Viscous",
+            "Ivy"
+          ],
+          "bans": [
+            "Paradox",
+            "Wraith",
+            "Silver"
+          ],
+          "players": [
+            [
+              "Lomein",
+              "Baba",
+              10,
+              2,
+              12,
+              36050,
+              34401,
+              4030
+            ],
+            [
+              "average",
+              "Venator",
+              5,
+              4,
+              10,
+              32940,
+              20605,
+              4937
+            ],
+            [
+              "Saiah",
+              "Viscous",
+              2,
+              5,
+              9,
+              25950,
+              16868,
+              8074
+            ],
+            [
+              "Zeno",
+              "Kelvin",
+              3,
+              3,
+              15,
+              28031,
+              14398,
+              23012
+            ],
+            [
+              "League",
+              "Ivy",
+              2,
+              4,
+              9,
+              33010,
+              14200,
+              14944
+            ],
+            [
+              "JonJon",
+              "Seven",
+              2,
+              2,
+              12,
+              34469,
+              13323,
+              1417
+            ]
+          ]
+        },
+        {
+          "name": "YFP",
+          "picks": [
+            "Holliday",
+            "Mirage",
+            "Nurse Harrow",
+            "Mina",
+            "Pocket",
+            "Billy"
+          ],
+          "bans": [
+            "Yamato",
+            "Violet",
+            "Lady Geist"
+          ],
+          "players": [
+            [
+              "Goober",
+              "Holliday",
+              5,
+              4,
+              10,
+              23495,
+              31773,
+              1652
+            ],
+            [
+              "rocaine",
+              "Pocket",
+              3,
+              3,
+              9,
+              30312,
+              29513,
+              1712
+            ],
+            [
+              "Lefaa",
+              "Mina",
+              7,
+              2,
+              5,
+              28737,
+              24138,
+              5625
+            ],
+            [
+              "Braeden",
+              "Mirage",
+              1,
+              4,
+              6,
+              25096,
+              15201,
+              4774
+            ],
+            [
+              "Calc",
+              "Billy",
+              4,
+              6,
+              6,
+              24025,
+              12825,
+              5221
+            ],
+            [
+              "Zirbzy",
+              "Nurse Harrow",
+              0,
+              5,
+              10,
+              17586,
+              5641,
+              20988
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "na2",
+      "region": "NA",
+      "no": 2,
+      "winner": "Cloud9",
+      "firstPick": "Cloud9",
+      "duration": "30:27",
+      "matchId": 143856448,
+      "screenshot": "img/na_m2.png",
+      "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
+      "flow": "YFP が 19:21 の Mid-Boss を取ったが、ソウルは最後まで Cloud9 が上。Cloud9 が 28:21 の Mid-Boss を取り、30:27 に勝った。",
+      "teams": [
+        {
+          "name": "Cloud9",
+          "picks": [
+            "Mirage",
+            "Kelvin",
+            "Venator",
+            "Rem",
+            "Abrams",
+            "McGinnis"
+          ],
+          "bans": [
+            "Paradox",
+            "Wraith",
+            "Silver"
+          ],
+          "players": [
+            [
+              "League",
+              "Venator",
+              14,
+              6,
+              12,
+              40540,
+              46887,
+              6664
+            ],
+            [
+              "JonJon",
+              "McGinnis",
+              6,
+              1,
+              13,
+              41652,
+              41306,
+              13480
+            ],
+            [
+              "average",
+              "Mirage",
+              2,
+              4,
+              20,
+              34127,
+              36021,
+              11938
+            ],
+            [
+              "Lomein",
+              "Abrams",
+              2,
+              4,
+              17,
+              33554,
+              23704,
+              11841
+            ],
+            [
+              "Zeno",
+              "Kelvin",
+              4,
+              6,
+              11,
+              31420,
+              18686,
+              25405
+            ],
+            [
+              "Saiah",
+              "Rem",
+              3,
+              0,
+              20,
+              33649,
+              12002,
+              29505
+            ]
+          ]
+        },
+        {
+          "name": "YFP",
+          "picks": [
+            "Lady Geist",
+            "Violet",
+            "Billy",
+            "Pocket",
+            "Shiv",
+            "Bebop"
+          ],
+          "bans": [
+            "Seven",
+            "Holliday",
+            "Baba"
+          ],
+          "players": [
+            [
+              "Lefaa",
+              "Lady Geist",
+              0,
+              7,
+              7,
+              32364,
+              40600,
+              24052
+            ],
+            [
+              "Calc",
+              "Billy",
+              5,
+              7,
+              7,
+              28600,
+              34833,
+              17078
+            ],
+            [
+              "rocaine",
+              "Pocket",
+              1,
+              5,
+              4,
+              38377,
+              31844,
+              3921
+            ],
+            [
+              "Goober",
+              "Bebop",
+              4,
+              4,
+              13,
+              27470,
+              31813,
+              7628
+            ],
+            [
+              "Braeden",
+              "Shiv",
+              5,
+              5,
+              10,
+              28121,
+              30775,
+              2600
+            ],
+            [
+              "Zirbzy",
+              "Violet",
+              5,
+              3,
+              13,
+              27606,
+              20863,
+              4730
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "heroNote": "Kelvin は4マップで使われて4勝（残る EU Map 1 では Leviathan が BAN）。Venator は5マップすべてで使われ、2勝3敗。Holliday は4マップで使われて4敗。5マップしかないので、傾向ではなく今回の結果として読む。",
+  "banNote": "Lady Geist は Buff Enjoyers が3マップとも BAN。Cloud9 は2マップとも Paradox・Wraith・Silver を BAN した。",
+  "takeaways": [
+    {
+      "title": "最後の Mid-Boss を取ったチームが、5マップすべて勝った",
+      "body": "Mid-Boss が2回以上出た4マップでは、最初の Mid-Boss を取ったチームが4マップとも負けている。EU Map 2 の Buff Enjoyers は20分で2.86万ソウル負けていたが、25:39 と 33:00 の Mid-Boss を取って逆転した。"
+    },
+    {
+      "title": "1万ソウル以上のリードでも、EU では3マップとも逆転された",
+      "body": "EU Map 1 は30分で Buff Enjoyers が1.30万リードして負けた。Map 2 は20分で Leviathan が2.86万リードして負けた。Map 3 は Leviathan の1.29万リードを Buff Enjoyers が一度ひっくり返し、最後にまた Leviathan が逆転した。"
+    }
+  ],
+  "practice": [
+    "自分の試合で、最後の Mid-Boss を取ったチームと勝敗",
+    "ソウルで1万以上リードしてから負けた試合で、そのあと誰が Mid-Boss を取ったか"
+  ],
+  "sources": [
+    {
+      "label": "Deadlock API（マッチデータ）",
+      "url": "https://api.deadlock-api.com/"
+    },
+    {
+      "label": "Night Shift #66 配信アーカイブ（YouTube）",
+      "url": "https://www.youtube.com/watch?v=zpCifl6aDK8"
+    },
+    {
+      "label": "DLNS 66 EU（EDL.GG）",
+      "url": "https://edl.gg/news/dlns-66-eu"
+    },
+    {
+      "label": "Deadlock Night Shift 66 NA（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-66-na"
+    },
+    {
+      "label": "EU 決勝シリーズ（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-66-eu/series/grand-final-1-deadlock-night-shift-66-eu-template-grand-final"
+    },
+    {
+      "label": "NA 決勝シリーズ（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-66-na/series/grand-final-1-deadlock-night-shift-66-na-template-grand-final"
+    }
+  ]
+}
