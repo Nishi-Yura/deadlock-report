@@ -65,7 +65,7 @@
       "matchId": 139878037,
       "screenshot": "img/eu_m1.png",
       "screenshotNote": "配信画面（左が Buff Enjoyers、右が Leviathan）",
-      "flow": "合計27キルの低キル戦。終盤の約6分で相手をほぼ全滅させ、そのまま Mid-Boss と Rift を取って勝利。",
+      "flow": "25分と30分は Buff Enjoyers が約1,900ソウルリード。Leviathan が 31:42〜31:56 に4キルして 32:22 の Mid-Boss を取り、35分で3.72万リードまで広げて勝った。合計27キルの低キル戦。",
       "teams": [
         {
           "name": "Leviathan",
@@ -405,7 +405,7 @@
       "matchId": 139846567,
       "screenshot": "img/eu_c1.png",
       "screenshotNote": "配信画面（ピック確定後は、ヒーロー名ではなく選手名が表示されます）",
-      "flow": "Leviathan が序盤からリードし、19:51 の Mid-Boss を取って20分で1.26万差。24:27 に勝った。empty dreams（Ivy）が 9/0/5。",
+      "flow": "6分からは Leviathan がずっとリードし、19:51 の Mid-Boss を取って20分で1.26万差。24:27 に勝った。empty dreams（Ivy）が 9/0/5。",
       "teams": [
         {
           "name": "Leviathan",
@@ -744,7 +744,7 @@
       "duration": "32:25",
       "matchId": 139999621,
       "screenshot": "img/na_m2.png",
-      "flow": "YFP が6分前に Guardian を2体壊し、8分で 9-5。その後は Cloud9 を3キルに抑えた。",
+      "flow": "YFP が6分前に Guardian を2体壊し、8分で 10-5。その後は Cloud9 を3キルに抑えた。",
       "teams": [
         {
           "name": "Cloud9",
@@ -913,7 +913,7 @@
       "duration": "27:17",
       "matchId": 140025286,
       "screenshot": "img/na_m3.png",
-      "flow": "Cloud9 が終盤型のドラフトでジャングルを支配。YFP は7キル。",
+      "flow": "Cloud9 が3分から最後までソウルでリードし、16:47 と 25:27 の Mid-Boss を両方取った。15分で1.13万、終了時は5.53万差。キル 27-7。",
       "teams": [
         {
           "name": "YFP",
