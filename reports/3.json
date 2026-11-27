@@ -146,7 +146,7 @@
             "Rem"
           ],
           "bans": [
-            "Dynamo",
+            "Baba",
             "Holliday",
             "Abrams"
           ],
@@ -316,7 +316,7 @@
             "Silver"
           ],
           "bans": [
-            "Dynamo",
+            "Baba",
             "Lady Geist",
             "Rem"
           ],
@@ -488,7 +488,7 @@
           "bans": [
             "Silver",
             "Mina",
-            "Dynamo"
+            "Baba"
           ],
           "players": [
             [
@@ -656,7 +656,7 @@
             "Yamato"
           ],
           "bans": [
-            "Dynamo",
+            "Baba",
             "Mina",
             "Warden"
           ],
@@ -727,7 +727,7 @@
     }
   ],
   "heroNote": "Billy は4マップすべてで使われて4勝（AUSKR で3勝、OT で1勝）。Paradox も4マップすべてで使われて2勝2敗。4マップだけなので、今回の結果として読む。",
-  "banNote": "Dynamo は4マップすべてで BAN（AUSKR と OT が2回ずつ）。決勝で AUSKR は Mina・Shiv・Silver を、OT は Lady Geist と Dynamo を、それぞれ2回 BAN した。",
+  "banNote": "Baba は4マップすべてで BAN（AUSKR と OT が2回ずつ）。決勝で AUSKR は Mina・Shiv・Silver を、OT は Lady Geist と Baba を、それぞれ2回 BAN した。",
   "takeaways": [
     {
       "title": "Billy を取ったチームが4マップ全勝",
