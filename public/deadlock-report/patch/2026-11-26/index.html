@@ -116,7 +116,7 @@ footer a{display:inline-block;padding:12px 0}
     <li><span class="n">3</span><span><b>ファーストキル報酬アップ。</b>各プレイヤーの初キル <span class="chg up">125 → 175</span> ソウル。</span></li>
     <li><span class="n">4</span><span><b>ダメージ増減の計算を統一。</b>Rebuttal や Curse などの与ダメ増減が全種類のダメージに乗るように。重ね掛けは逓減。</span></li>
     <li><span class="n">5</span><span><b>Wraith に大きな弱体。</b>移動速度・HP回復・スプリント・カード生成速度がまとめて低下。</span></li>
-    <li><span class="n">6</span><span><b>練習モードに Bot Drills。</b>Bebop のフック避け、Graves のパリィ読みなど15種類の対面練習。</span></li>
+    <li><span class="n">6</span><span><b>練習モードに Bot Drills。</b>Bebop のフック避け、Graves のパリィ読みなど16種類の対面練習。</span></li>
   </ol>
 </section>
 
@@ -168,11 +168,11 @@ footer a{display:inline-block;padding:12px 0}
 <section class="panel">
   <h2 class="lab">サンドボックス ・ Street Brawl</h2>
   <h3 class="sub">Bot Drills（Testing Tools → Bots++）</h3>
-  <p>目の前に敵ボットを出して、特定の動きへの対処を練習できる機能。収録は15種類：Abrams の突進、Baba ×2、Bebop のフック避け、Billy の連携、Deadman Danny の急降下、Graves のパリィ読み、Grey Talon の空爆、Holliday の樽、Lash の叩きつけ、McGinnis の壁＋弾幕、Paradox の入れ替え、Silver の狼形態、Vindicta の飛行、Viscous ×2。</p>
+  <p>目の前に敵ボットを出して、特定の動きへの対処を練習できる機能。収録は16種類：Abrams の突進、Baba ×2、Bebop のフック避け、Billy の連携、Deadman Danny の急降下、Graves のパリィ読み、Grey Talon の空爆、Holliday の樽、Lash の叩きつけ、McGinnis の壁＋弾幕、Paradox の入れ替え、Silver の狼形態、Vindicta の飛行、Viscous ×2。</p>
   <h3 class="sub">Street Brawl</h3>
   <ul class="list">
     <li>最終ラウンドのブーン上限 <span class="chg">34 → 35</span>。Cloak of Opportunity が Fear も防ぐように。</li>
-    <li>ヒーローごとのおすすめアイテムが、現在の人気アイテムから自動で更新されるように。</li>
+    <li>ヒーローごとのおすすめアイテムが、現在の人気アイテムから自動で更新されるように（11/24 から反映済み）。</li>
   </ul>
 </section>
 
@@ -193,6 +193,7 @@ footer a{display:inline-block;padding:12px 0}
       <tr><td>Restorative Locket ほか</td><td class="k fix">修正</td><td>新ヒーローのスキルでのチャージ獲得を整理（Spellslinger, Radiant Regeneration も同様）</td></tr>
       <tr><td>Rebuttal / Witchmail / Majestic Leap</td><td class="k fix">修正</td><td>各種不具合の修正</td></tr>
       <tr><td>Phantom Strike / Slowing Hex / Vortex Web</td><td class="k adj">表示</td><td>敵ヒーローごとに止められるスキルを説明に表示</td></tr>
+      <tr><td>Spiritual Overflow / Scourge</td><td class="k adj">表示</td><td>効果の溜まり具合（Spiritual Overflow）と対象の味方（Scourge）を表示</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -214,11 +215,11 @@ footer a{display:inline-block;padding:12px 0}
   <h2 class="lab">最近の流れ</h2>
   <ol class="tl">
     <li><span class="num now">2026.11.26</span><span class="now">今回：感謝祭イベント＋上記の調整</span></li>
-    <li><span class="num">2026.11.24</span><span>非公開の小修正（Street Brawl、セキュリティ、ソウルバッグ）</span></li>
+    <li><span class="num">2026.11.24</span><span>小さな更新：セキュリティ修正と Street Brawl のおすすめアイテム自動更新（Yoshi が Discord で告知）、ソウルバッグの非公開修正</span></li>
     <li><span class="num">2026.11.05</span><span>ランク ベータ シーズン2開始。ソフトリセット、ヒーローBAN 3 → 4</span></li>
     <li><span class="num">2026.11.04</span><span>アイテム・ヒーローの調整</span></li>
     <li><span class="num">2026.10.30</span><span>ハロウィンイベント、Midboss 周辺と Rejuvenator の変更</span></li>
-    <li><span class="num">10.02 – 10.20</span><span>投票で選ばれた新ヒーロー6体を順に追加（Rat King, Baba, Solomon, Deadman Danny, Violet, Nurse Harrow）</span></li>
+    <li><span class="num">10.02 – 10.20</span><span>新ヒーロー6体を、投票で決まった順に追加（Rat King, Baba, Solomon, Deadman Danny, Violet, Nurse Harrow）</span></li>
     <li><span class="num">2026.09.29</span><span>大型アップデート City Never Sleeps：マップ刷新、Haunts、永続バフ、期間限定ショップ</span></li>
   </ol>
   <p class="note">次の大型はアイテム中心のアップデートの予定。開発者の Yoshi は 11/24 に Discord で「時期は未定」「クリスマス前には出ない」と答えています。</p>
@@ -244,7 +245,7 @@ const H=[
  ["Apollo","fencer_mm.webp","adj",["Riposte を大幅改修：弾は全反射、スキルを当ててきた相手にだけ Pommel Hit","Pommel Hit は打ち上げ＋50%減速＋スピリットダメ（100＋1.5倍率）に","Disengaging Sigil CD 12 → 11秒","Flawless Advance CD 26 → 30秒"]],
  ["Baba","baba_mm.webp","adj",["移動速度 6.5 → 6.4m、スピリット耐性成長 0.05 → 0.02","Threadsap 持続 16 → 10秒、1発ダメ 8 → 12","Feed The Birds 射程 18 → 20m、最大ダメ 450 → 650","Granny Long Legs：パリィされるとスタン"]],
  ["Bebop","bebop_mm.webp","fix",["Grapple Arm がヘビー近接扱いになっていた不具合を修正"]],
- ["Billy","punkgoat_mm.webp","fix",["Bashdown：行動不能時にすぐ叩きつけ","Blasted：バリア相手・低火力時のダメ増加の不具合を修正"]],
+ ["Billy","punkgoat_mm.webp","fix",["Bashdown：行動不能になると叩きつけが早く出るように","Blasted：バリア相手・低火力時のダメ増加の不具合を修正"]],
  ["Calico","nano_mm.webp","buff",["Leaping Slash：敵ヒーローに当たった時点で止まって斬る","T3 ダメ +90 → +100、ヒット時CD短縮 50 → 60%"]],
  ["Celeste","unicorn_mm.webp","fix",["Light Eater / Radiant Daggers の不具合を修正"]],
  ["Deadman Danny","deadpack_mm.webp","nerf",["Strix Salvo CD 25 → 26秒、倍率 0.681 → 0.62","Chimera Mk1 爆発半径 8 → 6.5m","ジェットパックの方向転換を抑制"]],
