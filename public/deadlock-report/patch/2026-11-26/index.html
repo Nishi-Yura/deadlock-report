@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11/26 アップデートまとめ | Deadlock レポート</title>
+<meta name="description" content="Deadlock 2026年11月26日アップデート（感謝祭イベント）の変更点を日本語で整理したまとめ。">
+<link rel="canonical" href="https://nishi-yura.github.io/deadlock-report/patch/2026-11-26/">
+<meta property="og:site_name" content="Deadlock レポート">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://nishi-yura.github.io/deadlock-report/patch/2026-11-26/">
+<meta property="og:title" content="Deadlock 11/26 アップデートまとめ">
+<meta property="og:description" content="感謝祭イベントと同時に来た調整パッチ。経済・ダメージ計算・30体以上のヒーロー変更を日本語で整理。">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#2b2b2b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* DESIGN.md「A. スコアシート」の色と文字をそのまま使う */
+:root{
+  --page:#cfcfcb; --panel:#ffffff; --cell:#f1f1ef; --cellhover:#f7f7f5;
+  --ink:#2b2b2b; --mute:#6b6b6b; --line:#ececec; --link:#0a7cad;
+  --win:#2b8a3e; --lose:#c92a2a; --hi:#e3f1e5;
+  --num:"Barlow Semi Condensed","IBM Plex Sans JP",sans-serif;
+  --sans:"IBM Plex Sans JP",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --page:#161615; --panel:#222220; --cell:#2c2c2a; --cellhover:#292927;
+  --ink:#e8e8e4; --mute:#9a9a94; --line:#333331; --link:#5bb6dd;
+  --win:#5cc275; --lose:#ef6b6b; --hi:#1f3a26; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.7}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,p{margin:0}
+ul{margin:0}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.bar{background:var(--ink)}
+.bar nav{max-width:760px;margin:0 auto;padding:0 16px;font-size:12px}
+.bar a{display:inline-block;padding:14px 0;font-weight:700;color:var(--panel)}
+main{max-width:760px;margin:0 auto;padding:20px 16px 12px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.panel{background:var(--panel);padding:14px 16px 16px;display:grid;gap:10px;min-width:0}
+.crumb{font-size:12px;color:var(--mute)}
+h1{font-family:var(--num);font-size:26px;line-height:1.2;font-weight:700}
+.lede{max-width:62ch}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;margin-top:4px}
+.facts div{background:var(--cell);padding:8px 10px;display:grid;gap:2px;min-width:0}
+.facts b{font-family:var(--num);font-size:16px;font-weight:600}
+.tldr{list-style:none;padding:0;display:grid;gap:0}
+.tldr li{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.tldr li:last-child{border-bottom:0}
+.tldr .n{font-family:var(--num);font-size:20px;font-weight:700;line-height:1.2;color:var(--mute)}
+.sub{font-size:12px;font-weight:700;margin-top:6px}
+ul.list{padding-left:1.2em;display:grid;gap:4px}
+ul.list li::marker{color:var(--mute)}
+.chg{font-family:var(--num);font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;background:var(--cell);padding:0 4px}
+.up{color:var(--win)} .down{color:var(--lose)}
+.tbl{overflow-x:auto;margin:0 -16px}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{text-align:left;padding:7px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+tr:last-child td{border-bottom:0}
+.k{font-weight:700;white-space:nowrap}
+.k.buff{color:var(--win)} .k.nerf{color:var(--lose)} .k.adj{color:var(--ink)} .k.fix{color:var(--mute)}
+.filters{display:flex;flex-wrap:wrap;gap:3px}
+.filters button{font:inherit;font-size:12px;font-weight:700;min-height:36px;padding:0 14px;border:0;background:var(--cell);color:var(--ink);cursor:pointer;border-bottom:2px solid transparent}
+.filters button[aria-pressed="true"]{border-bottom-color:var(--ink)}
+.filters button:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.heroes{list-style:none;padding:0;margin:0 -16px}
+.hero{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.hero:last-child{border-bottom:0}
+.hero[hidden]{display:none}
+.icon{width:32px;height:32px;background:#3a3a3a;color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;overflow:hidden}
+.icon img{width:100%;height:100%;object-fit:cover}
+.hero-h{display:flex;gap:10px;align-items:baseline}
+.hero-h h3{font-family:var(--num);font-size:16px;font-weight:600}
+.hero ul{padding-left:1.1em;color:var(--mute);font-size:12.5px}
+.tl{list-style:none;padding:0;display:grid}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)}
+.tl li:last-child{border-bottom:0}
+.tl .now{font-weight:700}
+.note{background:var(--hi);padding:10px 12px}
+footer{max-width:760px;margin:0 auto;padding:8px 16px 40px;font-size:11px;color:var(--mute)}
+footer a{display:inline-block;padding:12px 0}
+@media (max-width:560px){
+  .facts{grid-template-columns:1fr}
+  .tl li{grid-template-columns:1fr;gap:0}
+}
+</style>
+</head>
+<body>
+<header class="bar"><nav><a href="/deadlock-report/">Deadlock レポート</a></nav></header>
+
+<main>
+<section class="panel">
+  <p class="crumb">パッチまとめ ・ 2026.11.26 ・ Minor Update</p>
+  <h1>11/26 アップデート（感謝祭）</h1>
+  <p class="lede">公式の扱いは「マイナーアップデート」ですが、ソウル経済、ダメージ計算のルール、Haunts と Midboss、30体以上のヒーローに変更が入った大きめのパッチです。</p>
+  <div class="facts">
+    <div><span class="lab">配信</span><b>2026.11.26</b></div>
+    <div><span class="lab">前回の大型</span><b>City Never Sleeps</b></div>
+    <div><span class="lab">変更ヒーロー</span><b>33 体</b></div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 class="lab">まずはここだけ</h2>
+  <ol class="tldr">
+    <li><span class="n">1</span><span><b>序盤が柔らかく、後半が痛く。</b>基礎HP <span class="chg down">−8%</span>（その分ブーンでのHP成長へ再配分）、ブーン毎の銃ダメージ成長 <span class="chg up">+5%</span>（Haze, Holliday, Venator, Vindicta, Warden, Wraith は対象外）。</span></li>
+    <li><span class="n">2</span><span><b>逆転ボーナスが弱く。</b>カムバックソウル約 <span class="chg down">−5%</span>。Unstable Rift の劣勢ボーナスはネットワース差20%で最大（以前は15%）。</span></li>
+    <li><span class="n">3</span><span><b>ファーストキル報酬アップ。</b>各プレイヤーの初キル <span class="chg up">125 → 175</span> ソウル。</span></li>
+    <li><span class="n">4</span><span><b>ダメージ増減の計算を統一。</b>Rebuttal や Curse などの与ダメ増減が全種類のダメージに乗るように。重ね掛けは逓減。</span></li>
+    <li><span class="n">5</span><span><b>Wraith に大きな弱体。</b>移動速度・HP回復・スプリント・カード生成速度がまとめて低下。</span></li>
+    <li><span class="n">6</span><span><b>練習モードに Bot Drills。</b>Bebop のフック避け、Graves のパリィ読みなど15種類の対面練習。</span></li>
+  </ol>
+</section>
+
+<section class="panel">
+  <h2 class="lab">全体の変更</h2>
+
+  <h3 class="sub">ソウル経済・逆転要素</h3>
+  <ul class="list">
+    <li>カムバックソウルを全ソース約 <span class="chg down">−5%</span>。</li>
+    <li>自チーム平均より稼いでいる人のカムバックソウルは、一部がチームの貧しい2人へ回る。平均ちょうどで0%、平均+20%で最大80%（以前は「敵平均より上なら一律70%」）。</li>
+    <li>Unstable Rift の劣勢ボーナス（耐性・占領速度・トルーパー数）は差20%で最大。小さい差ではボーナスが減る。</li>
+    <li>トルーパーの対ヒーローダメージ <span class="chg">+10%</span>。ソウルオーブが落ちる範囲 <span class="chg">45m → 42m</span>、地面のオーブ取得範囲 <span class="chg">−7%</span>。</li>
+    <li>木箱のソウル：通常 <span class="chg">23+1.8/分 → 18+2.0/分</span>、大 <span class="chg">46+3.6/分 → 36+4.0/分</span>（序盤は減り、後半は増える）。</li>
+    <li>浮遊回復スナックの復活 <span class="chg">180秒 → 120秒</span>、取得範囲 <span class="chg">3m → 3.5m</span>。</li>
+  </ul>
+
+  <h3 class="sub">Haunts・Midboss・Rejuvenator</h3>
+  <ul class="list">
+    <li>Haunts：報酬 <span class="chg">−5%</span>、スキルダメージ <span class="chg">+30%</span>、弾耐性 <span class="chg">+5%</span>、スピリット耐性 <span class="chg">+10%</span>。劣勢時の Haunted Souls 確保速度は最大 <span class="chg">+50% → +75%</span>。</li>
+    <li>Sinner's Sacrifice の1撃ダメージ <span class="chg">80 → 80 + 最大HPの1%</span>。</li>
+    <li>Midboss：HP <span class="chg">15600+234/分 → 12500+250/分</span>、与ダメ <span class="chg">+30%</span>、全体咆哮の閾値 <span class="chg">25% → 30%</span>、連射速度低下効果は半減。</li>
+    <li>Rejuv クリスタル取得時に、ウルト以外のデバフを解除（回復の前）。クリスタルを殴った報酬はチーム全員で均等割り。</li>
+  </ul>
+
+  <h3 class="sub">Permanent Buffs（永続バフ）</h3>
+  <ul class="list">
+    <li>弾耐性・スピリット耐性 <span class="chg up">0.5/0.75/1% → 0.5/1/1.5%</span>、スキル射程 <span class="chg up">0.25/0.5/0.75% → 0.5/0.75/1%</span>、移動速度3段目 <span class="chg up">0.3m → 0.4m</span>。</li>
+    <li>スキル射程バフの2・3段目が範囲に効いていなかった不具合を修正。</li>
+  </ul>
+
+  <h3 class="sub">戦闘・移動のルール</h3>
+  <ul class="list">
+    <li>空中ジャンプに失敗すると、次の地上ジャンプの空気抵抗が連続回数に応じて増える（バニーホップのマクロ対策）。</li>
+    <li>ヘビー近接：途中で行動不能・打ち上げを受けると即座にパンチが確定。</li>
+    <li>与ダメ増加・減少（Rebuttal, Inhibitor, Cheat Death, Curse, Haunting Shot など）が、固定武器ダメージ・アイテムの固定ダメージ・近接スキルの基礎値・武器ダメ依存スキルにも乗るように。</li>
+    <li>与ダメ増加同士・減少同士の重ね掛けは全ダメージ種で逓減。Silencer などの「スピリット与ダメ低下」同士も逓減。召喚物は持ち主の現在の増減値を使う。</li>
+    <li>壁際のテレポート失敗、ノックバックの挙動、Steam Vent 内の索敵など、多数の不具合を修正。</li>
+  </ul>
+
+  <h3 class="sub">UI・表示</h3>
+  <ul class="list">
+    <li>スタミナ横に残り空中ジャンプ/ダッシュ数を表示（使い切ると赤）。Alt でジップラインブーストのCDを表示。</li>
+    <li>上部バーに Rejuvenator の残り時間、クリスタルに番号。Unstable Rift の劣勢ボーナスも HUD に表示。</li>
+    <li>武器ステータスに散弾数、Shiv / Yamato / Viscous の副射撃、Deadman Danny のチャージ射撃を表示。</li>
+    <li>試合後グラフに「与えたCC」「受けたCC」「軽減したダメージ」を追加。ヒーロー変更時にビルドを即ロード。</li>
+  </ul>
+</section>
+
+<section class="panel">
+  <h2 class="lab">サンドボックス ・ Street Brawl</h2>
+  <h3 class="sub">Bot Drills（Testing Tools → Bots++）</h3>
+  <p>目の前に敵ボットを出して、特定の動きへの対処を練習できる機能。収録は15種類：Abrams の突進、Baba ×2、Bebop のフック避け、Billy の連携、Deadman Danny の急降下、Graves のパリィ読み、Grey Talon の空爆、Holliday の樽、Lash の叩きつけ、McGinnis の壁＋弾幕、Paradox の入れ替え、Silver の狼形態、Vindicta の飛行、Viscous ×2。</p>
+  <h3 class="sub">Street Brawl</h3>
+  <ul class="list">
+    <li>最終ラウンドのブーン上限 <span class="chg">34 → 35</span>。Cloak of Opportunity が Fear も防ぐように。</li>
+    <li>ヒーローごとのおすすめアイテムが、現在の人気アイテムから自動で更新されるように。</li>
+  </ul>
+</section>
+
+<section class="panel">
+  <h2 class="lab">アイテム</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>アイテム</th><th>区分</th><th>変更内容</th></tr></thead>
+    <tbody>
+      <tr><td>Healing Nova</td><td class="k buff">強化</td><td>スピリット倍率 <span class="chg">1.1 → 1.25</span></td></tr>
+      <tr><td>Indomitable</td><td class="k buff">強化</td><td>Baba の鳩化（Feed The Birds）を防ぐ</td></tr>
+      <tr><td>Express Shot</td><td class="k nerf">弱体</td><td>副射撃の武器ダメ成長 約 <span class="chg">−10%</span></td></tr>
+      <tr><td>Sharpshooter</td><td class="k nerf">弱体</td><td>減衰距離 <span class="chg">+20% → +18%</span></td></tr>
+      <tr><td>Capacitor</td><td class="k nerf">弱体</td><td>電撃ダメージ <span class="chg">43 → 37</span>（封じる移動スキルを説明に表示）</td></tr>
+      <tr><td>Dispel Magic</td><td class="k nerf">弱体</td><td>CD <span class="chg">45秒 → 52秒</span></td></tr>
+      <tr><td>Cheat Death</td><td class="k nerf">弱体</td><td>CD <span class="chg">90秒 → 105秒</span></td></tr>
+      <tr><td>Spirit Burn</td><td class="k nerf">弱体</td><td>デバフ時間 <span class="chg">8秒 → 7秒</span></td></tr>
+      <tr><td>Mystic Reverb</td><td class="k fix">修正</td><td>Spellbreaker で減ったダメージを正しく反映</td></tr>
+      <tr><td>Restorative Locket ほか</td><td class="k fix">修正</td><td>新ヒーローのスキルでのチャージ獲得を整理（Spellslinger, Radiant Regeneration も同様）</td></tr>
+      <tr><td>Rebuttal / Witchmail / Majestic Leap</td><td class="k fix">修正</td><td>各種不具合の修正</td></tr>
+      <tr><td>Phantom Strike / Slowing Hex / Vortex Web</td><td class="k adj">表示</td><td>敵ヒーローごとに止められるスキルを説明に表示</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="panel">
+  <h2 class="lab">ヒーロー</h2>
+  <p class="crumb">区分は主な変更の傾向で付けた目安です（公式の分類ではありません）。</p>
+  <div class="filters" role="group" aria-label="区分で絞り込み">
+    <button id="f-all" data-f="all" aria-pressed="true">すべて</button>
+    <button id="f-buff" data-f="buff" aria-pressed="false">強化</button>
+    <button id="f-nerf" data-f="nerf" aria-pressed="false">弱体</button>
+    <button id="f-adj" data-f="adj" aria-pressed="false">調整</button>
+    <button id="f-fix" data-f="fix" aria-pressed="false">修正のみ</button>
+  </div>
+  <ul class="heroes" id="heroes"></ul>
+</section>
+
+<section class="panel">
+  <h2 class="lab">最近の流れ</h2>
+  <ol class="tl">
+    <li><span class="num now">2026.11.26</span><span class="now">今回：感謝祭イベント＋上記の調整</span></li>
+    <li><span class="num">2026.11.24</span><span>非公開の小修正（Street Brawl、セキュリティ、ソウルバッグ）</span></li>
+    <li><span class="num">2026.11.05</span><span>ランク ベータ シーズン2開始。ソフトリセット、ヒーローBAN 3 → 4</span></li>
+    <li><span class="num">2026.11.04</span><span>アイテム・ヒーローの調整</span></li>
+    <li><span class="num">2026.10.30</span><span>ハロウィンイベント、Midboss 周辺と Rejuvenator の変更</span></li>
+    <li><span class="num">10.02 – 10.20</span><span>投票で選ばれた新ヒーロー6体を順に追加（Rat King, Baba, Solomon, Deadman Danny, Violet, Nurse Harrow）</span></li>
+    <li><span class="num">2026.09.29</span><span>大型アップデート City Never Sleeps：マップ刷新、Haunts、永続バフ、期間限定ショップ</span></li>
+  </ol>
+  <p class="note">次の大型はアイテム中心のアップデートの予定。開発者の Yoshi は 11/24 に Discord で「時期は未定」「クリスマス前には出ない」と答えています。</p>
+</section>
+
+<section class="panel">
+  <h2 class="lab">出典</h2>
+  <ul class="list">
+    <li><a href="https://deadlock.wiki/Update:November_26,_2026">Deadlock Wiki – Update:November 26, 2026</a>（公式パッチノートの転載）</li>
+    <li><a href="https://deadlock.wiki/Updates">Deadlock Wiki – Updates</a></li>
+    <li><a href="https://forums.playdeadlock.com/forums/changelog.10/">公式フォーラム Changelog</a></li>
+  </ul>
+  <p class="crumb">2026.11.27 時点。数値は英語のパッチノートから訳しています。</p>
+</section>
+</main>
+
+<footer><a href="/deadlock-report/">レポート一覧</a></footer>
+
+<script>
+const IMG="https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/";
+const H=[
+ ["Abrams","bull_mm.webp","fix",["Shoulder Charge：スタン中の敵が減速しない不具合などを修正","Seismic Impact：空中で発動する不具合を修正"]],
+ ["Apollo","fencer_mm.webp","adj",["Riposte を大幅改修：弾は全反射、スキルを当ててきた相手にだけ Pommel Hit","Pommel Hit は打ち上げ＋50%減速＋スピリットダメ（100＋1.5倍率）に","Disengaging Sigil CD 12 → 11秒","Flawless Advance CD 26 → 30秒"]],
+ ["Baba","baba_mm.webp","adj",["移動速度 6.5 → 6.4m、スピリット耐性成長 0.05 → 0.02","Threadsap 持続 16 → 10秒、1発ダメ 8 → 12","Feed The Birds 射程 18 → 20m、最大ダメ 450 → 650","Granny Long Legs：パリィされるとスタン"]],
+ ["Bebop","bebop_mm.webp","fix",["Grapple Arm がヘビー近接扱いになっていた不具合を修正"]],
+ ["Billy","punkgoat_mm.webp","fix",["Bashdown：行動不能時にすぐ叩きつけ","Blasted：バリア相手・低火力時のダメ増加の不具合を修正"]],
+ ["Calico","nano_mm.webp","buff",["Leaping Slash：敵ヒーローに当たった時点で止まって斬る","T3 ダメ +90 → +100、ヒット時CD短縮 50 → 60%"]],
+ ["Celeste","unicorn_mm.webp","fix",["Light Eater / Radiant Daggers の不具合を修正"]],
+ ["Deadman Danny","deadpack_mm.webp","nerf",["Strix Salvo CD 25 → 26秒、倍率 0.681 → 0.62","Chimera Mk1 爆発半径 8 → 6.5m","ジェットパックの方向転換を抑制"]],
+ ["The Doorman","doorman_mm.webp","fix",["Doorway の配置範囲表示を改善","Luggage Cart が消える不具合を修正"]],
+ ["Graves","necro_mm.webp","nerf",["連射速度 −5%、移動速度 6.7 → 6.5m","グールの対オブジェクトダメ −25%"]],
+ ["Holliday","astro_card.png","nerf",["弾数 10 → 8、ブーン毎の弾ダメ 1.144 → 1.05","Crackshot 倍率 1.116 → 0.9"]],
+ ["Infernus","inferno_mm.webp","buff",["Napalm 初期半径 0.5 → 0.75m（当たり漏れ対策）"]],
+ ["Ivy","tengu_mm.webp","nerf",["ブーン毎のHP −6%","Stone Form・Air Drop のティア効果を入れ替え、Stone Form T3 倍率 1.5 → 1.2"]],
+ ["Kelvin","kelvin_mm.webp","nerf",["Arctic Beam CD 28 → 29秒、倍率 0.38 → 0.32","Ice Path が壊れやすく、T3 35 → 30%"]],
+ ["Lady Geist","spectre_mm.webp","nerf",["Essence Bomb 倍率 1.35 → 1.3、ダメ 90 → 85","起爆時間 0.65 → 0.8秒、自傷 30 → 50%"]],
+ ["Lash","lash_mm.webp","fix",["Death Slam の持ち上げ・地形への引っかかりを修正"]],
+ ["McGinnis","engineer_mm.webp","fix",["Medicinal Specter が弾を防いでしまう不具合を修正"]],
+ ["Mina","vampirebat_mm.webp","nerf",["基礎HP回復 2 → 1.5","Love Bites 倍率 1.85 → 1.5（T2で +0.35）","Sanguine Retreat T3 射程 +4 → +3m"]],
+ ["Mirage","mirage_mm.webp","fix",["Dust Devil の不具合を修正","Traveler：Altキャストで回復エリアを指定可能に"]],
+ ["Mo & Krill","digger_mm.webp","buff",["弾数 20 → 25","Burrow で Luggage Cart の下を通れる"]],
+ ["Nurse Harrow","nurse_mm.webp","nerf",["弾速 −30%（遠距離でさらに減速）","Leech Therapy 弾速 −15%"]],
+ ["Paradox","chrono_card.png","nerf",["Kinetic Carbine 最大ダメ 125 → 110%、T3 +55 → +40%"]],
+ ["Rat King","ratking_mm.webp","buff",["Rule, Ratannia! 移動速度 4 → 5m、打ち上げ時間 +35%","Royal Pestments T2 弾返却率 15 → 20%"]],
+ ["Shiv","shiv_mm.webp","adj",["Slice and Dice の T2 と T3 の効果を入れ替え","Killing Blow T3 処刑閾値 10 → 8%"]],
+ ["Silver","werewolf_mm.webp","fix",["透明の敵に爪攻撃が当たらない不具合などを修正"]],
+ ["Sinclair","magician_card.png","buff",["Vexing Bolt のオブジェクトへのダメ減少を撤廃"]],
+ ["Solomon","chessmaster_mm.webp","fix",["Setup Bishop の T2 アップグレード時の挙動を改善","Rook Battery が消える不具合を修正"]],
+ ["Venator","priest_mm.webp","buff",["Gutshot CD 23 → 20秒","Snap Trap は起動前に破壊されない、T3 で確定ダメも増幅"]],
+ ["Violet","artist_mm.webp","buff",["Living Ink T3 弾ダメ +30 → +45%","描いた線は近接トルーパーに壊されるように"]],
+ ["Viscous","viscous_mm.webp","nerf",["ヘッドショット耐性 10% 追加","副射撃の弾数 5 → 4"]],
+ ["Warden","warden_mm.webp","buff",["ブーン毎のHP +8%","Last Stand 吸収 75 → 90%（ヒーロー以外 10 → 15%）","Willpower T1 でバリア +50"]],
+ ["Wraith","wraith_mm.webp","nerf",["HP回復 2 → 1、移動速度 7.2 → 6.8m、スプリント 1.6 → 1.2m","Card Trick カード生成速度 −20%","Full Auto T3 倍率 0.045 → 0.03"]],
+ ["Yamato","yamato_mm.webp","fix",["Shadow Transformation 終了時の不具合を修正"]]
+];
+const L={buff:"強化",nerf:"弱体",adj:"調整",fix:"修正"};
+const ini=n=>{const c=n.replace(/[^A-Z]/g,"");return (c.length>=2?c.slice(0,2):n.slice(0,2)).toUpperCase()};
+const box=document.getElementById("heroes");
+box.innerHTML=H.map(([n,f,k,c])=>`<li class="hero" data-k="${k}"><span class="icon" title="${n}"><img src="${IMG+f}" alt="" width="32" height="32" loading="lazy" onerror="this.parentNode.textContent='${ini(n)}'"></span><div><div class="hero-h"><h3>${n}</h3><span class="k ${k}">${L[k]}</span></div><ul>${c.map(x=>`<li>${x}</li>`).join("")}</ul></div></li>`).join("");
+const btns=document.querySelectorAll(".filters button");
+btns.forEach(b=>b.addEventListener("click",()=>{
+  const f=b.dataset.f;
+  btns.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  box.querySelectorAll(".hero").forEach(h=>{h.hidden=!(f==="all"||h.dataset.k===f)});
+}));
+</script>
+</body>
+</html>
