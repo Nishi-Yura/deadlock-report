@@ -239,7 +239,7 @@
           ],
           "bans": [
             "Nurse Harrow",
-            "Lash",
+            "Shiv",
             "Mina"
           ],
           "players": [
@@ -580,7 +580,7 @@
           "bans": [
             "Silver",
             "Lady Geist",
-            "Lash"
+            "Shiv"
           ],
           "players": [
             [
@@ -727,7 +727,7 @@
     }
   ],
   "heroNote": "Billy は4マップすべてで使われて4勝（AUSKR で3勝、OT で1勝）。Paradox も4マップすべてで使われて2勝2敗。4マップだけなので、今回の結果として読む。",
-  "banNote": "Dynamo は4マップすべてで BAN（AUSKR と OT が2回ずつ）。決勝で AUSKR は Mina・Lash・Silver を、OT は Lady Geist と Dynamo を、それぞれ2回 BAN した。",
+  "banNote": "Dynamo は4マップすべてで BAN（AUSKR と OT が2回ずつ）。決勝で AUSKR は Mina・Shiv・Silver を、OT は Lady Geist と Dynamo を、それぞれ2回 BAN した。",
   "takeaways": [
     {
       "title": "Billy を取ったチームが4マップ全勝",

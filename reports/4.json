@@ -1,0 +1,766 @@
+{
+  "id": 4,
+  "event": "Deadlock Night Shift APAC #4",
+  "title": "Deadlock Night Shift APAC #4",
+  "date": "2026-11-27",
+  "headline": "11/26 パッチ後も Billy を取ったチームが4マップ全勝し、OT が AUSKR から優勝を取り返した",
+  "series": [
+    {
+      "region": "APAC",
+      "teams": [
+        "AUSKR",
+        "OT"
+      ],
+      "score": [
+        1,
+        2
+      ],
+      "note": "OT が優勝（チャレンジャーから勝ち上がり）。MVP は fletch"
+    },
+    {
+      "region": "APAC",
+      "stage": "チャレンジャー",
+      "teams": [
+        "OT",
+        "EGO"
+      ],
+      "score": [
+        1,
+        0
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "apacc1",
+      "region": "APAC",
+      "stage": "チャレンジャー",
+      "no": 1,
+      "winner": "OT",
+      "firstPick": "OT",
+      "duration": "23:35",
+      "matchId": 144477461,
+      "screenshot": "img/apac_c1.png",
+      "screenshotNote": "配信画面（左が EGO、右が OT）",
+      "flow": "OT が12分で3,900ソウルリード。20:48 の Mid-Boss を取ってから一気に差を広げ、23:35 にキル 41-12、6.01万ソウル差で勝った。nicoos（Ivy）12/1/18、sire（Lady Geist）6/0/11。",
+      "teams": [
+        {
+          "name": "OT",
+          "picks": [
+            "Shiv",
+            "Lady Geist",
+            "Billy",
+            "Violet",
+            "Ivy",
+            "Lash"
+          ],
+          "bans": [
+            "Abrams",
+            "Pocket",
+            "Mina"
+          ],
+          "players": [
+            [
+              "Whitearmor",
+              "Shiv",
+              11,
+              2,
+              14,
+              28528,
+              33268,
+              5480
+            ],
+            [
+              "sire",
+              "Lady Geist",
+              6,
+              0,
+              11,
+              33570,
+              18098,
+              20023
+            ],
+            [
+              "Adam",
+              "Billy",
+              2,
+              5,
+              22,
+              25434,
+              25646,
+              7428
+            ],
+            [
+              "ARandomDeadDude",
+              "Violet",
+              2,
+              2,
+              22,
+              24130,
+              18377,
+              1826
+            ],
+            [
+              "nicoos",
+              "Ivy",
+              12,
+              1,
+              18,
+              26670,
+              26076,
+              12907
+            ],
+            [
+              "fletch",
+              "Lash",
+              8,
+              2,
+              23,
+              29560,
+              30293,
+              13880
+            ]
+          ]
+        },
+        {
+          "name": "EGO",
+          "picks": [
+            "Warden",
+            "Paradox",
+            "Grey Talon",
+            "Drifter",
+            "Rat King",
+            "The Doorman"
+          ],
+          "bans": [
+            "Nurse Harrow",
+            "Mirage",
+            "Rem"
+          ],
+          "players": [
+            [
+              "zaharchik",
+              "Warden",
+              3,
+              5,
+              4,
+              21063,
+              17341,
+              3945
+            ],
+            [
+              "zoob3s",
+              "Paradox",
+              2,
+              8,
+              5,
+              17008,
+              14711,
+              1278
+            ],
+            [
+              "ecartxo",
+              "Grey Talon",
+              2,
+              5,
+              2,
+              16854,
+              22259,
+              763
+            ],
+            [
+              "vanek",
+              "Drifter",
+              5,
+              8,
+              3,
+              17013,
+              20417,
+              2449
+            ],
+            [
+              "Stt",
+              "Rat King",
+              0,
+              9,
+              1,
+              18588,
+              16627,
+              342
+            ],
+            [
+              "fred",
+              "The Doorman",
+              0,
+              6,
+              5,
+              17275,
+              11946,
+              183
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apac1",
+      "region": "APAC",
+      "no": 1,
+      "winner": "OT",
+      "firstPick": "OT",
+      "duration": "29:49",
+      "matchId": 144492230,
+      "screenshot": "img/apac_m1.png",
+      "screenshotNote": "配信画面（左が AUSKR、右が OT）",
+      "flow": "15分までは AUSKR が最大3,200ソウルリード。OT が 18:16 の Mid-Boss を取って20分で1.01万リードに逆転し、27:27 の Mid-Boss も取って 29:49 に勝った。キル 28-24。sire（Lady Geist）は与ダメ4.84万。",
+      "teams": [
+        {
+          "name": "OT",
+          "picks": [
+            "Billy",
+            "Lady Geist",
+            "Silver",
+            "Ivy",
+            "Paradox",
+            "Infernus"
+          ],
+          "bans": [
+            "Paige",
+            "Abrams",
+            "Mina"
+          ],
+          "players": [
+            [
+              "Adam",
+              "Billy",
+              8,
+              4,
+              14,
+              32563,
+              21346,
+              6614
+            ],
+            [
+              "sire",
+              "Lady Geist",
+              3,
+              5,
+              21,
+              35228,
+              48406,
+              26279
+            ],
+            [
+              "Whitearmor",
+              "Silver",
+              4,
+              5,
+              16,
+              29292,
+              22646,
+              7454
+            ],
+            [
+              "nicoos",
+              "Ivy",
+              2,
+              4,
+              23,
+              29414,
+              24209,
+              7808
+            ],
+            [
+              "ARandomDeadDude",
+              "Paradox",
+              5,
+              2,
+              15,
+              29006,
+              27253,
+              1280
+            ],
+            [
+              "fletch",
+              "Infernus",
+              6,
+              4,
+              15,
+              32423,
+              28708,
+              7741
+            ]
+          ]
+        },
+        {
+          "name": "AUSKR",
+          "picks": [
+            "Warden",
+            "Mirage",
+            "Mo & Krill",
+            "Kelvin",
+            "Venator",
+            "Holliday"
+          ],
+          "bans": [
+            "Shiv",
+            "Pocket",
+            "McGinnis"
+          ],
+          "players": [
+            [
+              "Decay",
+              "Warden",
+              7,
+              4,
+              12,
+              35828,
+              27400,
+              12290
+            ],
+            [
+              "birdring",
+              "Mirage",
+              1,
+              3,
+              16,
+              32198,
+              22870,
+              3620
+            ],
+            [
+              "Bischu",
+              "Mo & Krill",
+              2,
+              5,
+              17,
+              23020,
+              14926,
+              9042
+            ],
+            [
+              "FaxFox",
+              "Kelvin",
+              1,
+              7,
+              17,
+              23643,
+              13551,
+              15553
+            ],
+            [
+              "Jai_Stacked",
+              "Venator",
+              9,
+              5,
+              10,
+              25570,
+              24585,
+              2200
+            ],
+            [
+              "Fragmaz",
+              "Holliday",
+              4,
+              4,
+              15,
+              23723,
+              21440,
+              4441
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apac2",
+      "region": "APAC",
+      "no": 2,
+      "winner": "AUSKR",
+      "firstPick": "OT",
+      "duration": "33:39",
+      "matchId": 144508467,
+      "screenshot": "img/apac_m2.png",
+      "screenshotNote": "配信画面（左が AUSKR、右が OT）",
+      "flow": "9分は OT が2,400ソウルリード。AUSKR が 16:14・24:02・31:08 の Mid-Boss を3回とも取り、20分で2.07万、終了時は4.72万リード。キル 51-25。Decay（Haze）12/3/23。",
+      "teams": [
+        {
+          "name": "OT",
+          "picks": [
+            "Pocket",
+            "Silver",
+            "Abrams",
+            "Mirage",
+            "Ivy",
+            "The Doorman"
+          ],
+          "bans": [
+            "Kelvin",
+            "Warden",
+            "Mina"
+          ],
+          "players": [
+            [
+              "sire",
+              "Pocket",
+              3,
+              8,
+              10,
+              31884,
+              28789,
+              3106
+            ],
+            [
+              "Whitearmor",
+              "Silver",
+              5,
+              12,
+              12,
+              28810,
+              26842,
+              8825
+            ],
+            [
+              "Adam",
+              "Abrams",
+              2,
+              11,
+              10,
+              29563,
+              21959,
+              7838
+            ],
+            [
+              "ARandomDeadDude",
+              "Mirage",
+              4,
+              4,
+              12,
+              31849,
+              18268,
+              5681
+            ],
+            [
+              "nicoos",
+              "Ivy",
+              5,
+              7,
+              12,
+              28810,
+              43060,
+              7687
+            ],
+            [
+              "fletch",
+              "The Doorman",
+              6,
+              9,
+              9,
+              28810,
+              27379,
+              5662
+            ]
+          ]
+        },
+        {
+          "name": "AUSKR",
+          "picks": [
+            "Billy",
+            "Venator",
+            "Holliday",
+            "Violet",
+            "Lash",
+            "Haze"
+          ],
+          "bans": [
+            "Shiv",
+            "Lady Geist",
+            "Paradox"
+          ],
+          "players": [
+            [
+              "Bischu",
+              "Billy",
+              7,
+              4,
+              35,
+              40141,
+              33146,
+              12168
+            ],
+            [
+              "Jai_Stacked",
+              "Venator",
+              8,
+              6,
+              21,
+              37310,
+              27743,
+              2314
+            ],
+            [
+              "Fragmaz",
+              "Holliday",
+              7,
+              3,
+              33,
+              34711,
+              30606,
+              10356
+            ],
+            [
+              "FaxFox",
+              "Violet",
+              8,
+              4,
+              24,
+              33919,
+              24121,
+              2124
+            ],
+            [
+              "birdring",
+              "Lash",
+              9,
+              5,
+              24,
+              36621,
+              31962,
+              11760
+            ],
+            [
+              "Decay",
+              "Haze",
+              12,
+              3,
+              23,
+              44247,
+              42773,
+              13341
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "apac3",
+      "region": "APAC",
+      "no": 3,
+      "winner": "OT",
+      "firstPick": "OT",
+      "duration": "35:36",
+      "matchId": 144525386,
+      "screenshot": "img/apac_m3.png",
+      "screenshotNote": "配信画面（左が AUSKR、右が OT）",
+      "flow": "OT が 17:47 の Mid-Boss を取り、25分で1.87万ソウルリード。AUSKR が 25:59 と 32:29 の Mid-Boss を取って35分には差を110まで詰めたが、OT が 35:36 に勝った。キル 37-19。fletch（Apollo）13/4/15。",
+      "teams": [
+        {
+          "name": "OT",
+          "picks": [
+            "Billy",
+            "Venator",
+            "Violet",
+            "Paradox",
+            "Paige",
+            "Apollo"
+          ],
+          "bans": [
+            "Nurse Harrow",
+            "Mina",
+            "Lady Geist"
+          ],
+          "players": [
+            [
+              "Adam",
+              "Billy",
+              4,
+              3,
+              19,
+              38884,
+              38089,
+              11492
+            ],
+            [
+              "sire",
+              "Venator",
+              5,
+              3,
+              18,
+              38653,
+              28533,
+              1484
+            ],
+            [
+              "ARandomDeadDude",
+              "Violet",
+              6,
+              5,
+              21,
+              32021,
+              20759,
+              3285
+            ],
+            [
+              "Whitearmor",
+              "Paradox",
+              4,
+              2,
+              23,
+              32251,
+              31503,
+              3231
+            ],
+            [
+              "nicoos",
+              "Paige",
+              5,
+              2,
+              25,
+              34380,
+              35034,
+              3538
+            ],
+            [
+              "fletch",
+              "Apollo",
+              13,
+              4,
+              15,
+              36096,
+              47863,
+              12736
+            ]
+          ]
+        },
+        {
+          "name": "AUSKR",
+          "picks": [
+            "Warden",
+            "Pocket",
+            "Abrams",
+            "Kelvin",
+            "Holliday",
+            "Drifter"
+          ],
+          "bans": [
+            "Shiv",
+            "Silver",
+            "Ivy"
+          ],
+          "players": [
+            [
+              "Decay",
+              "Warden",
+              4,
+              5,
+              7,
+              39097,
+              29946,
+              13583
+            ],
+            [
+              "birdring",
+              "Pocket",
+              3,
+              4,
+              5,
+              40653,
+              29731,
+              1157
+            ],
+            [
+              "Bischu",
+              "Abrams",
+              3,
+              8,
+              9,
+              32377,
+              13560,
+              6347
+            ],
+            [
+              "FaxFox",
+              "Kelvin",
+              2,
+              5,
+              11,
+              35956,
+              11236,
+              30715
+            ],
+            [
+              "Fragmaz",
+              "Holliday",
+              6,
+              4,
+              6,
+              30673,
+              21047,
+              3377
+            ],
+            [
+              "Jai_Stacked",
+              "Drifter",
+              1,
+              11,
+              13,
+              30863,
+              14364,
+              5296
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "heroNote": "Billy は4マップすべてで使われて4勝（APAC #3 と合わせて8勝0敗）。パッチで強化された Violet は3勝0敗、同じく強化された Warden は0勝3敗。4マップだけなので、今回の結果として読む。",
+  "banNote": "Mina は4マップすべてで OT が BAN。AUSKR は決勝の3マップすべてで Shiv を BAN した（チャレンジャーで OT が使って勝ったヒーロー）。APAC #3 で4マップすべて BAN された Dynamo は、今回は BAN もピックもなかった。",
+  "takeaways": [
+    {
+      "title": "Billy を取ったチームは APAC #3・#4 の8マップで8戦全勝",
+      "body": "今回は OT が3マップ（チャレンジャー、決勝 Map 1・3）、AUSKR が決勝 Map 2 で使って全勝。11/26 パッチで Billy は不具合修正だけで、今回もどのマップでも BAN されなかった。"
+    },
+    {
+      "title": "強化された Violet は3勝、大きく弱体された Wraith は1度も出なかった",
+      "body": "Violet は APAC #3 では0マップだったが、今回は3マップで使われて3勝（Living Ink T3 の弾ダメ +30 → +45%）。BAN は1度もされなかった。Wraith は #3 で2マップ使われ2マップ BAN されたが、移動速度・HP回復の弱体後はピックも BAN もなかった。"
+    },
+    {
+      "title": "最初の Mid-Boss は平均で約2分早く倒れた",
+      "body": "Mid-Boss の HP が 15,600 → 12,500 に下がったパッチの後、最初の Mid-Boss は平均 18:16（APAC #3 は 20:02）。決勝 Map 3 の AUSKR は3回中2回を取って18,700ソウル差を110まで詰めたが、そのまま負けた。"
+    }
+  ],
+  "practice": [
+    "Billy が出た試合の勝敗",
+    "パッチ後、最初の Mid-Boss が何分に倒れたか"
+  ],
+  "sources": [
+    {
+      "label": "Deadlock API（マッチデータ）",
+      "url": "https://api.deadlock-api.com/"
+    },
+    {
+      "label": "Night Shift APAC #04 配信アーカイブ（YouTube）",
+      "url": "https://www.youtube.com/watch?v=6PygN2WuKaE"
+    },
+    {
+      "label": "Deadlock Night Shift 4 APAC（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-4-apac"
+    },
+    {
+      "label": "APAC 決勝シリーズ（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-4-apac/series/grand-final-1-deadlock-night-shift-4-apac-template-grand-final"
+    },
+    {
+      "label": "APAC チャレンジャーシリーズ（EDL.GG）",
+      "url": "https://edl.gg/events/deadlock-night-shift-4-apac/series/challenger-1-deadlock-night-shift-4-apac-template-challenger"
+    },
+    {
+      "label": "11/26 アップデートまとめ",
+      "url": "https://nishi-yura.github.io/deadlock-report/patch/2026-11-26/"
+    },
+    {
+      "label": "Deadlock Night Shift APAC #3 のレポート",
+      "url": "https://nishi-yura.github.io/deadlock-report/3/"
+    }
+  ]
+}
