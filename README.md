@@ -80,6 +80,20 @@ git push
 
 ---
 
+## 2.5 パッチまとめを足す手順
+
+公式のアップデートが出るたびに、日本語のまとめページを1枚足します。試合レポートの JSON とは別の、ただの HTML です。
+
+1. 中身を取る：<https://deadlock.wiki/Updates> で最新の日付を見て、`https://deadlock.wiki/Update:<Month>_<D>,_<YYYY>` を開く（公式フォーラムの Changelog と同じ内容）。
+2. `public/deadlock-report/patch/2026-11-26/index.html` をコピーして `patch/YYYY-MM-DD/index.html` を作り、中身を差し替える。CSS とヒーローのアイコン表（ファイル名は `src/heroes.ts` と同じ）はそのまま使う。
+   - 構成：概要 → まずはここだけ（6項目前後）→ 全体の変更 → モード → アイテム表 → ヒーロー（強化/弱体/調整/修正）→ 最近の流れ → 出典
+   - 数値は「前 → 後」で書く。ヒーロー数などの数は、表示された件数と合わせる。
+   - 非公開（Undocumented）の小修正だけの日はページを作らない。
+3. `src/pages/index-page.tsx` の `patches` の**先頭**に1件足す。前のページの「最近の流れ」はそのままでよい。
+4. `npm run build` → commit → push（⑤と同じ）。
+
+---
+
 ## 3. 書き方の決まり（前回「AI っぽい」と判断したものを避ける）
 
 - 「このページに載せていないこと」のような予防線の節は作らない。
