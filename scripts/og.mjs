@@ -46,11 +46,12 @@ function reportCard(r) {
   // カードには決勝だけ載せる（stage を省略したものが決勝）
   const finals = r.series.filter((s) => (s.stage ?? "決勝") === "決勝")
   const many = finals.length > 2
-  const teamSize = many ? 40 : 52
-  const scoreSize = many ? 56 : 76
+  const one = finals.length === 1
+  const teamSize = many ? 40 : one ? 60 : 52
+  const scoreSize = many ? 56 : one ? 92 : 76
   const series = finals.map((s) => {
     const winA = s.score[0] > s.score[1]
-    return h("div", { alignItems: "center", padding: many ? "6px 0" : "12px 0", borderTop: `2px solid ${C.line}` },
+    return h("div", { alignItems: "center", padding: many ? "6px 0" : one ? "16px 0" : "12px 0", borderTop: `2px solid ${C.line}` },
       h("div", { width: 70, fontSize: 22, fontWeight: 700, color: C.mute }, s.region),
       h("div", { flex: 1, justifyContent: "flex-end", fontFamily: "Barlow", fontSize: teamSize, fontWeight: 700, color: C.ink }, s.teams[0]),
       h("div", { width: 230, justifyContent: "center", fontFamily: "Barlow", fontSize: scoreSize, fontWeight: 700, color: C.ink },
@@ -66,9 +67,25 @@ function reportCard(r) {
       h("div", { fontSize: 22, fontWeight: 500, color: C.mute }, r.date.replaceAll("-", "."))),
     h("div", { fontSize: 42, fontWeight: 700, color: C.ink, marginTop: 10, marginBottom: 18 }, r.title),
     h("div", { flexDirection: "column" }, ...series),
+    one && mapStrip(r, finals[0]),
     h("div", { flex: 1 }),
     h("div", { background: C.cell, padding: "16px 22px", fontSize: 28, fontWeight: 500, color: C.ink, lineHeight: 1.4 }, r.headline),
   )
+}
+
+// 決勝が1つだけのとき、スコアの下にマップごとの勝者とキルを並べて空きを埋める
+function mapStrip(r, s) {
+  const maps = r.maps.filter((m) => m.region === s.region && (m.stage ?? "決勝") === "決勝")
+  const k = (t) => t.players.reduce((n, p) => n + p[2], 0)
+  return h("div", { gap: 8 },
+    ...maps.map((m) => {
+      const [a, b] = m.teams
+      const [w, l] = a.name === m.winner ? [a, b] : [b, a]
+      return h("div", { flex: 1, justifyContent: "space-between", alignItems: "baseline", background: C.cell, padding: "10px 16px", fontSize: 22 },
+        h("div", { fontWeight: 700, color: C.ink }, `Map ${m.no}`),
+        h("div", { fontFamily: "Barlow", fontWeight: 700, color: C.win, fontSize: 26 }, m.winner),
+        h("div", { fontFamily: "Barlow", fontWeight: 700, color: C.ink, fontSize: 26 }, `${k(w)}-${k(l)}`))
+    }))
 }
 
 function indexCard(reports) {

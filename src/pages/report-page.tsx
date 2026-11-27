@@ -64,7 +64,14 @@ export function ReportPage({ report: r }: { report: Report }) {
             const maps = seriesMaps(r, s)
             return (
               <TabsContent key={seriesKey(s)} value={seriesKey(s)} className="min-w-0 text-[13px]">
-                {maps.length === 1 ? (
+                {maps.length === 0 ? (
+                  <Panel>
+                    <p className="m-0 px-4 py-3">
+                      <b className="font-semibold">{s.teams[0]} {s.score[0]}-{s.score[1]} {s.teams[1]}</b>
+                    </p>
+                    {s.note && <p className="m-0 border-t border-line px-4 py-3 text-[12px] text-mute">{s.note}</p>}
+                  </Panel>
+                ) : maps.length === 1 ? (
                   <MapDetail map={maps[0]} base={base} />
                 ) : (
                   <Tabs defaultValue={maps[0].id} className="min-w-0 gap-3">
