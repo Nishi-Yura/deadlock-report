@@ -36,6 +36,9 @@ function useWidth(initial: number) {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
+    // 最初の幅はすぐ測る（ResizeObserver の通知は、裏のタブなどでは遅れることがある）
+    const now = el.getBoundingClientRect().width
+    if (now > 0) setW(Math.max(240, Math.round(now)))
     const ro = new ResizeObserver(([e]) => setW(Math.max(240, Math.round(e.contentRect.width))))
     ro.observe(el)
     return () => ro.disconnect()
