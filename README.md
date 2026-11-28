@@ -132,14 +132,15 @@ git push
 
 ## 2.6 Discord への自動告知
 
-`main` に push して公開が終わると、GitHub Actions（`deploy.yml` の `notify`）が `scripts/discord.mjs` を実行し、**新しく足されたレポートとパッチまとめだけ**を Discord に投稿します（既存のレポートの修正やサイトの機能変更では投稿しない）。文面はタイトル・見出し（または概要）・決勝の結果・リンクで、リンクのカード画像は Discord が自動で出します。`@everyone` などの通知は飛ばないようにしてあります。
+`main` に push して公開が終わると、GitHub Actions（`deploy.yml` の `notify`）が `scripts/discord.mjs` を実行し、**新しく足されたレポート・パッチまとめ・サイトの更新（`src/updates.json`）だけ**を Discord に投稿します（既存のレポートの修正や、`updates.json` に書いていない変更では投稿しない）。文面はタイトル・見出し（または概要）・決勝の結果・リンクで、リンクのカード画像は Discord が自動で出します。`@everyone` などの通知は飛ばないようにしてあります。
 
 - **投稿先の設定（最初の1回だけ）**：Discord のチャンネル設定 → 連携サービス → ウェブフック で URL を作り、リポジトリの Secrets に `DISCORD_WEBHOOK_URL` として登録する。
   ```powershell
   gh secret set DISCORD_WEBHOOK_URL --repo Nishi-Yura/deadlock-report
   ```
   （実行すると値を聞かれるので、ウェブフックの URL を貼る）。登録していなければ投稿しないだけで、公開は普通に終わる。
-- **文面を確かめる（投稿しない）**：`npm run discord -- --report 5`、`npm run discord -- --patch 2026-12-03`
+- **サイトの機能を足したとき**は、`src/updates.json` に1件足す（`id`・`date`・`title`・`items`）。push すると Discord に「サイトの更新」として投稿され、目次の一番下の「サイトの更新」にも出る。`id` は一度公開したら変えない（変えると同じ内容がもう一度投稿される）。細かい修正だけのときは足さなければ投稿されない。
+- **文面を確かめる（投稿しない）**：`npm run discord -- --report 5`、`npm run discord -- --patch 2026-12-03`、`npm run discord -- --update <id>`
 - 比べる相手は「前に公開まで成功した push」なので、続けて push して途中の実行が取り消されても、告知が抜けない。逆に、同じ実行を GitHub で「Re-run」すると同じ告知がもう一度出る。
 
 ---

@@ -147,6 +147,25 @@ for (const name of ["timelines.json", "items.json"]) {
   })
 }
 
+// ---- サイトの更新（src/updates.json。新しい id を足すと Discord に告知される） ----
+{
+  const f = join(root, "src", "updates.json")
+  const list = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : []
+  const ids = new Set()
+  if (!Array.isArray(list)) err("src/updates.json", "配列ではない")
+  else list.forEach((u, i) => {
+    const at = `src/updates.json [${i}]`
+    if (!u.id) err(at, "id を書く（例 2026-12-01-xxx。一度公開したら変えない。変えると同じ内容がもう一度告知される）")
+    else if (ids.has(u.id)) err(at, `id ${u.id} が重複`)
+    ids.add(u.id)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(u.date ?? "")) err(at, `date は "2026-11-28" の形（今は ${u.date}）`)
+    if (!u.title) err(at, "title を書く")
+    if (!Array.isArray(u.items) || !u.items.length) err(at, "items に1つ以上書く")
+    const len = (u.title ?? "").length + (u.items ?? []).join("\n・").length + 80
+    if (len > 1900) err(at, `長すぎる（約 ${len} 字）。Discord は1回 2,000 字まで`)
+  })
+}
+
 // ---- パッチまとめ：下書きのまま公開しない ----
 const patchDir = join(root, "public", "deadlock-report", "patch")
 if (existsSync(patchDir)) {

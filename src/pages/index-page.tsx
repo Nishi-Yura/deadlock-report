@@ -1,5 +1,9 @@
 import { Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { NextEvents } from "@/components/report/schedule"
+import updateList from "@/updates.json"
+
+/** サイトの更新（src/updates.json）。新しい順 */
+const updates = [...updateList].sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id))
 import { isFinal, reportPath, reports } from "@/lib/report"
 // パッチまとめ（public/deadlock-report/patch/ の静的ページ）の一覧は src/patches.json に書く
 import { patches } from "@/lib/stats"
@@ -91,6 +95,28 @@ export function IndexPage() {
             ))}
           </ol>
         </Panel>
+        {updates.length > 0 && (
+          <Panel delay={0.06}>
+            <h2 className="lab px-4 pt-3.5 pb-2 text-[12px] text-ink">サイトの更新</h2>
+            <ol className="m-0 list-none border-t border-line p-0">
+              {updates.slice(0, 3).map((u) => (
+                <li key={u.id} className="border-b border-line last:border-0">
+                  <details className="group">
+                    <summary className="grid min-h-11 cursor-pointer list-none grid-cols-[88px_1fr_auto] items-baseline gap-3 px-4 py-3 hover:bg-cellhover max-sm:grid-cols-[1fr_auto] [&::-webkit-details-marker]:hidden">
+                      <span className="num font-num text-[15px] font-semibold text-mute max-sm:col-span-2">{u.date.replaceAll("-", ".")}</span>
+                      <span className="font-semibold">{u.title}</span>
+                      <span className="text-[12px] text-link group-open:hidden">{u.items.length} 件を見る</span>
+                      <span className="hidden text-[12px] text-link group-open:inline">閉じる</span>
+                    </summary>
+                    <ul className="m-0 list-disc pr-4 pb-3 pl-9 sm:pl-[123px]">
+                      {u.items.map((x) => <li key={x}>{x}</li>)}
+                    </ul>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </Panel>
+        )}
       </main>
       <SiteFoot />
     </>

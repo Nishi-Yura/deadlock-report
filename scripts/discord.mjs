@@ -5,11 +5,13 @@
 // base と head を比べて「新しく足されたもの」だけを投稿する（既存のレポートの修正では投稿しない）
 //   - reports/N.json が新しく足された        → レポートの告知
 //   - src/patches.json に新しい日付が増えた  → パッチまとめの告知
+//   - src/updates.json に新しい id が増えた   → サイトの更新の告知（機能を足したときに手で1件書く）
 // 投稿先は環境変数 DISCORD_WEBHOOK_URL（リポジトリの Secrets）。なければ何もせずに終わる。
 //
 // 手元で文面だけ確かめる（投稿はしない）：
 //   npm run discord -- --report 4
 //   npm run discord -- --patch 2026-11-27
+//   npm run discord -- --update 2026-11-28-glossary-schedule
 //   npm run discord -- --base <commit> --head HEAD
 // 手元から本当に投稿するときは --send を付け、環境変数 DISCORD_WEBHOOK_URL を設定しておく。
 import { execFileSync } from "node:child_process"
@@ -62,6 +64,11 @@ function patchMessage(p) {
   return [`**パッチまとめ：${p.title}**`, p.summary, `${SITE}${p.path}`].join("\n")
 }
 
+function updateMessage(u) {
+  const [, m, d] = u.date.split("-").map(Number)
+  return [`**サイトの更新（${m}/${d}）：${u.title}**`, ...u.items.map((x) => `・${x}`), `${SITE}/deadlock-report/`].join("\n")
+}
+
 // ---- 何が新しいか ----
 
 function readJsonAt(commit, path) {
@@ -81,7 +88,9 @@ function newItems(base, head) {
   const patches = (readJsonAt(head, "src/patches.json") ?? [])
     .filter((p) => !before.has(p.date))
     .sort((a, b) => a.date.localeCompare(b.date))
-  return { reports, patches }
+  const oldUpdates = new Set((readJsonAt(base, "src/updates.json") ?? []).map((u) => u.id))
+  const updates = (readJsonAt(head, "src/updates.json") ?? []).filter((u) => !oldUpdates.has(u.id))
+  return { reports, patches, updates }
 }
 
 // ---- 投稿 ----
@@ -109,6 +118,10 @@ if (reportArg) {
   const f = join(root, "reports", `${reportArg}.json`)
   if (!existsSync(f)) throw new Error(`reports/${reportArg}.json がない`)
   messages.push(reportMessage(JSON.parse(readFileSync(f, "utf8"))))
+} else if (opt("update")) {
+  const u = JSON.parse(readFileSync(join(root, "src", "updates.json"), "utf8")).find((x) => x.id === opt("update"))
+  if (!u) throw new Error(`src/updates.json に ${opt("update")} がない`)
+  messages.push(updateMessage(u))
 } else if (patchArg) {
   const p = JSON.parse(readFileSync(join(root, "src", "patches.json"), "utf8")).find((x) => x.date === patchArg)
   if (!p) throw new Error(`src/patches.json に ${patchArg} がない`)
@@ -120,8 +133,8 @@ if (reportArg) {
     console.log("discord: 比べる前の commit がない（新しいブランチや手動実行）ので投稿しない")
     process.exit(0)
   }
-  const { reports, patches } = newItems(base, head)
-  messages.push(...reports.map(reportMessage), ...patches.map(patchMessage))
+  const { reports, patches, updates } = newItems(base, head)
+  messages.push(...reports.map(reportMessage), ...patches.map(patchMessage), ...updates.map(updateMessage))
 }
 
 if (!messages.length) {
