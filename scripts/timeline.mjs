@@ -16,6 +16,9 @@ const catalog = new Map(
     .map((i) => [i.id, i])
 )
 
+// API の team_objective_id → 種類（g Guardian / w Walker / b Base Guardian / s Shrine / p Patron / c Patron の最後）
+const OBJ = { 0: "c", 1: "g", 2: "g", 3: "g", 4: "g", 5: "w", 6: "w", 7: "w", 8: "w", 9: "p", 10: "s", 11: "s", 12: "b", 13: "b", 14: "b", 15: "b" }
+
 const timelines = {}
 const items = {}
 const used = new Set()
@@ -43,12 +46,29 @@ for (const { file, r } of loadReports()) {
       for (const s of p.stats) lead.set(s.time_stamp_s, (lead.get(s.time_stamp_s) ?? 0) + sign * s.net_worth)
     }
     const t = [...lead.keys()].sort((a, b) => a - b)
+    // キル：倒した選手のチームのキルとして数える（[秒, レポートの teams の添字]）。
+    // 敵に倒されていないデス（落下・自滅など）はスコアボードのキルにも入らないので除く
+    const teamOfSlot = new Map(info.players.map((p) => [p.player_slot, p.team]))
+    const kills = info.players
+      .flatMap((p) =>
+        (p.death_details ?? [])
+          .filter((dd) => teamOfSlot.has(dd.killer_player_slot) && teamOfSlot.get(dd.killer_player_slot) !== p.team)
+          .map((dd) => [dd.game_time_s, side[teamOfSlot.get(dd.killer_player_slot)]])
+      )
+      .sort((a, b) => a[0] - b[0])
+    // オブジェクト：API の team は「壊された側」。壊した側を記録する（[秒, 壊したチームの添字, 種類]）
+    const objs = (info.objectives ?? [])
+      .filter((o) => o.destroyed_time_s > 0 && OBJ[o.team_objective_id])
+      .map((o) => [o.destroyed_time_s, 1 - side[o.team], OBJ[o.team_objective_id]])
+      .sort((a, b) => a[0] - b[0])
     timelines[m.matchId] = {
       t,
       lead: t.map((x) => lead.get(x)),
       mid: (info.mid_boss ?? [])
         .filter((b) => b.destroyed_time_s)
         .map((b) => ({ t: b.destroyed_time_s, team: side[b.team_claimed] })),
+      kills,
+      objs,
     }
 
     // アイテム：ヒーロー名（レポートの綴り）→ [[買った秒, アイテム ID], ...]

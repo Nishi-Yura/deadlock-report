@@ -27,7 +27,17 @@ interface Row {
   first: number
 }
 
-export function HeroItems({ hero, maps }: { hero: string; maps: MapCtx[] }) {
+export function HeroItems({
+  hero, maps, title = "プロのアイテム", note, limit = 14,
+}: {
+  hero: string
+  maps: MapCtx[]
+  title?: string
+  /** 表の上の説明。省略するとヒーローページ用の文 */
+  note?: string
+  /** 「よく買われたアイテム」の行数 */
+  limit?: number
+}) {
   const [data, setData] = useState<{ buys: Buys; cat: Record<string, Item> } | null>(null)
   useEffect(() => {
     Promise.all([import("@/items.json"), import("@/item-catalog.json")]).then(([b, c]) =>
@@ -37,7 +47,7 @@ export function HeroItems({ hero, maps }: { hero: string; maps: MapCtx[] }) {
   if (!data) {
     return (
       <Panel>
-        <Label>プロのアイテム</Label>
+        <Label>{title}</Label>
         <p className="m-0 px-4 py-3 text-mute">読み込み中…</p>
       </Panel>
     )
@@ -60,14 +70,17 @@ export function HeroItems({ hero, maps }: { hero: string; maps: MapCtx[] }) {
   const rows: Row[] = [...by.entries()]
     .filter(([id]) => data.cat[id])
     .map(([id, r]) => ({ id, item: data.cat[id], n: r.n, avgT: r.t / r.n, early: r.early, first: r.first }))
-  const popular = [...rows].sort((a, b) => b.n - a.n || a.avgT - b.avgT).slice(0, 14)
-  const opening = [...rows].filter((r) => r.first >= Math.max(2, runs.length * 0.3)).sort((a, b) => a.avgT - b.avgT).slice(0, 6)
+  const popular = [...rows].sort((a, b) => b.n - a.n || a.avgT - b.avgT).slice(0, limit)
+  // 1回しか使っていないときは、その試合で最初に買った5つをそのまま出す
+  const minFirst = runs.length === 1 ? 1 : Math.max(2, runs.length * 0.3)
+  const opening = [...rows].filter((r) => r.first >= minFirst).sort((a, b) => a.avgT - b.avgT).slice(0, 6)
 
   return (
     <Panel>
-      <Label>プロのアイテム（{runs.length} 回分）</Label>
+      <Label>{title}（{runs.length} 回分）</Label>
       <p className="m-0 px-4 pt-1 text-[12px] text-mute">
-        大会でこのヒーローを使った選手が買ったアイテム。「購入率」は何回のうち何回買ったか、時刻は買った時間の平均（売って買い直した分は最初の1回）。
+        {note ?? "大会でこのヒーローを使った選手が買ったアイテム。"}
+        「購入率」は何回のうち何回買ったか、時刻は買った時間の平均（売って買い直した分は最初の1回）。
       </p>
       {opening.length > 0 && (
         <div className="px-4 pt-3">

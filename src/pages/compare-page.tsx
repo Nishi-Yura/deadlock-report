@@ -7,6 +7,7 @@ import { fmt } from "@/lib/report"
 import { allMaps, heroPath, pct } from "@/lib/stats"
 import { durationSec } from "@/lib/trends"
 import { cn } from "@/lib/utils"
+import { drawShareCard, shareOrSave, type ShareCard } from "@/lib/share-image"
 
 const API = "https://api.deadlock-api.com/v1"
 
@@ -301,6 +302,28 @@ function Result({ match, me }: { match: Match; me: Match["players"][number] }) {
       <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
         デスは少ないほうが緑。大会は役割分担がはっきりしているので、サポート寄りのヒーローはダメージが低めに出ます。
       </p>
+      <ShareButton
+        filename={`deadlock-${me.hero.replace(/\W+/g, "-").toLowerCase()}-${match.id}.png`}
+        card={() => ({
+          kicker: "自分の試合と比べる",
+          title: `${me.hero} の比較`,
+          sub: `${Math.floor(match.duration / 60)}分${match.duration % 60}秒の試合・${match.winner === me.team ? "勝ち" : "負け"}・K/D/A ${me.kills}/${me.deaths}/${me.assists}`,
+          proLabel: pro ? `大会の ${me.hero}` : "大会の全体",
+          rows: METRICS.map((m) => {
+            const ref = pro ?? all
+            const a = rate(mine, m.key, m.per)
+            const b = rate(ref, m.key, m.per)
+            const d = b ? pct(a - b, b) : 0
+            return {
+              label: `${m.label}${m.unit}`,
+              mine: show(a, m.per),
+              pro: show(b, m.per),
+              diff: b ? `${d > 0 ? "+" : ""}${d}%` : "–",
+              good: !b || d === 0 ? null : m.better === "high" ? d > 0 : d < 0,
+            }
+          }),
+        })}
+      />
     </Panel>
   )
 }
@@ -479,6 +502,27 @@ function RecentResult() {
             </tbody>
           </table>
         </div>
+        <ShareButton
+          filename={`deadlock-recent-${games.length}.png`}
+          card={() => ({
+            kicker: "自分の試合と比べる",
+            title: `直近 ${games.length} 試合の平均`,
+            sub: `${wins} 勝 ${games.length - wins} 敗・よく使ったヒーロー ${heroes.slice(0, 3).map((h) => h.hero).join("・")}`,
+            proLabel: "大会の全体",
+            rows: RECENT_METRICS.map((m) => {
+              const a = rate(mine, m.key, m.per)
+              const b = rate(all, m.key, m.per)
+              const d = b ? pct(a - b, b) : 0
+              return {
+                label: `${m.label}${m.unit}`,
+                mine: show(a, m.per),
+                pro: show(b, m.per),
+                diff: b ? `${d > 0 ? "+" : ""}${d}%` : "–",
+                good: !b || d === 0 ? null : m.better === "high" ? d > 0 : d < 0,
+              }
+            }),
+          })}
+        />
       </Panel>
 
       <Panel>
@@ -545,5 +589,36 @@ function RecentResult() {
         </ul>
       </Panel>
     </>
+  )
+}
+
+/** 結果を画像にして、保存（PC）か共有（スマホ） */
+function ShareButton({ card, filename }: { card: () => ShareCard; filename: string }) {
+  const [state, setState] = useState<"" | "busy" | "saved" | "shared" | "error">("")
+  const run = async () => {
+    setState("busy")
+    try {
+      const blob = await drawShareCard(card())
+      setState(await shareOrSave(blob, filename))
+    } catch {
+      setState("error")
+    }
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-3 border-t border-line px-4 py-2.5">
+      <button
+        type="button"
+        onClick={run}
+        disabled={state === "busy"}
+        className="h-11 cursor-pointer border border-ink px-4 text-[13px] font-bold text-ink hover:bg-cellhover disabled:opacity-60"
+      >
+        {state === "busy" ? "作成中…" : "結果を画像で保存"}
+      </button>
+      <span role="status" className="text-[12px] text-mute">
+        {state === "saved" && "PNG を保存しました。Discord や X に貼れます。"}
+        {state === "shared" && "共有しました。"}
+        {state === "error" && "画像を作れませんでした。"}
+      </span>
+    </div>
   )
 }

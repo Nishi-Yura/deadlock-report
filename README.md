@@ -1,10 +1,10 @@
 # Deadlock レポートの作り方
 
-`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/hero/<名前>/`・`/trends/`（試合展開とドラフトの傾向）・`/teams/`・`/team/<名前>/`・`/vs/`（対戦カード）・`/players/`・`/player/<名前>/`・`/compare/`（自分の試合と比べる：1試合・直近の試合）を作るリポジトリです。上のバーにはサイト内検索（`/` キーでも開く）があります。
+`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/hero/<名前>/`・`/trends/`（試合展開とドラフトの傾向）・`/teams/`・`/team/<名前>/`・`/vs/`（対戦カード）・`/players/`・`/player/<名前>/`・`/compare/`（自分の試合と比べる：1試合・直近の試合）を作るリポジトリです。上のバーにはサイト内検索（`/` キーでも開く）、一番下には表示の切り替え（自動 / ライト / ダーク。選んだものはブラウザの localStorage の `theme` に残り、パッチまとめのページでも同じものを使う）があります。
 `/compare/` だけはブラウザから Deadlock API を直接読みます（大会側の平均はビルド時のデータ）。
 
 **レポートを足したときに自動で更新されるもの**：ヒーロー統計・傾向・ヒーロー/チーム/選手のページ・対戦カード・検索・カード画像・RSS は、`reports/*.json` から毎回ビルドで作り直すので、JSON を足して push するだけで全部に反映されます。
-**手で1回実行するもの**：`npm run timeline`（ソウル推移・Mid-Boss・アイテム購入を API から取って `src/*.json` に書く）。忘れると `npm run validate`（＝ build）がエラーで止めます。パッチまとめは `src/patches.json` に足したときだけ反映されます。
+**手で1回実行するもの**：`npm run timeline`（ソウル推移・Mid-Boss・キル・オブジェクト破壊・アイテム購入を API から取って `src/*.json` に書く）。忘れると `npm run validate`（＝ build）がエラーで止めます。パッチまとめは `src/patches.json` に足したときだけ反映されます。
 サイト本体の `Nishi-Yura.github.io` とは別のリポジトリで、リポジトリ名が `deadlock-report` なので URL もそのまま `/deadlock-report/` になります。
 
 デザインの決まりは [design/DESIGN.md](design/DESIGN.md)。見た目を変えるときは、先にそちらを直してください。
@@ -20,7 +20,7 @@ deadlock-report/
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
   src/patches.json          ← パッチまとめの一覧（目次・ヒーロー統計のパッチ前後・RSS が使う）
-  src/timelines.json        ← 各マップのソウル差の推移と Mid-Boss（npm run timeline が作る）
+  src/timelines.json        ← 各マップのソウル差の推移・Mid-Boss・キル・オブジェクト破壊（npm run timeline が作る）
   src/items.json            ← 各選手のアイテム購入（npm run timeline が作る。ヒーローページを開いたときだけ読む）
   src/item-catalog.json     ← アイテムの名前・ティア・画像（npm run timeline が作る）
   patch-src/                ← パッチまとめの下書きの元（deadlock.wiki から取り出した英語の JSON）
@@ -93,7 +93,7 @@ npm run fill -- 5 EU:決勝:145000001,145000002 EU:チャレンジャー:1450000
 ### ④ 確かめる・ソウル推移とアイテムを取る
 ```powershell
 npm run validate -- --api   # JSON の中身を Deadlock API と照らし合わせる
-npm run timeline            # ソウル推移・Mid-Boss・アイテム購入を src/timelines.json と src/items.json に足す
+npm run timeline            # ソウル推移・Mid-Boss・キル・オブジェクト・アイテム購入を src/timelines.json と src/items.json に足す
 npm run dev
 ```
 `validate` が拾うもの：ヒーロー名の綴り（`The Doorman` ではなく `Doorman` など）、BAN したヒーローが同じマップでピックされている（BAN の読み違い）、ピックと選手のヒーローのずれ、先行ピックと `teams[0]` のずれ、シリーズのスコアとマップの勝者のずれ。`--api` を付けると勝者・時間・K/D/A・ソウル・ダメージ・回復も API と比べる。API の結果は `.cache/` に保存される（コミットしない）。
@@ -125,7 +125,7 @@ git push
    - 構成：概要 → まずはここだけ（6項目前後）→ 全体の変更 → モード → アイテム表 → ヒーロー（強化/弱体/調整/修正）→ 最近の流れ → 出典
    - 数値は「前 → 後」で書く。ヒーロー数などの数は、表示された件数と合わせる。
    - 非公開（Undocumented）の小修正だけの日はページを作らない。
-3. `src/patches.json` に1件足す（`date` は `YYYY-MM-DD`。並びは自動で新しい順）。前のページの「最近の流れ」はそのままでよい。ヒーロー統計の「パッチ前・後」は、ここにある一番新しいパッチの日付で自動的に区切られる。
+3. `src/patches.json` に1件足す（`date` は `YYYY-MM-DD`。並びは自動で新しい順）。リンクを貼ったときのカード画像（`patch/YYYY-MM-DD/og.png`：タイトル・概要・変更ヒーロー数・強化/弱体の数・変更アイテム数）は `npm run build` が自動で作る。ページの `<head>` には `og:image` のタグが要る（下書きを使えば前のページから引き継がれる。ないと validate がエラーにする）。前のページの「最近の流れ」はそのままでよい。ヒーロー統計の「パッチ前・後」は、ここにある一番新しいパッチの日付で自動的に区切られる。
 4. `npm run build` → commit → push（⑤と同じ）。
 
 ---

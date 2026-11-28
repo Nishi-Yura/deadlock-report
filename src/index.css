@@ -7,7 +7,18 @@
 
 /* DESIGN.md「3. 確定した方向性：A. スコアシート」の色と文字 */
 
-@custom-variant dark (@media (prefers-color-scheme: dark));
+/* ダーク：<html data-theme="dark">、または「自動」（data-theme なし）で端末がダークのとき。
+   data-theme は フッターの切り替え（src/components/report/theme.tsx）が付ける */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --font-sans: "IBM Plex Sans JP", system-ui, sans-serif;
@@ -72,8 +83,9 @@
   color-scheme: light;
 }
 
+/* ダークの色。「自動」で端末がダークのときと、ダークを選んだとき */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --page: #161615;
     --panel: #222220;
     --cell: #2c2c2a;
@@ -89,6 +101,22 @@
     --onpage-link: #5bb6dd;
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --page: #161615;
+  --panel: #222220;
+  --cell: #2c2c2a;
+  --cellhover: #292927;
+  --ink: #e8e8e4;
+  --mute: #9a9a94;
+  --line: #333331;
+  --link: #5bb6dd;
+  --win: #5cc275;
+  --lose: #ef6b6b;
+  --hi: #1f3a26;
+  --onpage: #9a9a94;
+  --onpage-link: #5bb6dd;
+  color-scheme: dark;
 }
 
 @layer base {

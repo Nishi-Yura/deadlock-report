@@ -218,4 +218,32 @@ const pub = join(root, "public", "deadlock-report")
 await render(indexCard(reports), join(pub, "og.png"))
 for (const r of reports) await render(reportCard(r), join(pub, String(r.id), "og.png"))
 const c = await siteCards(reports, pub)
-console.log(`og: 目次 + レポート ${reports.length} 本 + 統計・傾向・一覧 + チーム ${c.teams} + 選手 ${c.players} + ヒーロー ${c.heroes}`)
+
+// ---- パッチまとめ（public/deadlock-report/patch/YYYY-MM-DD/）のカード ----
+// 数はページの中のヒーロー表（const H=[...]）とアイテム表の行から数える
+const patchList = JSON.parse(readFileSync(join(root, "src", "patches.json"), "utf8"))
+let patchCards = 0
+for (const p of patchList) {
+  const html = join(pub, "patch", p.date, "index.html")
+  let page = ""
+  try {
+    page = readFileSync(html, "utf8")
+  } catch {
+    continue
+  }
+  const kinds = [...page.matchAll(/^\s*\["[^"]+","[^"]*","(buff|nerf|adj|fix)"/gm)].map((m) => m[1])
+  const count = (k) => kinds.filter((x) => x === k).length
+  const itemRows = (page.match(/<section class="panel">\s*<h2 class="lab">アイテム<\/h2>[\s\S]*?<\/section>/) ?? [""])[0].split("<tr><td>").length - 1
+  const stats = [
+    ["変更ヒーロー", `${kinds.length} 体`],
+    ...(count("buff") ? [["強化", count("buff")]] : []),
+    ...(count("nerf") ? [["弱体", count("nerf")]] : []),
+    ...(itemRows ? [["変更アイテム", itemRows]] : []),
+  ].slice(0, 4)
+  await render(
+    statCard({ kicker: `パッチまとめ・${p.date.replaceAll("-", ".")}`, title: p.title, sub: p.summary, stats, foot: "Deadlock の公式アップデートを日本語で整理" }),
+    join(pub, "patch", p.date, "og.png")
+  )
+  patchCards++
+}
+console.log(`og: 目次 + レポート ${reports.length} 本 + 統計・傾向・一覧 + チーム ${c.teams} + 選手 ${c.players} + ヒーロー ${c.heroes} + パッチ ${patchCards}`)

@@ -36,6 +36,7 @@ const page = ({ title, ogTitle, description, data = {}, depth, path, type, ogIma
 <meta property="og:image:alt" content="${esc(ogTitle)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#2b2b2b">
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">

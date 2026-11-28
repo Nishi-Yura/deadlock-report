@@ -8,9 +8,22 @@ interface Timeline {
   t: number[]
   lead: number[]
   mid: { t: number; team: number }[]
+  /** [秒, キルしたチーム（teams の添字）] */
+  kills?: [number, number][]
+  /** [秒, 壊したチーム, 種類 g/w/b/s/p/c] */
+  objs?: [number, number, string][]
 }
 
-const data = timelines as Record<string, Timeline>
+const data = timelines as unknown as Record<string, Timeline>
+
+/** オブジェクトの種類 → 図の文字と名前。c（Patron の最後の一撃）は試合の終わりなので出さない */
+const OBJ: Record<string, [string, string]> = {
+  g: ["G", "Guardian"],
+  w: ["W", "Walker"],
+  b: ["B", "Base Guardian"],
+  s: ["S", "Shrine"],
+  p: ["P", "Patron"],
+}
 
 const H = 180
 const PL = 44 // 左の目盛りの幅
@@ -137,12 +150,94 @@ function Graph({ map, tl }: { map: MapData; tl: Timeline }) {
           </circle>
         ))}
       </svg>
+      {tl.kills && <Events tl={tl} map={map} W={W} x={x} end={end} />}
       </div>
       <figcaption className="mt-1 text-[12px] text-mute">
         {narrow && "MB は Mid-Boss を取った時刻とチーム。"}
         Deadlock API のスナップショット（序盤は3分、15分以降は5分ごと）と試合終了時の値。終了時は {last >= 0 ? a.name : b.name} が{" "}
         <span className="num">{fmt(Math.abs(last))}</span> リード。
+        {tl.kills && (
+          <>
+            {" "}下の帯は2分ごとのキル数（上が {a.name}、下が {b.name}）と、壊したオブジェクト
+            （{Object.values(OBJ).map(([c, n]) => `${c} ${n}`).join("・")}）。
+          </>
+        )}
       </figcaption>
     </figure>
+  )
+}
+
+const EH = 110 // キルとオブジェクトの帯の高さ（上下に文字3段＋キルの棒）
+const BUCKET = 120
+
+/** ソウル差のグラフと同じ横軸で、キル数（2分ごと）と壊したオブジェクトを並べる */
+function Events({ tl, map, W, x, end }: { tl: Timeline; map: MapData; W: number; x: (t: number) => number; end: number }) {
+  const kills = tl.kills ?? []
+  const n = Math.ceil(end / BUCKET)
+  const counts = [0, 1].map((side) => {
+    const c = Array.from({ length: n }, () => 0)
+    for (const [t, s] of kills) if (s === side) c[Math.min(n - 1, Math.floor(t / BUCKET))]++
+    return c
+  })
+  const peak = Math.max(1, ...counts[0], ...counts[1])
+  const mid = EH / 2
+  const barMax = 22
+  const bw = Math.max(2, x(BUCKET) - x(0) - 2)
+  const bh = (v: number) => (v / peak) * barMax
+
+  // オブジェクトの文字：同じ側で続けて壊したもの（12px 以内）は1つの文字列にまとめ（例 "BBSSP"）、
+  // それでも重なるときだけ段をずらす
+  // 文字ごとの幅（太字 11px の実測＋少し余白）
+  const CW: Record<string, number> = { G: 9, W: 12, B: 8.5, S: 8, P: 8.5 }
+  const width = (items: { k: string }[]) => items.reduce((s, it) => s + (CW[OBJ[it.k][0]] ?? 9), 0)
+  const LW = 9 // 先頭の文字を時刻の位置の中央に置くための目安
+  const clusters: { side: number; items: { t: number; k: string }[]; x0: number; last: number }[] = []
+  for (const [t, side, k] of tl.objs ?? []) {
+    if (!OBJ[k]) continue
+    const px = x(t)
+    const c = [...clusters].reverse().find((c) => c.side === side)
+    if (c && px - c.last < 12) {
+      c.items.push({ t, k })
+      c.last = px
+    } else clusters.push({ side, items: [{ t, k }], x0: px, last: px })
+  }
+  const placed: { side: number; row: number; a: number; b: number }[] = []
+  const objs = clusters.map((c) => {
+    const w = width(c.items)
+    const a = Math.min(Math.max(c.x0 - LW / 2, 44), W - 8 - w)
+    let row = 0
+    while (placed.some((p) => p.side === c.side && p.row === row && a < p.b + 3 && p.a < a + w + 3)) row++
+    placed.push({ side: c.side, row, a, b: a + w })
+    return { ...c, a, row }
+  })
+  const fmtT = (t: number) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`
+  const PL = 44
+
+  return (
+    <svg viewBox={`0 0 ${W} ${EH}`} width={W} height={EH} className="mt-1 block h-auto w-full overflow-visible" role="img"
+      aria-label={`キル数 ${map.teams[0].name} ${kills.filter((k) => k[1] === 0).length}、${map.teams[1].name} ${kills.filter((k) => k[1] === 1).length}。オブジェクトを壊した順：${objs.flatMap((o) => o.items.map((it) => `${fmtT(it.t)} ${map.teams[o.side].name} ${OBJ[it.k][1]}`)).join("、")}`}
+    >
+      <text x={PL - 6} y={mid - barMax / 2 + 3.5} textAnchor="end" className="fill-mute text-[11px]">キル</text>
+      <text x={PL - 6} y={mid + barMax / 2 + 3.5} textAnchor="end" className="fill-mute text-[11px]">キル</text>
+      <line x1={PL} x2={W - 8} y1={mid} y2={mid} className="stroke-mute" strokeWidth={1} />
+      {counts.map((c, side) =>
+        c.map((v, i) =>
+          v ? (
+            <rect key={`${side}-${i}`} x={x(i * BUCKET) + 1} width={bw} y={side === 0 ? mid - bh(v) : mid} height={bh(v)} className={side === 0 ? "fill-ink" : "fill-mute"}>
+              <title>{`${i * 2}〜${i * 2 + 2}分 ${map.teams[side].name} ${v} キル`}</title>
+            </rect>
+          ) : null
+        )
+      )}
+      {objs.map((o, i) => {
+        const y = o.side === 0 ? 10 + o.row * 13 : EH - 3 - o.row * 13
+        return (
+          <text key={i} x={o.a} y={y} className={o.side === 0 ? "fill-ink text-[11px] font-bold" : "fill-mute text-[11px] font-bold"}>
+            {o.items.map((it) => OBJ[it.k][0]).join("")}
+            <title>{o.items.map((it) => `${fmtT(it.t)} ${map.teams[o.side].name} が ${OBJ[it.k][1]} を破壊`).join("\n")}</title>
+          </text>
+        )
+      })}
+    </svg>
   )
 }

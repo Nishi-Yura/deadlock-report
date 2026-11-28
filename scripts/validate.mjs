@@ -141,6 +141,10 @@ if (existsSync(patchDir)) {
     const f = join(patchDir, d, "index.html")
     if (!existsSync(f)) continue
     const html = readFileSync(f, "utf8")
+    // リンクを貼ったときの画像（og.png は scripts/og.mjs が作る）
+    if (!html.includes(`property="og:image" content="https://nishi-yura.github.io/deadlock-report/patch/${d}/og.png"`)) {
+      err(`patch/${d}`, `og:image のタグがない（または日付が違う）。<meta property="og:image" content="https://nishi-yura.github.io/deadlock-report/patch/${d}/og.png"> を入れる`)
+    }
     const left = ["下書き: 未翻訳", "[EN] ", 'class="en"'].filter((m) => html.includes(m))
     if (left.length) err(`patch/${d}`, `訳していない下書きが残っている（${left.join("、")}）。訳し終えたら消す`)
   }

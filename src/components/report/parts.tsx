@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { heroImage, heroInitials } from "@/heroes"
 import { cn } from "@/lib/utils"
 import { SiteSearch } from "./search"
+import { ThemeSwitch } from "./theme"
 
 /** サイト共通の上部バー */
 const NAV = [
@@ -45,10 +46,16 @@ export function SiteBar({ current }: { current?: NavKey } = {}) {
 
 export function SiteFoot() {
   return (
-    <footer className="mx-auto max-w-[760px] px-4 pt-2 pb-10 text-[12px] text-(--onpage)">
-      <a href="/deadlock-report/" className="inline-block py-3 text-(--onpage-link)">レポート一覧</a>
-      <span className="px-2">・</span>
-      <a href="/deadlock-report/feed.xml" className="inline-block py-3 text-(--onpage-link)">RSS</a>
+    <footer className="mx-auto flex max-w-[760px] flex-wrap items-center justify-between gap-x-4 px-4 pt-2 pb-10 text-[12px] text-(--onpage)">
+      <span>
+        <a href="/deadlock-report/" className="inline-block py-3 text-(--onpage-link)">レポート一覧</a>
+        <span className="px-2">・</span>
+        <a href="/deadlock-report/feed.xml" className="inline-block py-3 text-(--onpage-link)">RSS</a>
+      </span>
+      {/* 灰色の地の上なので、ラベルとボタンの文字も地に合わせた濃さにする */}
+      <span className="[&_.lab]:text-(--onpage) [&_button]:text-(--onpage) [&_button[aria-checked=true]]:text-ink [&_button:hover]:bg-transparent">
+        <ThemeSwitch />
+      </span>
     </footer>
   )
 }

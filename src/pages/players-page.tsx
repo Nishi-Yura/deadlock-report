@@ -2,6 +2,7 @@ import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/p
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { SortTable, type Column } from "@/components/report/sort-table"
 import { HeroList, Stat } from "@/pages/teams-page"
+import { HeroItems } from "@/components/report/hero-items"
 import { fmt } from "@/lib/report"
 import {
   filterMaps, heroUsage, mapLink, mapShort, pct, playerPath, playerStats, playerTotals, slug, teamPath,
@@ -115,6 +116,18 @@ export function PlayerPage({ slug: s }: { slug: string }) {
           <Label>使ったヒーロー</Label>
           <HeroList rows={heroes} />
         </Panel>
+
+        {/* よく使ったヒーロー（3体まで）ごとのアイテム。1マップでヒーローは1人なので、その選手のマップだけ渡せばその選手のビルドになる */}
+        {heroes.slice(0, 3).map((h) => (
+          <HeroItems
+            key={h.hero}
+            hero={h.hero}
+            maps={p.maps.filter((m) => m.hero === h.hero).map((m) => m.ctx)}
+            title={`${h.hero} のアイテム`}
+            note={`${p.name} が大会で ${h.hero} を使ったときに買ったアイテム（大会全体の平均は ${h.hero} のページ）。`}
+            limit={8}
+          />
+        ))}
 
         <Panel>
           <Label>マップごと</Label>
