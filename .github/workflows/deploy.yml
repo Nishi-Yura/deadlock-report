@@ -40,3 +40,32 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # 公開が終わってから、新しいレポート・パッチまとめを Discord に告知する（scripts/discord.mjs）。
+  # 投稿先はリポジトリの Secrets の DISCORD_WEBHOOK_URL。登録されていなければ何もしない。
+  notify:
+    needs: deploy
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # 比べる相手は「前に公開まで成功した push」。連続で push して途中の実行が取り消されても、
+      # そこで足したレポートの告知が抜けないように
+      - id: base
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          base=$(gh run list --workflow deploy.yml --branch main --status success --limit 10 \
+            --json headSha,databaseId -q '[.[] | select(.databaseId != ${{ github.run_id }})][0].headSha' 2>/dev/null || true)
+          echo "sha=${base:-${{ github.event.before }}}" >> "$GITHUB_OUTPUT"
+      - run: node scripts/discord.mjs --base "${{ steps.base.outputs.sha }}" --head "${{ github.sha }}"
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

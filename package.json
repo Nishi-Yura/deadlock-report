@@ -12,7 +12,8 @@
     "build": "node scripts/validate.mjs && node scripts/entries.mjs && node scripts/og.mjs && tsc --noEmit && vite build",
     "new": "node scripts/new-report.mjs",
     "fill": "node scripts/fill.mjs",
-    "patch-draft": "node scripts/patch-draft.mjs"
+    "patch-draft": "node scripts/patch-draft.mjs",
+    "discord": "node scripts/discord.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
