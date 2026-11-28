@@ -1,0 +1,32 @@
+{
+ "title": "Update:November 27, 2026",
+ "url": "https://deadlock.wiki/Update:November_27,_2026",
+ "source": "Source: Minor Update - 11-27-2026",
+ "sections": [
+  {
+   "name": "Heroes",
+   "groups": [
+    {
+     "name": "Apollo",
+     "lines": [
+      "Riposte: ▲ Now procs on melee hits",
+      "Riposte: ▲ Cooldown reduced from 22s to 20s",
+      "Riposte: ▲ T2 debuff duration increased from +1s to +1.25s"
+     ]
+    },
+    {
+     "name": "Baba",
+     "lines": [
+      "Stats: ▲ Base bullet resistance increased from -7% to -4%",
+      "Threadsap: ▲ Cooldown reduced from 28s to 26s",
+      "Threadsap: ▲ Spirit Damage Per Bullet increased from 12 + 0.26 to 18 + 0.3",
+      "Granny Long Legs: ▲ Cooldown reduced from 32s to 30s",
+      "Granny Long Legs: ▲ Heavy Melee now takes 0.1s less time to play out",
+      "Granny Long Legs: ▲ Heavy Melee spirit damage scaling increased from 0.6 to 0.9",
+      "Feed The Birds: ▲ T1 increased from +4m Cast Range to +5m"
+     ]
+    }
+   ]
+  }
+ ]
+}

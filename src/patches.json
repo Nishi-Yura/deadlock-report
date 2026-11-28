@@ -1,5 +1,11 @@
 [
   {
+    "date": "2026-11-27",
+    "path": "/deadlock-report/patch/2026-11-27/",
+    "title": "11/27 アップデート",
+    "summary": "前日に弱くなった Apollo と Baba を少し戻す、2体だけの小さな強化。"
+  },
+  {
     "date": "2026-11-26",
     "path": "/deadlock-report/patch/2026-11-26/",
     "title": "11/26 アップデート（感謝祭）",

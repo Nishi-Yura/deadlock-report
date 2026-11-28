@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11/27 アップデートまとめ | Deadlock レポート</title>
+<meta name="description" content="Deadlock 2026年11月27日アップデートの変更点を日本語で整理したまとめ。">
+<link rel="canonical" href="https://nishi-yura.github.io/deadlock-report/patch/2026-11-27/">
+<meta property="og:site_name" content="Deadlock レポート">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://nishi-yura.github.io/deadlock-report/patch/2026-11-27/">
+<meta property="og:title" content="Deadlock 11/27 アップデートまとめ">
+<meta property="og:description" content="前日の大型調整で弱くなった Apollo と Baba を少し戻す、2体だけの小さな強化パッチ。">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#2b2b2b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* DESIGN.md「A. スコアシート」の色と文字をそのまま使う */
+:root{
+  --page:#cfcfcb; --panel:#ffffff; --cell:#f1f1ef; --cellhover:#f7f7f5;
+  --ink:#2b2b2b; --mute:#6b6b6b; --line:#ececec; --link:#0a7cad;
+  --win:#237a35; --lose:#c92a2a; --hi:#e3f1e5; --onpage:#3f3f3f; --onpage-link:#075e84;
+  --num:"Barlow Semi Condensed","IBM Plex Sans JP",sans-serif;
+  --sans:"IBM Plex Sans JP",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --page:#161615; --panel:#222220; --cell:#2c2c2a; --cellhover:#292927;
+  --ink:#e8e8e4; --mute:#9a9a94; --line:#333331; --link:#5bb6dd;
+  --win:#5cc275; --lose:#ef6b6b; --hi:#1f3a26; --onpage:#9a9a94; --onpage-link:#5bb6dd; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.7}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,p{margin:0}
+ul{margin:0}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.bar{background:var(--ink)}
+.bar nav{max-width:760px;margin:0 auto;padding:0 16px;font-size:12px;display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;white-space:nowrap}
+.bar a{display:inline-block;padding:14px 0;color:var(--panel);opacity:.8}
+.bar a:first-child{margin-right:auto;font-weight:700;opacity:1}
+.bar a:hover{opacity:1}
+@media (max-width:639px){.bar nav{column-gap:12px}}
+@media (max-width:420px){.bar .long{display:none}}
+main{max-width:760px;margin:0 auto;padding:20px 16px 12px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.panel{background:var(--panel);padding:14px 16px 16px;display:grid;gap:10px;min-width:0}
+.crumb{font-size:12px;color:var(--mute)}
+h1{font-family:var(--num);font-size:26px;line-height:1.2;font-weight:700}
+.lede{max-width:62ch}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;margin-top:4px}
+.facts div{background:var(--cell);padding:8px 10px;display:grid;gap:2px;min-width:0}
+.facts b{font-family:var(--num);font-size:16px;font-weight:600}
+.tldr{list-style:none;padding:0;display:grid;gap:0}
+.tldr li{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.tldr li:last-child{border-bottom:0}
+.tldr .n{font-family:var(--num);font-size:20px;font-weight:700;line-height:1.2;color:var(--mute)}
+.sub{font-size:12px;font-weight:700;margin-top:6px}
+ul.list{padding-left:1.2em;display:grid;gap:4px}
+ul.list li::marker{color:var(--mute)}
+.chg{font-family:var(--num);font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;background:var(--cell);padding:0 4px}
+.up{color:var(--win)} .down{color:var(--lose)}
+.tbl{overflow-x:auto;margin:0 -16px}
+/* 表が横にはみ出すときは、続きがある側の端を薄くする（下のスクリプトが data-more を付ける） */
+.tbl[data-more="right"]{mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}
+.tbl[data-more="left"]{mask-image:linear-gradient(to right,transparent,#000 14px)}
+.tbl[data-more="both"]{mask-image:linear-gradient(to right,transparent,#000 14px,#000 calc(100% - 40px),transparent)}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{text-align:left;padding:7px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+tr:last-child td{border-bottom:0}
+.k{font-weight:700;white-space:nowrap}
+.k.buff{color:var(--win)} .k.nerf{color:var(--lose)} .k.adj{color:var(--ink)} .k.fix{color:var(--mute)}
+.filters{display:flex;flex-wrap:wrap;gap:3px}
+.filters button{font:inherit;font-size:12px;font-weight:700;min-height:36px;padding:0 14px;border:0;background:var(--cell);color:var(--ink);cursor:pointer;border-bottom:2px solid transparent}
+.filters button[aria-pressed="true"]{border-bottom-color:var(--ink)}
+.filters button:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.heroes{list-style:none;padding:0;margin:0 -16px}
+.hero{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.hero:last-child{border-bottom:0}
+.hero[hidden]{display:none}
+.icon{width:32px;height:32px;background:#3a3a3a;color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;overflow:hidden}
+.icon img{width:100%;height:100%;object-fit:cover}
+.hero-h{display:flex;gap:10px;align-items:baseline}
+.hero-h h3{font-family:var(--num);font-size:16px;font-weight:600}
+.hero ul{padding-left:1.1em;color:var(--mute);font-size:12.5px}
+.tl{list-style:none;padding:0;display:grid}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)}
+.tl li:last-child{border-bottom:0}
+.tl .now{font-weight:700}
+.note{background:var(--hi);padding:10px 12px}
+footer{max-width:760px;margin:0 auto;padding:8px 16px 40px;font-size:12px;color:var(--onpage)}
+footer a{display:inline-block;padding:12px 0;color:var(--onpage-link)}
+@media (max-width:560px){
+  .facts{grid-template-columns:1fr}
+  .tl li{grid-template-columns:1fr;gap:0}
+}
+.en{background:#fff3bf}
+</style>
+</head>
+<body>
+<header class="bar"><nav><a href="/deadlock-report/">Deadlock<span class="long"> レポート</span></a><a href="/deadlock-report/stats/">ヒーロー</a><a href="/deadlock-report/trends/">傾向</a><a href="/deadlock-report/teams/">チーム</a><a href="/deadlock-report/players/">選手</a><a href="/deadlock-report/compare/">比べる</a></nav></header>
+
+<main>
+<section class="panel">
+  <p class="crumb">パッチまとめ ・ 2026.11.27 ・ Minor Update</p>
+  <h1>11/27 アップデート</h1>
+  <p class="lede">前日（11/26）の大型パッチで改修・弱体された Apollo と Baba だけを強化する小さな更新です。アイテムと全体の変更はありません。</p>
+  <div class="facts">
+    <div><span class="lab">配信</span><b>2026.11.27</b></div>
+    <div><span class="lab">変更ヒーロー</span><b>2 体</b></div>
+    <div><span class="lab">変更アイテム</span><b>0 個</b></div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 class="lab">まずはここだけ</h2>
+  <ol class="tldr">
+    <li><span class="n">1</span><span>Apollo の Riposte（前日に改修）が近接攻撃にも反応するように。CD 22 → 20秒</span></li>
+    <li><span class="n">2</span><span>Baba の Threadsap は1発ダメ 12＋0.26倍率 → 18＋0.3倍率、CD 28 → 26秒。前日の弱体をほぼ取り戻す形</span></li>
+    <li><span class="n">3</span><span>Baba の基本弾耐性 -7% → -4%。撃ち合いで少し倒れにくくなる</span></li>
+    <li><span class="n">4</span><span>Granny Long Legs は CD 32 → 30秒、ヘビー近接が0.1秒速くなりスピリット倍率 0.6 → 0.9</span></li>
+  </ol>
+</section>
+
+
+
+
+
+<section class="panel">
+  <h2 class="lab">ヒーロー</h2>
+  <p class="crumb">区分は主な変更の傾向で付けた目安です（公式の分類ではありません）。</p>
+  <div class="filters" role="group" aria-label="区分で絞り込み">
+    <button id="f-all" data-f="all" aria-pressed="true">すべて</button>
+    <button id="f-buff" data-f="buff" aria-pressed="false">強化</button>
+    <button id="f-nerf" data-f="nerf" aria-pressed="false">弱体</button>
+    <button id="f-adj" data-f="adj" aria-pressed="false">調整</button>
+    <button id="f-fix" data-f="fix" aria-pressed="false">修正のみ</button>
+  </div>
+  <ul class="heroes" id="heroes"></ul>
+</section>
+
+<section class="panel">
+  <h2 class="lab">最近の流れ</h2>
+  <ol class="tl">
+    <li><span class="num now">2026.11.27</span><span class="now">今回：小さな更新。Apollo と Baba を強化</span></li>
+    <li><span class="num">2026.11.26</span><span>感謝祭イベント＋上記の調整</span></li>
+    <li><span class="num">2026.11.24</span><span>小さな更新：セキュリティ修正と Street Brawl のおすすめアイテム自動更新（Yoshi が Discord で告知）、ソウルバッグの非公開修正</span></li>
+    <li><span class="num">2026.11.05</span><span>ランク ベータ シーズン2開始。ソフトリセット、ヒーローBAN 3 → 4</span></li>
+    <li><span class="num">2026.11.04</span><span>アイテム・ヒーローの調整</span></li>
+    <li><span class="num">2026.10.30</span><span>ハロウィンイベント、Midboss 周辺と Rejuvenator の変更</span></li>
+    <li><span class="num">10.02 – 10.20</span><span>新ヒーロー6体を、投票で決まった順に追加（Rat King, Baba, Solomon, Deadman Danny, Violet, Nurse Harrow）</span></li>
+    <li><span class="num">2026.09.29</span><span>大型アップデート City Never Sleeps：マップ刷新、Haunts、永続バフ、期間限定ショップ</span></li>
+  </ol>
+</section>
+
+<section class="panel">
+  <h2 class="lab">出典</h2>
+  <ul class="list">
+    <li><a href="https://deadlock.wiki/Update:November_27,_2026">Deadlock Wiki – Update:November 27, 2026</a>（公式パッチノートの転載）</li>
+    <li><a href="https://deadlock.wiki/Updates">Deadlock Wiki – Updates</a></li>
+    <li><a href="https://forums.playdeadlock.com/forums/changelog.10/">公式フォーラム Changelog</a></li>
+  </ul>
+  <p class="crumb">2026.11.27 時点。数値は英語のパッチノートから訳しています。</p>
+</section>
+</main>
+
+<footer><a href="/deadlock-report/">レポート一覧</a></footer>
+
+<script>
+const IMG="https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/";
+const H=[
+ ["Apollo","fencer_mm.webp","buff",["Riposte：近接攻撃にも発動するように","Riposte CD 22 → 20秒","Riposte T2 のデバフ持続 +1 → +1.25秒"]],
+ ["Baba","baba_mm.webp","buff",["基本弾耐性 -7% → -4%","Threadsap CD 28 → 26秒、1発のスピリットダメ 12＋0.26倍率 → 18＋0.3倍率","Granny Long Legs CD 32 → 30秒","Granny Long Legs：ヘビー近接の動作が0.1秒短く、スピリット倍率 0.6 → 0.9","Feed The Birds T1 射程ボーナス +4 → +5m"]]
+];
+const L={buff:"強化",nerf:"弱体",adj:"調整",fix:"修正"};
+const ini=n=>{const c=n.replace(/[^A-Z]/g,"");return (c.length>=2?c.slice(0,2):n.slice(0,2)).toUpperCase()};
+const box=document.getElementById("heroes");
+box.innerHTML=H.map(([n,f,k,c])=>`<li class="hero" data-k="${k}"><span class="icon" title="${n}"><img src="${IMG+f}" alt="" width="32" height="32" loading="lazy" onerror="this.parentNode.textContent='${ini(n)}'"></span><div><div class="hero-h"><h3>${n}</h3><span class="k ${k}">${L[k]}</span></div><ul>${c.map(x=>`<li>${x}</li>`).join("")}</ul></div></li>`).join("");
+const btns=document.querySelectorAll(".filters button");
+btns.forEach(b=>b.addEventListener("click",()=>{
+  const f=b.dataset.f;
+  btns.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  box.querySelectorAll(".hero").forEach(h=>{h.hidden=!(f==="all"||h.dataset.k===f)});
+}));
+document.querySelectorAll(".tbl").forEach(el=>{
+  const upd=()=>{const max=el.scrollWidth-el.clientWidth,l=el.scrollLeft>2,r=el.scrollLeft<max-2;
+    const v=max<=2?"":l&&r?"both":r?"right":l?"left":"";if(v)el.dataset.more=v;else delete el.dataset.more};
+  el.addEventListener("scroll",upd,{passive:true});new ResizeObserver(upd).observe(el);upd();
+});
+</script>
+</body>
+</html>
