@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HeroIcon, Label, Panel, Score, SiteBar, SiteFoot } from "@/components/report/parts"
 import { MapDetail } from "@/components/report/map-detail"
 import { Bracket } from "@/components/report/bracket"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   banCounts, draftMapCount, formatDate, heroRecords, isFinal, kills, reportPath,
   seriesByRegion, seriesKey, seriesKills, seriesMaps, stageOf,
@@ -19,7 +19,13 @@ export function ReportPage({ report: r }: { report: Report }) {
   const groups = seriesByRegion(r)
   // タブも勝ち上がり表と同じ 予選 → チャレンジャー → 決勝 の順。最初に開くのは最初の決勝
   const ordered = groups.flatMap((g) => g.series)
-  const [tab, setTab] = useState(seriesKey(ordered.find(isFinal) ?? ordered[0]))
+  // #マップID（チーム・選手ページからのリンク）で来たら、そのマップのタブを開く
+  const [hashMap] = useState(() => r.maps.find((m) => "#" + m.id === location.hash))
+  const hashSeries = hashMap && ordered.find((s) => s.region === hashMap.region && stageOf(s) === stageOf(hashMap))
+  const [tab, setTab] = useState(seriesKey(hashSeries ?? ordered.find(isFinal) ?? ordered[0]))
+  useEffect(() => {
+    if (hashMap) document.getElementById("maps")?.scrollIntoView({ block: "start" })
+  }, [hashMap])
   const pick = (key: string) => {
     setTab(key)
     document.getElementById("maps")?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -74,7 +80,7 @@ export function ReportPage({ report: r }: { report: Report }) {
                 ) : maps.length === 1 ? (
                   <MapDetail map={maps[0]} base={base} />
                 ) : (
-                  <Tabs defaultValue={maps[0].id} className="min-w-0 gap-3">
+                  <Tabs defaultValue={maps.some((m) => m === hashMap) ? hashMap!.id : maps[0].id} className="min-w-0 gap-3">
                     <Panel>
                       <TabsList variant="line" className="h-auto! w-full justify-start gap-0 overflow-x-auto px-2 [scrollbar-width:none]">
                         <span className="self-center px-2 text-[11px] whitespace-nowrap text-mute max-sm:hidden">{s.teams[0]} vs {s.teams[1]}</span>

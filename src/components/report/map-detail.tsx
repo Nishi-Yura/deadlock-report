@@ -1,7 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator"
 import { HeroIcon, Label, Panel } from "./parts"
+import { hasTimeline, SoulGraph } from "./soul-graph"
 import { fmt, kills, mapLabel, winnerFirst } from "@/lib/report"
+import { playerPath, teamPath } from "@/lib/stats"
 import type { MapData, MapTeam, PlayerRow } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -44,6 +46,13 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
         </Panel>
       </div>
 
+      {hasTimeline(map) && (
+        <Panel>
+          <Label>ソウル差の推移</Label>
+          <SoulGraph map={map} />
+        </Panel>
+      )}
+
       <Panel>
         <Scoreboard team={w} result="勝ち" best={best} />
         <Scoreboard team={l} result="負け" best={best} last />
@@ -72,7 +81,7 @@ function Draft({ map }: { map: MapData }) {
   const [a, b] = map.teams
   const head = (t: MapTeam, first: boolean) => (
     <div className="flex items-baseline justify-between gap-2 pb-1.5">
-      <span className="font-num text-[16px] font-semibold">{t.name}</span>
+      <a href={teamPath(t.name)} className="font-num text-[16px] font-semibold text-ink">{t.name}</a>
       <span className={cn("text-[11px] font-bold", t.name === map.winner ? "text-win" : "text-lose")}>
         {t.name === map.winner ? "勝ち" : "負け"}
         {first && <span className="font-normal text-mute">・先行</span>}
@@ -124,7 +133,7 @@ function Scoreboard({ team, result, best, last }: { team: MapTeam; result: strin
   return (
     <div className={cn("px-4 pt-3", last && "pb-3")}>
       <div className="flex items-baseline justify-between">
-        <h3 className="font-num text-[17px] font-semibold">{team.name}</h3>
+        <h3 className="font-num text-[17px] font-semibold"><a href={teamPath(team.name)} className="text-ink">{team.name}</a></h3>
         <span className={cn("text-[11px] font-bold", win ? "text-win" : "text-lose")}>{result}</span>
       </div>
       <Table className="mt-1 min-w-[480px] table-fixed border-separate border-spacing-[3px] text-[13px]">
@@ -164,7 +173,7 @@ function PlayerLine({ p, best }: { p: PlayerRow; best: Best }) {
         <span className="flex min-w-0 items-center gap-2">
           <HeroIcon hero={hero} />
           <span className="min-w-0 leading-tight">
-            <span className="block truncate font-semibold text-link">{name}</span>
+            <a href={playerPath(name)} className="block truncate font-semibold">{name}</a>
             <span className="block truncate text-[11px] text-mute">{hero}</span>
           </span>
         </span>

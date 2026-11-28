@@ -1,6 +1,6 @@
 # Deadlock レポートの作り方
 
-`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）を作るリポジトリです。
+`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/teams/`・`/team/<名前>/`・`/players/`・`/player/<名前>/` を作るリポジトリです。
 サイト本体の `Nishi-Yura.github.io` とは別のリポジトリで、リポジトリ名が `deadlock-report` なので URL もそのまま `/deadlock-report/` になります。
 
 デザインの決まりは [design/DESIGN.md](design/DESIGN.md)。見た目を変えるときは、先にそちらを直してください。
@@ -15,15 +15,20 @@ deadlock-report/
   reports/1.json            ← レポートの中身（ここだけ書けばページになる）
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
+  src/patches.json          ← パッチまとめの一覧（目次・ヒーロー統計のパッチ前後・RSS が使う）
+  src/timelines.json        ← 各マップのソウル差の推移（npm run timeline が作る）
   scripts/                  ← ビルド用のスクリプト
   design/                   ← DESIGN.md、参考サイトのスクショ、比較した3案
 ```
 
 `main` に push すると、GitHub Actions が `npm run build` を実行して公開します（反映まで1〜2分。進み具合はリポジトリの Actions タブで見られる）。
 `npm run build` がやること：
+0. `scripts/validate.mjs` で `reports/*.json` を確かめる。エラーがあればここで止まる（下の ④）
 1. `reports/*.json` を全部読んで、目次とレポートのページを作る（Discord や X に貼ったときのカード用のタグも入る）
    - カードの画像（1200×630、スコアと見出し）も `scripts/og.mjs` が自動で作る。見た目を確認したいときは `npm run og` を実行して `public/deadlock-report/N/og.png` を開く
    - Discord は一度読んだカードをしばらく覚えているので、公開後に直した内容はすぐには反映されないことがある
+   - 更新フィード `feed.xml`（レポートとパッチまとめ）も書く
+   - チーム・選手のページは JSON に出てくる名前から自動で作る。名前の綴りがレポートごとに違うと別人・別チームになるので、前のレポートと同じ綴りで書く
 2. 公開するファイル一式（`index.html`、`1/`、`2/` …、`assets/`）を `dist/deadlock-report/` に書き出す。公開されるのはこのフォルダの中だけ
 ---
 
@@ -65,16 +70,20 @@ npm run new
 - キル数・シリーズのキル合計・ヒーロー別の勝敗・BAN の集計は**自動で計算**されます。手で書かない。
 - **`takeaways`**：3〜5個。「何が起きたか」の事実と、自分の試合で何をするかをセットで。
 
-### ④ 確認する
+### ④ 確かめる・ソウル推移を取る
 ```powershell
+npm run validate -- --api   # JSON の中身を Deadlock API と照らし合わせる
+npm run timeline            # ソウル差のグラフ用データを src/timelines.json に足す
 npm run dev
 ```
+`validate` が拾うもの：ヒーロー名の綴り（`The Doorman` ではなく `Doorman` など）、BAN したヒーローが同じマップでピックされている（BAN の読み違い）、ピックと選手のヒーローのずれ、先行ピックと `teams[0]` のずれ、シリーズのスコアとマップの勝者のずれ。`--api` を付けると勝者・時間・K/D/A・ソウル・ダメージ・回復も API と比べる。API の結果は `.cache/` に保存される（コミットしない）。
+
 表示された URL の `/deadlock-report/N/` を開いて確認します。スマホ幅（375px）でも見る。
 
 ### ⑤ 公開する
 ```powershell
 npm run build   # 手元でエラーが出ないか確かめるだけ（dist は push されない）
-git add -A
+git add -A   # src/timelines.json も入る
 git commit -m "Add Deadlock report N"
 git push
 ```
@@ -90,7 +99,7 @@ git push
    - 構成：概要 → まずはここだけ（6項目前後）→ 全体の変更 → モード → アイテム表 → ヒーロー（強化/弱体/調整/修正）→ 最近の流れ → 出典
    - 数値は「前 → 後」で書く。ヒーロー数などの数は、表示された件数と合わせる。
    - 非公開（Undocumented）の小修正だけの日はページを作らない。
-3. `src/pages/index-page.tsx` の `patches` の**先頭**に1件足す。前のページの「最近の流れ」はそのままでよい。
+3. `src/patches.json` に1件足す（`date` は `YYYY-MM-DD`。並びは自動で新しい順）。前のページの「最近の流れ」はそのままでよい。ヒーロー統計の「パッチ前・後」は、ここにある一番新しいパッチの日付で自動的に区切られる。
 4. `npm run build` → commit → push（⑤と同じ）。
 
 ---

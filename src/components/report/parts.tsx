@@ -7,11 +7,30 @@ import { heroImage, heroInitials } from "@/heroes"
 import { cn } from "@/lib/utils"
 
 /** サイト共通の上部バー */
-export function SiteBar() {
+const NAV = [
+  { key: "stats", href: "/deadlock-report/stats/", label: "ヒーロー" },
+  { key: "teams", href: "/deadlock-report/teams/", label: "チーム" },
+  { key: "players", href: "/deadlock-report/players/", label: "選手" },
+] as const
+
+export type NavKey = (typeof NAV)[number]["key"]
+
+export function SiteBar({ current }: { current?: NavKey } = {}) {
+  const link = "py-3.5 text-panel hover:no-underline hover:underline-offset-4 hover:[text-decoration-line:underline]"
   return (
     <header className="bg-ink text-panel">
-      <nav className="mx-auto flex max-w-[760px] items-center gap-5 px-4 text-[12px]">
-        <a href="/deadlock-report/" className="py-3.5 font-bold text-panel hover:no-underline hover:underline-offset-4 hover:[text-decoration-line:underline]">Deadlock レポート</a>
+      <nav className="mx-auto flex max-w-[760px] items-center gap-4 overflow-x-auto px-4 text-[12px] whitespace-nowrap [scrollbar-width:none]">
+        <a href="/deadlock-report/" className={cn(link, "mr-auto font-bold")}>Deadlock レポート</a>
+        {NAV.map((n) => (
+          <a
+            key={n.key}
+            href={n.href}
+            aria-current={current === n.key ? "page" : undefined}
+            className={cn(link, current === n.key ? "font-bold underline underline-offset-4" : "opacity-80 hover:opacity-100")}
+          >
+            {n.label}
+          </a>
+        ))}
       </nav>
     </header>
   )
@@ -21,6 +40,8 @@ export function SiteFoot() {
   return (
     <footer className="mx-auto max-w-[760px] px-4 pt-2 pb-10 text-[11px] text-mute">
       <a href="/deadlock-report/" className="inline-block py-3">レポート一覧</a>
+      <span className="px-2">・</span>
+      <a href="/deadlock-report/feed.xml" className="inline-block py-3">RSS</a>
     </footer>
   )
 }

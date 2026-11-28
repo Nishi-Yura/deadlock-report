@@ -1,15 +1,8 @@
 import { Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { isFinal, reportPath, reports } from "@/lib/report"
+// パッチまとめ（public/deadlock-report/patch/ の静的ページ）の一覧は src/patches.json に書く
+import { patches } from "@/lib/stats"
 
-// パッチまとめ（public/deadlock-report/patch/ の静的ページ）。新しい順に上へ足す
-const patches = [
-  {
-    date: "2026.11.26",
-    path: "/deadlock-report/patch/2026-11-26/",
-    title: "11/26 アップデート（感謝祭）",
-    summary: "ソウル経済・ダメージ計算の見直しと33体のヒーロー調整。Wraith に大きな弱体。",
-  },
-]
 
 export function IndexPage() {
   return (
@@ -65,7 +58,7 @@ export function IndexPage() {
                   href={p.path}
                   className="grid grid-cols-[88px_1fr] items-baseline gap-3 px-4 py-3 text-ink hover:bg-cellhover hover:no-underline max-sm:grid-cols-[1fr] max-sm:gap-0"
                 >
-                  <span className="num font-num text-[15px] font-semibold text-mute">{p.date}</span>
+                  <span className="num font-num text-[15px] font-semibold text-mute">{p.date.replaceAll("-", ".")}</span>
                   <span className="min-w-0">
                     <span className="block font-semibold text-link">{p.title}</span>
                     <span className="block">{p.summary}</span>
