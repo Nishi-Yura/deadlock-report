@@ -22,7 +22,7 @@
 :root{
   --page:#cfcfcb; --panel:#ffffff; --cell:#f1f1ef; --cellhover:#f7f7f5;
   --ink:#2b2b2b; --mute:#6b6b6b; --line:#ececec; --link:#0a7cad;
-  --win:#2b8a3e; --lose:#c92a2a; --hi:#e3f1e5;
+  --win:#237a35; --lose:#c92a2a; --hi:#e3f1e5; --onpage:#3f3f3f; --onpage-link:#075e84;
   --num:"Barlow Semi Condensed","IBM Plex Sans JP",sans-serif;
   --sans:"IBM Plex Sans JP",system-ui,sans-serif;
   color-scheme:light;
@@ -30,7 +30,7 @@
 @media (prefers-color-scheme: dark){:root{
   --page:#161615; --panel:#222220; --cell:#2c2c2a; --cellhover:#292927;
   --ink:#e8e8e4; --mute:#9a9a94; --line:#333331; --link:#5bb6dd;
-  --win:#5cc275; --lose:#ef6b6b; --hi:#1f3a26; color-scheme:dark}}
+  --win:#5cc275; --lose:#ef6b6b; --hi:#1f3a26; --onpage:#9a9a94; --onpage-link:#5bb6dd; color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.7}
@@ -65,6 +65,10 @@ ul.list li::marker{color:var(--mute)}
 .chg{font-family:var(--num);font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;background:var(--cell);padding:0 4px}
 .up{color:var(--win)} .down{color:var(--lose)}
 .tbl{overflow-x:auto;margin:0 -16px}
+/* 表が横にはみ出すときは、続きがある側の端を薄くする（下のスクリプトが data-more を付ける） */
+.tbl[data-more="right"]{mask-image:linear-gradient(to right,#000 calc(100% - 40px),transparent)}
+.tbl[data-more="left"]{mask-image:linear-gradient(to right,transparent,#000 14px)}
+.tbl[data-more="both"]{mask-image:linear-gradient(to right,transparent,#000 14px,#000 calc(100% - 40px),transparent)}
 table{border-collapse:collapse;width:100%;min-width:520px}
 th,td{text-align:left;padding:7px 16px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
@@ -89,8 +93,8 @@ tr:last-child td{border-bottom:0}
 .tl li:last-child{border-bottom:0}
 .tl .now{font-weight:700}
 .note{background:var(--hi);padding:10px 12px}
-footer{max-width:760px;margin:0 auto;padding:8px 16px 40px;font-size:11px;color:var(--mute)}
-footer a{display:inline-block;padding:12px 0}
+footer{max-width:760px;margin:0 auto;padding:8px 16px 40px;font-size:12px;color:var(--onpage)}
+footer a{display:inline-block;padding:12px 0;color:var(--onpage-link)}
 @media (max-width:560px){
   .facts{grid-template-columns:1fr}
   .tl li{grid-template-columns:1fr;gap:0}
@@ -289,6 +293,11 @@ btns.forEach(b=>b.addEventListener("click",()=>{
   btns.forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
   box.querySelectorAll(".hero").forEach(h=>{h.hidden=!(f==="all"||h.dataset.k===f)});
 }));
+document.querySelectorAll(".tbl").forEach(el=>{
+  const upd=()=>{const max=el.scrollWidth-el.clientWidth,l=el.scrollLeft>2,r=el.scrollLeft<max-2;
+    const v=max<=2?"":l&&r?"both":r?"right":l?"left":"";if(v)el.dataset.more=v;else delete el.dataset.more};
+  el.addEventListener("scroll",upd,{passive:true});new ResizeObserver(upd).observe(el);upd();
+});
 </script>
 </body>
 </html>

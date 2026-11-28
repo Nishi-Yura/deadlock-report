@@ -136,7 +136,7 @@ function Scoreboard({ team, result, best, last }: { team: MapTeam; result: strin
         <h3 className="font-num text-[17px] font-semibold"><a href={teamPath(team.name)} className="text-ink">{team.name}</a></h3>
         <span className={cn("text-[11px] font-bold", win ? "text-win" : "text-lose")}>{result}</span>
       </div>
-      <Table className="mt-1 min-w-[480px] table-fixed border-separate border-spacing-[3px] text-[13px]">
+      <Table className="mt-1 min-w-[480px] table-fixed max-sm:min-w-[420px] max-sm:text-[12px] border-separate border-spacing-[3px] text-[13px]">
         <colgroup>
           <col className="w-[34%]" />
           <col className="w-[17%]" />
@@ -180,9 +180,9 @@ function PlayerLine({ p, best }: { p: PlayerRow; best: Best }) {
       </TableCell>
       <TableCell className={cell}>
         <span className={cn(k === best.k && "font-bold text-win")}>{k}</span>
-        <span className="text-mute"> / </span>
+        <span className="px-0.5 text-mute max-sm:px-0">/</span>
         <span className={cn(d === best.d && "font-bold text-lose")}>{d}</span>
-        <span className="text-mute"> / </span>
+        <span className="px-0.5 text-mute max-sm:px-0">/</span>
         {a}
       </TableCell>
       <TableCell className={cell}>{fmt(souls)}</TableCell>

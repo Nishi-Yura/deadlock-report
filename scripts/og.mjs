@@ -12,7 +12,7 @@ import { slug } from "./slug.mjs"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const W = 1200
 const H = 630
-const C = { page: "#cfcfcb", panel: "#ffffff", cell: "#f1f1ef", ink: "#2b2b2b", mute: "#6b6b6b", line: "#e3e3e3", win: "#2b8a3e" }
+const C = { page: "#cfcfcb", panel: "#ffffff", cell: "#f1f1ef", ink: "#2b2b2b", mute: "#6b6b6b", line: "#e3e3e3", win: "#237a35" }
 
 // フォント。数字・英字は Barlow Semi Condensed（@fontsource）、和文は IBM Plex Sans JP の完全版（@ibm/plex-sans-jp）
 const nm = (...p) => join(root, "node_modules", ...p)

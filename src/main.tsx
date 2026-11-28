@@ -11,6 +11,7 @@ import { TrendsPage } from "@/pages/trends-page"
 import { HeroPage } from "@/pages/hero-page"
 import { ComparePage } from "@/pages/compare-page"
 import { VsPage } from "@/pages/vs-page"
+import { startScrollHints } from "@/lib/scroll-hints"
 import "./index.css"
 
 // scripts/entries.mjs が <div id="root" data-page="..." data-report="1" data-slug="..."> を書く
@@ -38,3 +39,4 @@ createRoot(el).render(
     <TooltipProvider delay={150}>{route()}</TooltipProvider>
   </StrictMode>
 )
+startScrollHints()

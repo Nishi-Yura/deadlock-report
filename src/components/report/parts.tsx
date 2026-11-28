@@ -45,10 +45,10 @@ export function SiteBar({ current }: { current?: NavKey } = {}) {
 
 export function SiteFoot() {
   return (
-    <footer className="mx-auto max-w-[760px] px-4 pt-2 pb-10 text-[11px] text-mute">
-      <a href="/deadlock-report/" className="inline-block py-3">レポート一覧</a>
+    <footer className="mx-auto max-w-[760px] px-4 pt-2 pb-10 text-[12px] text-(--onpage)">
+      <a href="/deadlock-report/" className="inline-block py-3 text-(--onpage-link)">レポート一覧</a>
       <span className="px-2">・</span>
-      <a href="/deadlock-report/feed.xml" className="inline-block py-3">RSS</a>
+      <a href="/deadlock-report/feed.xml" className="inline-block py-3 text-(--onpage-link)">RSS</a>
     </footer>
   )
 }

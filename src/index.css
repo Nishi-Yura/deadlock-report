@@ -61,9 +61,13 @@
   --mute: #6b6b6b;
   --line: #ececec;
   --link: #0a7cad;
-  --win: #2b8a3e;
+  /* 白で 5.4:1、灰色のセル（--cell・--hi）でも 4.6:1 以上（以前の #2b8a3e はセル上で 3.9:1 だった） */
+  --win: #237a35;
   --lose: #c92a2a;
   --hi: #e3f1e5;
+  /* 灰色の地（--page）の上に直接置く文字（フッター）用。--mute / --link のままだと 3:1 しかない */
+  --onpage: #3f3f3f;
+  --onpage-link: #075e84;
   --radius: 0px;
   color-scheme: light;
 }
@@ -81,6 +85,8 @@
     --win: #5cc275;
     --lose: #ef6b6b;
     --hi: #1f3a26;
+    --onpage: #9a9a94;
+    --onpage-link: #5bb6dd;
     color-scheme: dark;
   }
 }
@@ -97,5 +103,17 @@
 @layer components {
   .lab {
     @apply text-[11px] font-bold uppercase tracking-[.08em] text-mute;
+  }
+
+  /* 横スクロールの続きがある側の端を薄くする（src/lib/scroll-hints.ts が data-more を付ける）。
+     表の先頭の列は固定表示なので、左側は細く */
+  .overflow-x-auto[data-more="right"] {
+    mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+  }
+  .overflow-x-auto[data-more="left"] {
+    mask-image: linear-gradient(to right, transparent, #000 14px);
+  }
+  .overflow-x-auto[data-more="both"] {
+    mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 40px), transparent);
   }
 }
