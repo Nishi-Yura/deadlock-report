@@ -32,7 +32,7 @@ export function Segmented<T extends string>({
   return (
     <div className="flex min-w-0 items-center gap-1">
       <span className="lab shrink-0 pr-1">{label}</span>
-      <div role="radiogroup" aria-label={label} className="flex min-w-0 overflow-x-auto [scrollbar-width:none]">
+      <div role="radiogroup" aria-label={label} className="flex min-w-0 flex-wrap">
         {options.map((o) => (
           <button
             key={o.value}

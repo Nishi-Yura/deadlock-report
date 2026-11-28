@@ -41,8 +41,12 @@ ul{margin:0}
 .num{font-family:var(--num);font-variant-numeric:tabular-nums}
 .lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
 .bar{background:var(--ink)}
-.bar nav{max-width:760px;margin:0 auto;padding:0 16px;font-size:12px}
-.bar a{display:inline-block;padding:14px 0;font-weight:700;color:var(--panel)}
+.bar nav{max-width:760px;margin:0 auto;padding:0 16px;font-size:12px;display:flex;flex-wrap:wrap;align-items:center;column-gap:16px;white-space:nowrap}
+.bar a{display:inline-block;padding:14px 0;color:var(--panel);opacity:.8}
+.bar a:first-child{margin-right:auto;font-weight:700;opacity:1}
+.bar a:hover{opacity:1}
+@media (max-width:639px){.bar nav{column-gap:12px}}
+@media (max-width:420px){.bar .long{display:none}}
 main{max-width:760px;margin:0 auto;padding:20px 16px 12px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 .panel{background:var(--panel);padding:14px 16px 16px;display:grid;gap:10px;min-width:0}
 .crumb{font-size:12px;color:var(--mute)}
@@ -94,7 +98,7 @@ footer a{display:inline-block;padding:12px 0}
 </style>
 </head>
 <body>
-<header class="bar"><nav><a href="/deadlock-report/">Deadlock レポート</a></nav></header>
+<header class="bar"><nav><a href="/deadlock-report/">Deadlock<span class="long"> レポート</span></a><a href="/deadlock-report/stats/">ヒーロー</a><a href="/deadlock-report/trends/">傾向</a><a href="/deadlock-report/teams/">チーム</a><a href="/deadlock-report/players/">選手</a><a href="/deadlock-report/compare/">比べる</a></nav></header>
 
 <main>
 <section class="panel">

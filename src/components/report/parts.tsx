@@ -21,8 +21,11 @@ export function SiteBar({ current }: { current?: NavKey } = {}) {
   const link = "py-3.5 text-panel hover:no-underline hover:underline-offset-4 hover:[text-decoration-line:underline]"
   return (
     <header className="bg-ink text-panel">
-      <nav className="mx-auto flex max-w-[760px] items-center gap-4 overflow-x-auto max-sm:gap-3 px-4 text-[12px] whitespace-nowrap [scrollbar-width:none]">
-        <a href="/deadlock-report/" className={cn(link, "mr-auto font-bold")}>Deadlock レポート</a>
+      {/* 横スクロールで右端の項目が隠れないように、狭い画面ではロゴを短くし、それでも入らなければ折り返す */}
+      <nav className="mx-auto flex max-w-[760px] flex-wrap items-center gap-x-4 px-4 text-[12px] whitespace-nowrap max-sm:gap-x-3">
+        <a href="/deadlock-report/" className={cn(link, "mr-auto font-bold")}>
+          Deadlock<span className="max-[420px]:hidden"> レポート</span>
+        </a>
         {NAV.map((n) => (
           <a
             key={n.key}
