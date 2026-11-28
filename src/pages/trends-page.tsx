@@ -1,5 +1,5 @@
 import type { ReactNode } from "react"
-import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { HeroIcon, Label, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar } from "@/components/report/sort-table"
 import { fmt } from "@/lib/report"
@@ -22,13 +22,13 @@ export function TrendsPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">試合の傾向</h1>
-            <p className="m-0 mt-1 text-mute">
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">試合の傾向</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">
               ソウル差・Mid-Boss・ドラフトが勝敗とどれくらい結びついているか。全レポートのマップから数えています。
             </p>
           </div>
           <FilterBar f={f} />
-          <p className="m-0 px-4 py-3 text-[12px] text-mute">
+          <p className="m-0 px-4 py-3 text-[13px] text-mute">
             <span className="num">{maps.length}</span> マップ（ソウル推移があるのは <span className="num">{tlMaps}</span>、
             ドラフトが分かるのは <span className="num">{draftedCount(maps)}</span>）。マップ数が少ないうちは、1マップで数字が大きく動きます。
           </p>
@@ -55,7 +55,7 @@ function RateRow({ label, sub, r }: { label: ReactNode; sub?: ReactNode; r: Rate
         <div>{typeof label === "string" ? <Glossed text={label} /> : label}</div>
         {sub && <div className="text-[11px] text-mute">{sub}</div>}
       </div>
-      <span className="num text-[12px] text-mute">{r.n ? `${r.win}-${r.n - r.win}` : "–"}</span>
+      <span className="num text-[13px] text-mute">{r.n ? `${r.win}-${r.n - r.win}` : "–"}</span>
       <span className="max-sm:hidden"><Bar value={p} className={small ? "" : p > 50 ? "bg-win" : p < 50 ? "bg-lose" : ""} /></span>
       <b title={small ? `${MIN_HERO}回未満` : undefined} className={cn("num text-right text-[15px] font-semibold", !small && p > 50 && "text-win", !small && p < 50 && "text-lose", (!r.n || small) && "font-normal text-mute")}>
         {r.n ? `${p}%` : "–"}
@@ -123,9 +123,9 @@ function Flow({ maps }: { maps: Parameters<typeof leaderAt>[0] }) {
             {d.shortest && (
               <>
                 <dt className="text-mute">最短</dt>
-                <dd className="m-0"><span className="num font-semibold">{d.shortest.ctx.map.duration}</span> <a href={mapLink(d.shortest.ctx)} className="text-[12px]">#{d.shortest.ctx.report.id} {mapShort(d.shortest.ctx.map)}</a></dd>
+                <dd className="m-0"><span className="num font-semibold">{d.shortest.ctx.map.duration}</span> <a href={mapLink(d.shortest.ctx)} className="text-[13px]">#{d.shortest.ctx.report.id} {mapShort(d.shortest.ctx.map)}</a></dd>
                 <dt className="text-mute">最長</dt>
-                <dd className="m-0"><span className="num font-semibold">{d.longest.ctx.map.duration}</span> <a href={mapLink(d.longest.ctx)} className="text-[12px]">#{d.longest.ctx.report.id} {mapShort(d.longest.ctx.map)}</a></dd>
+                <dd className="m-0"><span className="num font-semibold">{d.longest.ctx.map.duration}</span> <a href={mapLink(d.longest.ctx)} className="text-[13px]">#{d.longest.ctx.report.id} {mapShort(d.longest.ctx.map)}</a></dd>
               </>
             )}
           </dl>
@@ -154,14 +154,14 @@ function Draft({ maps }: { maps: Parameters<typeof leaderAt>[0] }) {
         </Panel>
         <Panel>
           <Label>早く取られるヒーロー（3回以上）</Label>
-          <p className="m-0 px-4 pt-1 text-[11px] text-mute">チームの中で何番目に取ったかの平均。「1・2番目」はその回数</p>
+          <Note label="この数字の読み方" className="mt-2">チームの中で何番目に取ったかの平均。「1・2番目」はその回数</Note>
           <div className="pt-1 pb-2">
             {order.slice(0, 12).map((h) => (
               <div key={h.hero} className="grid grid-cols-[22px_1fr_40px_44px] items-center gap-2 px-4 py-[4px] even:bg-cellhover">
                 <HeroIcon hero={h.hero} size={22} />
                 <a href={heroPath(h.hero)} className="truncate text-ink">{h.hero}</a>
                 <span className="num text-right font-semibold">{h.avg.toFixed(1)}</span>
-                <span className="num text-right text-[12px] text-mute">{h.early}/{h.n}</span>
+                <span className="num text-right text-[13px] text-mute">{h.early}/{h.n}</span>
               </div>
             ))}
           </div>
@@ -185,7 +185,7 @@ function Pairs({ maps }: { maps: Parameters<typeof pairs>[0] }) {
   return (
     <Panel>
       <Label>よく一緒にピックされる2体（3回以上）</Label>
-      <p className="m-0 px-4 pt-1 text-[12px] text-mute">同じチームで一緒に使われた回数と、そのときの勝敗。配信のないマップも含む。</p>
+      <Note label="この数字の読み方" className="mt-2">同じチームで一緒に使われた回数と、そのときの勝敗。配信のないマップも含む。</Note>
       {rows.length ? (
         <div className="grid grid-cols-2 gap-x-2 pt-1 pb-2 max-sm:grid-cols-1">
           {rows.map((p) => {
@@ -193,7 +193,7 @@ function Pairs({ maps }: { maps: Parameters<typeof pairs>[0] }) {
             return (
               <div key={p.a + p.b} className="grid grid-cols-[48px_1fr_24px_36px_38px] items-center gap-2 px-4 py-[5px] odd:bg-cellhover">
                 <span className="flex gap-0.5"><HeroIcon hero={p.a} size={22} /><HeroIcon hero={p.b} size={22} /></span>
-                <span className="min-w-0 truncate text-[12px]">
+                <span className="min-w-0 truncate text-[13px]">
                   <a href={heroPath(p.a)} className="text-ink">{p.a}</a> + <a href={heroPath(p.b)} className="text-ink">{p.b}</a>
                 </span>
                 <span className="num text-right">{p.n}</span>

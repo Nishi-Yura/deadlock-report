@@ -1,7 +1,7 @@
 // 自分の試合と比べる。マッチ ID からブラウザで Deadlock API を読み、選んだ選手の1分あたりの数字を
 // 同じヒーローの大会での平均と並べる。API は CORS で直接読める（access-control-allow-origin: *）
 import { useEffect, useState, type FormEvent } from "react"
-import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { HeroIcon, Label, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { Segmented, useQueryState } from "@/components/report/filters"
 import { fmt } from "@/lib/report"
 import { allMaps, heroPath, pct } from "@/lib/stats"
@@ -98,8 +98,8 @@ export function ComparePage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-1">
-            <h1 className="font-num text-[26px] leading-tight font-bold">自分の試合と比べる</h1>
-            <p className="m-0 mt-1 text-mute">
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">自分の試合と比べる</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">
               自分の数字を、同じヒーローの大会での平均と並べます。試合の長さが違うので、1分（K/D/A は10分）あたりで比べます。
             </p>
           </div>
@@ -174,7 +174,7 @@ function SingleForm() {
 
   return (
     <>
-      <p className="m-0 px-4 pt-3 text-[12px] text-mute">マッチ ID はゲーム内の試合履歴か、statlocker.gg などで見られます。</p>
+      <p className="m-0 px-4 pt-3 text-[13px] text-mute">マッチ ID はゲーム内の試合履歴か、statlocker.gg などで見られます。</p>
       <form onSubmit={submit} className="flex gap-2 px-4 py-3">
         <label htmlFor="match" className="sr-only">マッチ ID</label>
         <input
@@ -236,7 +236,7 @@ function MatchPicker({ match, me, pick }: { match: Match; me?: Match["players"][
               >
                 <HeroIcon hero={p.hero} size={26} />
                 <span className="flex-1 truncate">{p.hero}</span>
-                <span className="num text-[12px] text-mute">{p.kills}/{p.deaths}/{p.assists}</span>
+                <span className="num text-[13px] text-mute">{p.kills}/{p.deaths}/{p.assists}</span>
               </button>
             ))}
           </div>
@@ -263,7 +263,7 @@ function Result({ match, me }: { match: Match; me: Match["players"][number] }) {
           <HeroIcon hero={me.hero} size={22} /> {me.hero} の比較
         </span>
       </Label>
-      <p className="m-0 px-4 pt-1 text-[12px] text-mute">
+      <p className="m-0 px-4 pt-1 text-[13px] text-mute">
         {pro ? (
           <>大会で {me.hero} が使われた <span className="num">{pro.n}</span> マップの平均。<a href={heroPath(me.hero)}>{me.hero} の大会データ</a></>
         ) : (
@@ -303,9 +303,9 @@ function Result({ match, me }: { match: Match; me: Match["players"][number] }) {
           </tbody>
         </table>
       </div>
-      <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
+      <Note label="この数字の読み方">
         デスは少ないほうが緑。大会は役割分担がはっきりしているので、サポート寄りのヒーローはダメージが低めに出ます。
-      </p>
+      </Note>
       <ShareButton
         filename={`deadlock-${me.hero.replace(/\W+/g, "-").toLowerCase()}-${match.id}.png`}
         card={() => ({
@@ -424,7 +424,7 @@ function RecentForm() {
 
   return (
     <>
-      <p className="m-0 px-4 pt-3 text-[12px] text-mute">
+      <p className="m-0 px-4 pt-3 text-[13px] text-mute">
         Steam のアカウント ID か、数字の入ったプロフィール URL（steamcommunity.com/profiles/…）を入れると、直近 {RECENT} 試合（通常モード）をまとめて比べます。
       </p>
       <form onSubmit={submit} className="flex gap-2 px-4 py-3">
@@ -480,7 +480,7 @@ function RecentResult() {
     <>
       <Panel>
         <Label>直近 {games.length} 試合の平均</Label>
-        <p className="m-0 px-4 pt-1 text-[12px] text-mute">
+        <p className="m-0 px-4 pt-1 text-[13px] text-mute">
           <span className="num">{wins}</span> 勝 <span className="num">{games.length - wins}</span> 敗。
           右の列は大会の全選手の平均（ヒーロー別はこの下）。試合履歴にはダメージと回復が入っていないので、1試合ずつ開くと見られます。
         </p>
@@ -557,7 +557,7 @@ function RecentResult() {
                         {pro ? <Diff a={rate(t, m.key, m.per)} b={rate(pro, m.key, m.per)} better={m.better} /> : <span className="text-mute">{show(rate(t, m.key, m.per), m.per)}</span>}
                       </td>
                     ))}
-                    <td className="num py-1.5 pr-4 text-right text-[12px] text-mute">
+                    <td className="num py-1.5 pr-4 text-right text-[13px] text-mute">
                       {pro ? <a href={heroPath(hero)}>{pro.n}回</a> : "なし"}
                     </td>
                   </tr>
@@ -566,9 +566,9 @@ function RecentResult() {
             </tbody>
           </table>
         </div>
-        <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
+        <Note label="この数字の読み方">
           大会で使われていないヒーローは比べる相手がないので、自分の数字（ソウル/分・10分あたりの K/D/A）をそのまま出しています。
-        </p>
+        </Note>
       </Panel>
 
       <Panel>
@@ -580,13 +580,13 @@ function RecentResult() {
                 href={`/deadlock-report/compare/?match=${g.id}&account=${account}`}
                 className="grid grid-cols-[52px_22px_1fr_auto_auto] items-center gap-2 px-4 py-2 text-ink hover:bg-cellhover hover:no-underline max-sm:grid-cols-[22px_1fr_auto]"
               >
-                <span className="num text-[12px] text-mute max-sm:hidden">{new Date(g.start * 1000).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" })}</span>
+                <span className="num text-[13px] text-mute max-sm:hidden">{new Date(g.start * 1000).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" })}</span>
                 <HeroIcon hero={g.hero} size={22} />
                 <span className="truncate">
                   {g.hero} <b className={cn("text-[11px]", g.win ? "text-win" : "text-lose")}>{g.win ? "勝ち" : "負け"}</b>
                 </span>
-                <span className="num text-[12px]">{g.k}/{g.d}/{g.a}</span>
-                <span className="num text-[12px] text-mute max-sm:hidden">{fmt(Math.round(g.souls / (g.sec / 60)))}/分</span>
+                <span className="num text-[13px]">{g.k}/{g.d}/{g.a}</span>
+                <span className="num text-[13px] text-mute max-sm:hidden">{fmt(Math.round(g.souls / (g.sec / 60)))}/分</span>
               </a>
             </li>
           ))}
@@ -618,7 +618,7 @@ function ShareButton({ card, filename }: { card: () => ShareCard; filename: stri
       >
         {state === "busy" ? "作成中…" : "結果を画像で保存"}
       </button>
-      <span role="status" className="text-[12px] text-mute">
+      <span role="status" className="text-[13px] text-mute">
         {state === "saved" && "PNG を保存しました。Discord や X に貼れます。"}
         {state === "shared" && "共有しました。"}
         {state === "error" && "画像を作れませんでした。"}

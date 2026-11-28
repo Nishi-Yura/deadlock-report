@@ -54,8 +54,8 @@ export function TeamsPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">チーム</h1>
-            <p className="m-0 mt-1 text-mute">レポートに出てきたチームの戦績。チーム名からそのチームのページへ。2チームを並べるなら<a href="/deadlock-report/vs/">対戦カード</a>。</p>
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">チーム</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">レポートに出てきたチームの戦績。チーム名からそのチームのページへ。2チームを並べるなら<a href="/deadlock-report/vs/">対戦カード</a>。</p>
           </div>
           <FilterBar f={f} />
           {rows.length ? (
@@ -107,7 +107,7 @@ export function TeamPage({ slug: s }: { slug: string }) {
         <Panel>
           <div className="flex flex-wrap items-center justify-between gap-x-3 border-b border-line px-4">
             <a href="/deadlock-report/teams/" className="py-3 font-semibold">チーム一覧</a>
-            <span className="py-3 text-[12px] text-mute">{t.regions.join(" / ")}</span>
+            <span className="py-3 text-[13px] text-mute">{t.regions.join(" / ")}</span>
           </div>
           <div className="px-4 pt-4 pb-4">
             <h1 className="font-num text-[32px] leading-none font-bold">{t.name}</h1>
@@ -125,11 +125,11 @@ export function TeamPage({ slug: s }: { slug: string }) {
           <ul className="m-0 list-none p-0 pt-1">
             {t.series.map((x, i) => (
               <li key={i} className="grid grid-cols-[72px_1fr_auto] items-center gap-3 border-b border-line px-4 py-2 last:border-0 max-sm:grid-cols-[1fr_auto]">
-                <span className="num text-[12px] text-mute max-sm:col-span-2">{seriesDate(x.report, x.series).replaceAll("-", ".")}</span>
+                <span className="num text-[13px] text-mute max-sm:col-span-2">{seriesDate(x.report, x.series).replaceAll("-", ".")}</span>
                 <span className="min-w-0">
                   <a href={teamPath(x.opponent)} className="font-semibold">vs {x.opponent}</a>
-                  <a href={reportPath(x.report.id)} className="ml-2 text-[12px] text-mute">#{x.report.id} {x.series.region} {stageOf(x.series)}</a>
-                  <a href={vsPath(t.name, x.opponent)} className="ml-2 text-[12px]">対戦カード</a>
+                  <a href={reportPath(x.report.id)} className="ml-2 text-[13px] text-mute">#{x.report.id} {x.series.region} {stageOf(x.series)}</a>
+                  <a href={vsPath(t.name, x.opponent)} className="ml-2 text-[13px]">対戦カード</a>
                 </span>
                 <span className={cn("num font-num text-[17px] font-bold", x.win ? "text-win" : "text-lose")}>
                   {x.score[0]}-{x.score[1]}
@@ -175,7 +175,7 @@ export function TeamPage({ slug: s }: { slug: string }) {
                       const [ka, kb] = m.side === 0 ? [k0, k1] : [k1, k0]
                       return (
                         <tr key={m.ctx.map.id + m.ctx.report.id} className="border-b border-line last:border-0 hover:bg-cellhover">
-                          <td className="num py-1.5 pl-4 text-[12px] whitespace-nowrap text-mute">{m.ctx.date.slice(5).replace("-", "/")}</td>
+                          <td className="num py-1.5 pl-4 text-[13px] whitespace-nowrap text-mute">{m.ctx.date.slice(5).replace("-", "/")}</td>
                           <td className="px-2 whitespace-nowrap"><a href={mapLink(m.ctx)}>{mapShort(m.ctx.map)}</a></td>
                           <td className="px-2 whitespace-nowrap">vs <a href={teamPath(m.opponent)}>{m.opponent}</a></td>
                           <td className={cn("px-2 font-bold", m.win ? "text-win" : "text-lose")}>{m.win ? "勝ち" : "負け"}</td>
@@ -238,7 +238,7 @@ export function TeamPage({ slug: s }: { slug: string }) {
 export function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex items-baseline gap-1.5">
-      <dt className="lab">{label}</dt>
+      <dt className="text-[13px] text-mute">{label}</dt>
       <dd className="num m-0 font-num text-[20px] font-semibold">{value}</dd>
     </div>
   )

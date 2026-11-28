@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>整理案 3つ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Oswald:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Condensed:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: #e6e6e3; color: #1a1a1a; font-family: "IBM Plex Sans JP", system-ui, sans-serif; }
+  img { display: block; }
+  a { color: inherit; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ---- 選択用の外枠（本番には入らない） ---- */
+  .pick { position: sticky; top: 0; z-index: 10; background: #1a1a1a; color: #f2f2f2; font-size: 13px; }
+  .pick .in { max-width: 1180px; margin: 0 auto; padding: 0 16px; display: flex; gap: 4px 20px; align-items: center; flex-wrap: wrap; }
+  .pick b { font-weight: 500; margin-right: auto; padding: 12px 0; }
+  .pick a { text-decoration: none; padding: 12px 2px; border-bottom: 2px solid transparent; }
+  .pick a:hover, .pick a:focus-visible { border-bottom-color: #f2f2f2; outline: none; }
+  .label { max-width: 1180px; margin: 0 auto; padding: 56px 16px 14px; font-size: 14px; color: #555; line-height: 1.7; }
+  .label strong { display: block; font-size: 22px; color: #1a1a1a; margin-bottom: 4px; }
+  .label .ref { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: #777; }
+  .stage { max-width: 1180px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: minmax(0, 1fr) 375px; gap: 24px; align-items: start; }
+  .cap { font-size: 12px; color: #666; margin: 0 0 6px; font-family: "IBM Plex Mono", monospace; }
+  .desk, .phone { overflow: hidden; }
+  .phone { width: 375px; border: 1px solid #bdbdb8; }
+  @media (max-width: 1000px) { .stage { grid-template-columns: minmax(0, 1fr); } .phone { width: 100%; max-width: 375px; } }
+  .ico { width: 24px; height: 24px; object-fit: cover; flex-shrink: 0; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; }
+
+  /* =========================================================
+     A. 整理したスコアシート（Sofascore ＋ BBC Sport）
+     今の色・文字を残し、タブを1段に、説明を畳む
+     ========================================================= */
+  .A { background: #cfcfcb; color: #2b2b2b; font-size: 15px; line-height: 1.7; padding-bottom: 32px; }
+  .A .bar { background: #2b2b2b; color: #fff; }
+  .A .bar .in { max-width: 760px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 20px; font-size: 13px; }
+  .A .bar .logo { font-weight: 700; margin-right: auto; padding: 13px 0; }
+  .A .bar a { text-decoration: none; padding: 13px 0; opacity: .8; }
+  .A .bar a:hover, .A .bar a:focus-visible { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  .A .bar a[aria-current] { opacity: 1; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .A .col { max-width: 760px; margin: 12px auto 0; display: grid; gap: 12px; padding: 0 16px; }
+  .A .panel { background: #fff; }
+  .A .head { padding: 18px 20px 0; }
+  .A .meta { font-size: 13px; color: #6b6b6b; display: flex; gap: 12px; flex-wrap: wrap; }
+  .A .meta .stagepick { margin-left: auto; font-size: 13px; color: #2b2b2b; border: 1px solid #d6d6d2; background: #f6f6f4; padding: 2px 10px; }
+  .A h1 { font-size: 21px; line-height: 1.5; margin: 6px 0 0; font-weight: 700; }
+  .A .score { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; padding: 20px 20px 16px; font-family: "Barlow Semi Condensed", sans-serif; }
+  .A .score .t { font-size: 22px; font-weight: 700; }
+  .A .score .t:first-child { text-align: right; }
+  .A .score .lose { color: #8f8f8a; }
+  .A .score .big { font-size: 42px; font-weight: 700; letter-spacing: .02em; }
+  .A .score .big .w { color: #237a35; }
+  .A .maps { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #ececec; }
+  .A .maps div { padding: 10px 14px; font-size: 13px; display: flex; justify-content: space-between; font-family: "Barlow Semi Condensed", sans-serif; font-size: 15px; }
+  .A .maps div + div { border-left: 1px solid #ececec; }
+  .A .maps .w { color: #237a35; font-weight: 700; }
+  .A .tabs { display: flex; gap: 22px; padding: 0 20px; border-bottom: 1px solid #ececec; font-size: 14px; overflow-x: auto; white-space: nowrap; }
+  .A .tabs a { text-decoration: none; padding: 12px 0 10px; color: #6b6b6b; border-bottom: 2px solid transparent; }
+  .A .tabs a:hover, .A .tabs a:focus-visible { color: #2b2b2b; outline: none; }
+  .A .tabs a[aria-current] { color: #2b2b2b; font-weight: 700; border-bottom-color: #2b2b2b; }
+  .A .sec { padding: 16px 20px; }
+  .A h2 { font-size: 16px; margin: 0 0 8px; font-weight: 700; }
+  .A table { font-size: 14px; }
+  .A th { font-size: 12px; font-weight: 500; color: #6b6b6b; text-align: right; padding: 4px 6px; }
+  .A th:first-child { text-align: left; }
+  .A td { padding: 5px 6px; text-align: right; font-family: "Barlow Semi Condensed", sans-serif; font-size: 15px; border-top: 1px solid #f1f1ef; }
+  .A td:first-child { text-align: left; font-family: "IBM Plex Sans JP", sans-serif; font-size: 14px; }
+  .A td .p { display: flex; gap: 8px; align-items: center; }
+  .A td.hi { background: #e3f1e5; }
+  .A .team { display: flex; justify-content: space-between; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 16px; margin: 8px 0 2px; }
+  .A details { border-top: 1px solid #ececec; padding: 10px 20px; font-size: 14px; color: #555; }
+  .A summary { cursor: pointer; color: #0a7cad; }
+  .A summary:hover, .A summary:focus-visible { text-decoration: underline; outline: none; }
+  /* A の phone：トップ */
+  .A.ph .col { padding: 0 12px; margin-top: 12px; }
+  .A .row { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; padding: 12px 16px; border-top: 1px solid #ececec; align-items: baseline; text-decoration: none; }
+  .A .row:hover, .A .row:focus-visible { background: #f6f6f4; outline: none; }
+  .A .row .n { font-family: "Barlow Semi Condensed", sans-serif; font-weight: 700; font-size: 20px; color: #8f8f8a; }
+  .A .row .tt { font-size: 14px; line-height: 1.55; }
+  .A .row .tt b { display: block; color: #0a7cad; font-weight: 500; font-size: 13px; }
+  .A .row .s { font-family: "Barlow Semi Condensed", sans-serif; font-size: 15px; white-space: nowrap; }
+  .A .phlab { font-size: 13px; font-weight: 700; padding: 14px 16px 4px; }
+  .A .more { display: block; padding: 12px 16px; font-size: 14px; color: #0a7cad; text-decoration: none; border-top: 1px solid #ececec; }
+  .A .more:hover, .A .more:focus-visible { text-decoration: underline; outline: none; }
+
+  /* =========================================================
+     B. 読みもの（VALORANT パッチノート ＋ Linear / GitHub Changelog）
+     カードをやめ、1本の記事として縦に読ませる
+     ========================================================= */
+  .B { background: #f5f3ee; color: #1d1c19; font-family: "Zen Kaku Gothic New", sans-serif; font-size: 16px; line-height: 1.8; padding-bottom: 40px; }
+  .B .bar { border-bottom: 1px solid #d9d4c8; }
+  .B .bar .in { max-width: 920px; margin: 0 auto; padding: 0 24px; display: flex; gap: 28px; align-items: center; font-size: 14px; }
+  .B .bar .logo { font-family: "Oswald", sans-serif; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-right: auto; padding: 16px 0; font-size: 17px; }
+  .B .bar a { text-decoration: none; padding: 16px 0; border-bottom: 2px solid transparent; }
+  .B .bar a:hover, .B .bar a:focus-visible { border-bottom-color: #1d1c19; outline: none; }
+  .B .bar a[aria-current] { border-bottom-color: #8a6a2b; }
+  .B .art { max-width: 920px; margin: 0 auto; padding: 40px 24px 0; display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 0 40px; }
+  .B .side { font-family: "IBM Plex Mono", monospace; font-size: 12px; line-height: 1.7; color: #7b766b; padding-top: 6px; }
+  .B .side b { display: block; font-family: "Oswald", sans-serif; font-size: 44px; line-height: 1; color: #1d1c19; font-weight: 500; margin-bottom: 8px; }
+  .B .side nav { margin-top: 28px; display: grid; gap: 2px; font-family: "Zen Kaku Gothic New", sans-serif; font-size: 13px; }
+  .B .side nav a { text-decoration: none; color: #7b766b; padding: 4px 0; }
+  .B .side nav a:hover, .B .side nav a:focus-visible { color: #1d1c19; text-decoration: underline; outline: none; }
+  .B .side nav a[aria-current] { color: #1d1c19; font-weight: 700; }
+  .B .ev { font-family: "Oswald", sans-serif; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #8a6a2b; }
+  .B h1 { font-size: 28px; line-height: 1.5; margin: 6px 0 22px; font-weight: 700; }
+  .B .result { display: flex; align-items: baseline; gap: 16px; font-family: "Oswald", sans-serif; padding: 16px 0; border-top: 2px solid #1d1c19; border-bottom: 1px solid #d9d4c8; flex-wrap: wrap; }
+  .B .result .t { font-size: 24px; font-weight: 600; }
+  .B .result .lose { color: #a39e92; }
+  .B .result .sc { font-size: 40px; font-weight: 500; line-height: 1; }
+  .B .result .note { font-family: "Zen Kaku Gothic New", sans-serif; font-size: 14px; color: #7b766b; margin-left: auto; }
+  .B .mlist { list-style: none; margin: 0; padding: 0; }
+  .B .mlist li { display: grid; grid-template-columns: 64px 70px 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px solid #e4dfd3; font-size: 15px; align-items: baseline; }
+  .B .mlist .m { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: #7b766b; }
+  .B .mlist .w { font-family: "Oswald", sans-serif; font-weight: 600; }
+  .B .mlist .d { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: #7b766b; }
+  .B h2 { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 18px; letter-spacing: .08em; text-transform: uppercase; margin: 44px 0 4px; }
+  .B h2 + .sub { font-size: 14px; color: #7b766b; margin: 0 0 14px; }
+  .B ol.take { margin: 0; padding: 0; list-style: none; counter-reset: k; }
+  .B ol.take li { counter-increment: k; display: grid; grid-template-columns: 32px 1fr; padding: 12px 0; border-bottom: 1px solid #e4dfd3; }
+  .B ol.take li::before { content: counter(k); font-family: "Oswald", sans-serif; font-size: 20px; color: #8a6a2b; line-height: 1.4; }
+  .B ol.take b { display: block; font-size: 17px; }
+  .B ol.take span { font-size: 15px; color: #4a463e; }
+  .B table { font-size: 15px; }
+  .B th { font-size: 12px; font-weight: 500; color: #7b766b; text-align: right; padding: 6px; border-bottom: 1px solid #1d1c19; font-family: "IBM Plex Mono", monospace; }
+  .B th:first-child { text-align: left; }
+  .B td { padding: 7px 6px; text-align: right; border-bottom: 1px solid #e4dfd3; font-family: "IBM Plex Mono", monospace; font-size: 14px; }
+  .B td:first-child { text-align: left; font-family: "Zen Kaku Gothic New", sans-serif; font-size: 15px; }
+  .B td .p { display: flex; gap: 10px; align-items: center; }
+  .B td b { font-weight: 700; }
+  .B .tlab { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .04em; margin: 18px 0 2px; display: flex; justify-content: space-between; }
+  .B .tlab span { color: #8a6a2b; }
+  .B .tlab.l span { color: #a39e92; }
+  /* B の phone：トップ */
+  .B.ph .bar .in { padding: 0 16px; gap: 18px; }
+  .B .feed { padding: 24px 16px 0; }
+  .B .feed h2 { margin: 0 0 6px; }
+  .B .item { display: grid; grid-template-columns: 78px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e4dfd3; text-decoration: none; }
+  .B .item:hover .h, .B .item:focus-visible .h { text-decoration: underline; }
+  .B .item:focus-visible { outline: 2px solid #8a6a2b; outline-offset: 2px; }
+  .B .item .dt { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: #7b766b; line-height: 1.6; }
+  .B .item .h { font-size: 15px; font-weight: 700; line-height: 1.55; }
+  .B .item .x { font-size: 13px; color: #7b766b; }
+  .B .tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: #8a6a2b; display: block; }
+
+  /* =========================================================
+     C. 畳めるハブ（FotMob ＋ NBA.com）
+     見出しで畳む・地域は日付帯のように横に並べる・下部タブバー
+     ========================================================= */
+  .C { background: #101513; color: #e5eae6; font-family: "Noto Sans JP", sans-serif; font-size: 15px; line-height: 1.7; padding-bottom: 32px; }
+  .C .bar .in { max-width: 1000px; margin: 0 auto; padding: 0 20px; display: flex; gap: 24px; align-items: center; font-size: 14px; }
+  .C .bar .logo { font-family: "Roboto Condensed", sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .03em; margin-right: auto; padding: 14px 0; }
+  .C .bar a { text-decoration: none; color: #a9b3ad; padding: 14px 0; }
+  .C .bar a:hover, .C .bar a:focus-visible { color: #e5eae6; outline: none; text-decoration: underline; text-underline-offset: 5px; }
+  .C .bar a[aria-current] { color: #e5eae6; font-weight: 700; }
+  .C .grid { max-width: 1000px; margin: 8px auto 0; padding: 0 20px; display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .C .card { background: #19211d; border-radius: 14px; }
+  .C .nav { padding: 8px; font-size: 14px; }
+  .C .nav .h { font-size: 12px; color: #8a958f; padding: 8px 10px 4px; }
+  .C .nav a { display: flex; justify-content: space-between; text-decoration: none; padding: 8px 10px; border-radius: 8px; color: #c9d1cc; }
+  .C .nav a:hover, .C .nav a:focus-visible { background: #222c27; outline: none; }
+  .C .nav a[aria-current] { background: #24312b; color: #fff; }
+  .C .nav a span { font-family: "Roboto Condensed", sans-serif; color: #8a958f; }
+  .C .main { display: grid; gap: 12px; }
+  .C .hero { padding: 18px 22px 20px; }
+  .C .crumb { font-size: 13px; color: #8a958f; }
+  .C h1 { font-size: 20px; line-height: 1.55; margin: 4px 0 14px; }
+  .C .sb { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; font-family: "Roboto Condensed", sans-serif; }
+  .C .sb .t { font-size: 22px; font-weight: 700; }
+  .C .sb .t:first-child { text-align: right; }
+  .C .sb .lose { color: #6f7a74; }
+  .C .sb .big { font-size: 40px; font-weight: 700; }
+  .C .sb .big i { font-style: normal; color: #6f7a74; padding: 0 8px; }
+  .C .pills { display: flex; gap: 8px; margin-top: 16px; overflow-x: auto; }
+  .C .pills a { flex-shrink: 0; text-decoration: none; background: #222c27; border-radius: 10px; padding: 8px 14px; font-family: "Roboto Condensed", sans-serif; font-size: 14px; line-height: 1.3; color: #c9d1cc; }
+  .C .pills a:hover, .C .pills a:focus-visible { background: #2b3832; outline: none; }
+  .C .pills a[aria-current] { background: #e5eae6; color: #101513; }
+  .C .pills small { display: block; font-size: 12px; opacity: .7; }
+  .C details.card > summary { list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 14px 22px; cursor: pointer; font-weight: 700; font-size: 15px; }
+  .C details.card > summary::-webkit-details-marker { display: none; }
+  .C details.card > summary:hover, .C details.card > summary:focus-visible { background: #1e2823; border-radius: 14px; outline: none; }
+  .C details.card > summary::after { content: "▾"; color: #8a958f; }
+  .C details.card[open] > summary::after { content: "▴"; }
+  .C details.card > summary em { font-style: normal; font-weight: 400; color: #8a958f; font-size: 13px; margin-left: 10px; margin-right: auto; }
+  .C .body { padding: 0 22px 16px; }
+  .C table { font-size: 14px; }
+  .C th { font-size: 12px; color: #8a958f; font-weight: 500; text-align: right; padding: 6px; }
+  .C th:first-child { text-align: left; }
+  .C td { text-align: right; padding: 6px; border-top: 1px solid #24302a; font-family: "Roboto Condensed", sans-serif; font-size: 15px; }
+  .C td:first-child { text-align: left; font-family: "Noto Sans JP", sans-serif; font-size: 14px; }
+  .C td .p { display: flex; gap: 10px; align-items: center; }
+  .C td .p img { border-radius: 6px; }
+  .C td.hi { color: #8fd0a6; font-weight: 700; }
+  .C .tl { display: flex; justify-content: space-between; font-family: "Roboto Condensed", sans-serif; font-weight: 700; margin: 6px 0 0; }
+  .C .tl span { color: #8fd0a6; font-weight: 500; font-size: 13px; }
+  .C .tl.l span { color: #6f7a74; }
+  /* C の phone：トップ */
+  .C.ph { padding-bottom: 0; position: relative; }
+  .C.ph .bar .in { padding: 0 16px; }
+  .C .list { margin: 8px 12px 12px; }
+  .C .list .lh { display: flex; justify-content: space-between; padding: 14px 16px 6px; font-size: 13px; font-weight: 700; }
+  .C .list .lh span { color: #8a958f; font-weight: 400; }
+  .C .m { display: grid; grid-template-columns: 1fr 64px 1fr; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid #24302a; text-decoration: none; font-family: "Roboto Condensed", sans-serif; font-size: 15px; }
+  .C .m:hover, .C .m:focus-visible { background: #1e2823; outline: none; }
+  .C .m .a { text-align: right; }
+  .C .m .s { text-align: center; font-weight: 700; font-size: 17px; }
+  .C .m .lose { color: #6f7a74; }
+  .C .m small { grid-column: 1 / -1; text-align: center; font-family: "Noto Sans JP", sans-serif; color: #8a958f; font-size: 12px; margin-top: -4px; }
+  .C .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); background: #19211d; border-top: 1px solid #24302a; font-size: 12px; text-align: center; }
+  .C .tabbar a { text-decoration: none; padding: 10px 0 12px; color: #8a958f; min-height: 48px; }
+  .C .tabbar a:hover, .C .tabbar a:focus-visible { color: #e5eae6; outline: none; }
+  .C .tabbar a[aria-current] { color: #e5eae6; font-weight: 700; }
+  .C .tabbar b { display: block; font-size: 15px; line-height: 1.2; }
+
+  @media (max-width: 700px) {
+    .B .art { grid-template-columns: minmax(0, 1fr); padding: 24px 16px 0; }
+    .B .side nav { display: none; }
+    .C .grid { grid-template-columns: minmax(0, 1fr); padding: 0 12px; }
+    .C .grid > .nav { display: none; }
+    .A .maps { grid-template-columns: 1fr; }
+    .A .maps div + div { border-left: 0; border-top: 1px solid #ececec; }
+  }
+</style>
+</head>
+<body>
+<div class="pick"><div class="in">
+  <b>どれにするか選んでください（左＝PC のレポートページ／右＝スマホ幅 375px のトップページ）</b>
+  <a href="#a">A. 整理したスコアシート</a><a href="#b">B. 読みもの</a><a href="#c">C. 畳めるハブ</a>
+</div></div>
+
+<!-- ====================== A ====================== -->
+<div class="label" id="a"><strong>A. 整理したスコアシート</strong>
+  今の灰色の地・白パネル・文字はそのまま。<b>タブを1段にまとめ</b>（概要 / Map 1〜3 / ヒーロー / 持ち帰り）、地域・ステージは右上の切り替えへ。本文を 13→15px に上げ、グラフや表の説明は「読み方」として畳む。<br>
+  <span class="ref">土台：Sofascore の試合ページ（タブ1段）＋ BBC Sport（見出し2段階・同じ形の行）</span></div>
+<div class="stage">
+  <div><p class="cap">PC・レポート #4</p>
+  <div class="desk A">
+    <div class="bar"><div class="in"><span class="logo">Deadlock レポート</span><a href="#a" aria-current="page">レポート</a><a href="#a">ヒーロー</a><a href="#a">チーム・選手</a><a href="#a">その他</a><a href="#a">検索</a></div></div>
+    <div class="col">
+      <div class="panel">
+        <div class="head">
+          <div class="meta"><span>Deadlock Night Shift APAC #4</span><span>2026/11/27</span><span class="stagepick">決勝 ▾</span></div>
+          <h1>11/26 パッチ後も Billy を取ったチームが4マップ全勝し、OT が AUSKR から優勝を取り返した</h1>
+        </div>
+        <div class="score num"><span class="t lose">AUSKR</span><span class="big">1 : <span class="w">2</span></span><span class="t">OT</span></div>
+        <div class="maps num"><div><span>Map 1</span><span class="w">OT</span><span>29:49</span></div><div><span>Map 2</span><span class="w">AUSKR</span><span>33:39</span></div><div><span>Map 3</span><span class="w">OT</span><span>35:36</span></div></div>
+        <nav class="tabs"><a href="#a">概要</a><a href="#a" aria-current="page">Map 1</a><a href="#a">Map 2</a><a href="#a">Map 3</a><a href="#a">ヒーロー・BAN</a><a href="#a">持ち帰り</a></nav>
+        <div class="sec">
+          <h2>スコアボード</h2>
+          <div class="team"><span>OT</span><span style="color:#237a35">勝ち</span></div>
+          <div class="scroll"><table class="num">
+            <tr><th>選手</th><th>K / D / A</th><th>ソウル</th><th>与ダメ</th><th>回復</th></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/spectre_mm.webp" alt="Lady Geist" title="Lady Geist">sire</span></td><td>3 / 5 / 21</td><td>35,228</td><td class="hi">48,406</td><td class="hi">26,279</td></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/punkgoat_mm.webp" alt="Billy" title="Billy">Adam</span></td><td>8 / 4 / 14</td><td>32,563</td><td>21,346</td><td>6,614</td></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/inferno_mm.webp" alt="Infernus" title="Infernus">fletch</span></td><td>6 / 4 / 15</td><td>32,423</td><td>28,708</td><td>7,741</td></tr>
+          </table></div>
+          <div class="team"><span style="color:#8f8f8a">AUSKR</span><span style="color:#c92a2a">負け</span></div>
+          <div class="scroll"><table class="num">
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/warden_mm.webp" alt="Warden" title="Warden">Decay</span></td><td>7 / 4 / 12</td><td class="hi">35,828</td><td>27,400</td><td>12,290</td></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/priest_mm.webp" alt="Venator" title="Venator">Jai_Stacked</span></td><td>9 / 5 / 10</td><td>25,570</td><td>24,585</td><td>2,200</td></tr>
+          </table></div>
+        </div>
+        <details><summary>この表の読み方</summary>緑の背景はそのマップで一番多かった値。</details>
+      </div>
+    </div>
+  </div></div>
+  <div><p class="cap">スマホ 375px・トップ</p>
+  <div class="phone A ph">
+    <div class="bar"><div class="in" style="gap:16px"><span class="logo">Deadlock</span><a href="#a" aria-current="page">レポート</a><a href="#a">データ</a><a href="#a">その他</a></div></div>
+    <div class="col">
+      <div class="panel">
+        <div class="phlab">レポート</div>
+        <a class="row" href="#a"><span class="n">4</span><span class="tt"><b>APAC #4 ・ 11/27</b>Billy を取ったチームが4マップ全勝</span><span class="s num">OT 2-1</span></a>
+        <a class="row" href="#a"><span class="n">3</span><span class="tt"><b>APAC #3 ・ 11/20</b>Billy を取ったチームが4マップ全勝、AUSKR は決勝を逆転</span><span class="s num">AUSKR 2-1</span></a>
+        <a class="row" href="#a"><span class="n">2</span><span class="tt"><b>Night Shift #66 ・ 11/25</b>12マップ中11マップで、最後の Mid-Boss を取ったチームが勝った</span><span class="s num">6 シリーズ</span></a>
+        <a class="more" href="#a">すべてのレポート</a>
+      </div>
+      <div class="panel">
+        <div class="phlab">次の大会</div>
+        <a class="row" href="#a"><span class="n" style="font-size:15px">12/3</span><span class="tt">Night Shift #7 EU</span><span class="s">YouTube</span></a>
+        <a class="more" href="#a">予定・パッチ・サイトの更新</a>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ====================== B ====================== -->
+<div class="label" id="b"><strong>B. 読みもの</strong>
+  パネル・灰色の地をやめ、<b>1本の記事として上から読む</b>形。左の細い列に番号・日付・目次を寄せ、本文の頭をそろえる。最初は「要するに」の見出し文と結果だけ、データ表は記事の途中に置く。色は真鍮色 1色。<br>
+  <span class="ref">土台：VALORANT パッチノート（TL;DR・本文 652px・大きめの行間）＋ Linear / GitHub Changelog（左に日付）</span></div>
+<div class="stage">
+  <div><p class="cap">PC・レポート #4</p>
+  <div class="desk B">
+    <div class="bar"><div class="in"><span class="logo">Deadlock Report</span><a href="#b" aria-current="page">レポート</a><a href="#b">データ</a><a href="#b">パッチ</a></div></div>
+    <div class="art">
+      <aside class="side"><b>#4</b>2026-11-27<br>APAC 決勝<br>4 マップ
+        <nav><a href="#b" aria-current="true">結果</a><a href="#b">持ち帰ること</a><a href="#b">Map 1</a><a href="#b">Map 2</a><a href="#b">Map 3</a><a href="#b">ヒーロー・BAN</a><a href="#b">出典</a></nav></aside>
+      <div>
+        <div class="ev">Deadlock Night Shift APAC #4</div>
+        <h1>11/26 パッチ後も Billy を取ったチームが4マップ全勝し、OT が AUSKR から優勝を取り返した</h1>
+        <div class="result num"><span class="t lose">AUSKR</span><span class="sc">1–2</span><span class="t">OT</span><span class="note">OT はチャレンジャーから勝ち上がり</span></div>
+        <ul class="mlist num">
+          <li><span class="m">MAP 1</span><span class="w">OT</span><span>18:16 の Mid-Boss から逆転</span><span class="d">29:49</span></li>
+          <li><span class="m">MAP 2</span><span class="w">AUSKR</span><span>Mid-Boss を3回とも取る</span><span class="d">33:39</span></li>
+          <li><span class="m">MAP 3</span><span class="w">OT</span><span>1.87万差を 110 まで詰められて勝つ</span><span class="d">35:36</span></li>
+        </ul>
+        <h2>持ち帰ること</h2>
+        <ol class="take">
+          <li><div><b>Billy を取ったチームは APAC #3・#4 で8戦全勝</b><span>パッチの変更は不具合修正だけで、どのマップでも BAN されなかった。</span></div></li>
+          <li><div><b>強化された Violet は3勝、弱体された Wraith は出なかった</b><span>Living Ink T3 の弾ダメ +30 → +45%。</span></div></li>
+        </ol>
+        <h2>Map 1</h2><p class="sub">OT 勝ち ・ 29:49 ・ キル 28-24</p>
+        <div class="tlab"><b>OT</b><span>WIN</span></div>
+        <div class="scroll"><table class="num">
+          <tr><th>選手</th><th>K/D/A</th><th>ソウル</th><th>与ダメ</th><th>回復</th></tr>
+          <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/spectre_mm.webp" alt="Lady Geist" title="Lady Geist">sire</span></td><td>3/5/21</td><td>35,228</td><td><b>48,406</b></td><td><b>26,279</b></td></tr>
+          <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/punkgoat_mm.webp" alt="Billy" title="Billy">Adam</span></td><td>8/4/14</td><td>32,563</td><td>21,346</td><td>6,614</td></tr>
+        </table></div>
+        <div class="tlab l"><b>AUSKR</b><span>LOSS</span></div>
+        <div class="scroll"><table class="num">
+          <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/warden_mm.webp" alt="Warden" title="Warden">Decay</span></td><td>7/4/12</td><td><b>35,828</b></td><td>27,400</td><td>12,290</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div></div>
+  <div><p class="cap">スマホ 375px・トップ</p>
+  <div class="phone B ph">
+    <div class="bar"><div class="in"><span class="logo">Deadlock Report</span><a href="#b" aria-current="page">レポート</a><a href="#b">データ</a><a href="#b">パッチ</a></div></div>
+    <div class="feed">
+      <h2>新しい順</h2>
+      <a class="item" href="#b"><span class="dt">11-27<br>#4</span><span><span class="tag">REPORT · APAC</span><span class="h">Billy を取ったチームが4マップ全勝、OT が優勝</span><br><span class="x num">OT 2–1 AUSKR</span></span></a>
+      <a class="item" href="#b"><span class="dt">11-27</span><span><span class="tag">PATCH</span><span class="h">11/27 アップデート：Apollo と Baba を少し戻す</span></span></a>
+      <a class="item" href="#b"><span class="dt">11-26</span><span><span class="tag">PATCH</span><span class="h">11/26 アップデート：ソウル経済の見直しと33体の調整</span></span></a>
+      <a class="item" href="#b"><span class="dt">11-25<br>#2</span><span><span class="tag">REPORT · EU / NA</span><span class="h">12マップ中11マップで、最後の Mid-Boss を取ったチームが勝った</span><br><span class="x num">6 シリーズ</span></span></a>
+      <a class="item" href="#b"><span class="dt">12-03</span><span><span class="tag">NEXT</span><span class="h">Night Shift #7 EU</span></span></a>
+    </div>
+  </div></div>
+</div>
+
+<!-- ====================== C ====================== -->
+<div class="label" id="c"><strong>C. 畳めるハブ</strong>
+  深い緑がかった黒の地に角丸のカード。<b>セクションは見出しで畳める</b>（最初はスコアボードだけ開く）。地域・ステージ・マップは「日付帯」のような横並びのボタン1列。PC は左にメニュー、スマホは下部に4つのタブ。<br>
+  <span class="ref">土台：FotMob（畳める大会カード・下部タブバー）＋ NBA.com（日付帯・負けたチームを灰色に）</span></div>
+<div class="stage">
+  <div><p class="cap">PC・レポート #4</p>
+  <div class="desk C">
+    <div class="bar"><div class="in"><span class="logo">DEADLOCK REPORT</span><a href="#c">検索</a></div></div>
+    <div class="grid">
+      <nav class="card nav"><div class="h">レポート</div><a href="#c" aria-current="page">APAC #4 <span>11/27</span></a><a href="#c">#66 EU/NA <span>11/25</span></a><a href="#c">APAC #3 <span>11/20</span></a><div class="h">データ</div><a href="#c">ヒーロー</a><a href="#c">チーム・選手</a><a href="#c">傾向</a><div class="h">その他</div><a href="#c">パッチ</a><a href="#c">用語集</a></nav>
+      <div class="main">
+        <div class="card hero">
+          <div class="crumb">Night Shift APAC #4 ・ 2026/11/27</div>
+          <h1>11/26 パッチ後も Billy を取ったチームが4マップ全勝し、OT が AUSKR から優勝を取り返した</h1>
+          <div class="sb num"><span class="t lose">AUSKR</span><span class="big">1<i>–</i>2</span><span class="t">OT</span></div>
+          <div class="pills num"><a href="#c">チャレンジャー<small>OT 1–0 EGO</small></a><a href="#c" aria-current="true">Map 1<small>OT ・ 29:49</small></a><a href="#c">Map 2<small>AUSKR ・ 33:39</small></a><a href="#c">Map 3<small>OT ・ 35:36</small></a></div>
+        </div>
+        <details class="card" open><summary>スコアボード<em>Map 1 ・ キル 28-24</em></summary><div class="body">
+          <div class="tl"><b>OT</b><span>勝ち</span></div>
+          <div class="scroll"><table class="num">
+            <tr><th>選手</th><th>K / D / A</th><th>ソウル</th><th>与ダメ</th><th>回復</th></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/spectre_mm.webp" alt="Lady Geist" title="Lady Geist">sire</span></td><td>3 / 5 / 21</td><td>35,228</td><td class="hi">48,406</td><td class="hi">26,279</td></tr>
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/punkgoat_mm.webp" alt="Billy" title="Billy">Adam</span></td><td>8 / 4 / 14</td><td>32,563</td><td>21,346</td><td>6,614</td></tr>
+          </table></div>
+          <div class="tl l"><b style="color:#6f7a74">AUSKR</b><span>負け</span></div>
+          <div class="scroll"><table class="num">
+            <tr><td><span class="p"><img class="ico" src="../public/deadlock-report/img/heroes/warden_mm.webp" alt="Warden" title="Warden">Decay</span></td><td>7 / 4 / 12</td><td class="hi">35,828</td><td>27,400</td><td>12,290</td></tr>
+          </table></div>
+        </div></details>
+        <details class="card"><summary>ドラフト・BAN<em>OT が先ピック</em></summary></details>
+        <details class="card"><summary>ソウル差の推移<em>18:16 の Mid-Boss で逆転</em></summary></details>
+        <details class="card"><summary>持ち帰ること<em>3つ</em></summary></details>
+      </div>
+    </div>
+  </div></div>
+  <div><p class="cap">スマホ 375px・トップ</p>
+  <div class="phone C ph">
+    <div class="bar"><div class="in"><span class="logo">DEADLOCK REPORT</span><a href="#c">検索</a></div></div>
+    <div class="card list">
+      <div class="lh">APAC #4 決勝<span>11/27</span></div>
+      <a class="m num" href="#c"><span class="a lose">AUSKR</span><span class="s">1 – 2</span><span>OT</span><small>Billy を取ったチームが4マップ全勝</small></a>
+      <a class="m num" href="#c"><span class="a">OT</span><span class="s">1 – 0</span><span class="lose">EGO</span><small>チャレンジャー</small></a>
+    </div>
+    <div class="card list">
+      <div class="lh">APAC #3 決勝<span>11/20</span></div>
+      <a class="m num" href="#c"><span class="a">AUSKR</span><span class="s">2 – 1</span><span class="lose">OT</span><small>Billy を取ったチームが4マップ全勝</small></a>
+    </div>
+    <div class="card list">
+      <div class="lh">次の大会<span>12/3〜</span></div>
+      <a class="m" href="#c"><span class="a">EU</span><span class="s" style="font-size:14px">12/3</span><span>Night Shift #7</span></a>
+    </div>
+    <nav class="tabbar"><a href="#c" aria-current="page"><b>▦</b>レポート</a><a href="#c"><b>◎</b>ヒーロー</a><a href="#c"><b>≡</b>パッチ</a><a href="#c"><b>…</b>その他</a></nav>
+  </div></div>
+</div>
+<div style="height:80px"></div>
+</body>
+</html>

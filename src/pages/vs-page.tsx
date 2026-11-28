@@ -24,8 +24,8 @@ export function VsPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">対戦カード</h1>
-            <p className="m-0 mt-1 text-mute">2チームの直接の対戦成績と、それぞれがよく使う・よく BAN するヒーロー。</p>
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">対戦カード</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">2チームの直接の対戦成績と、それぞれがよく使う・よく BAN するヒーロー。</p>
           </div>
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-t border-line px-4 py-3">
             <TeamSelect id="vs-a" label="チーム1" value={a} names={names} onChange={setA} />
@@ -82,11 +82,11 @@ function Versus({ a, b }: { a: TeamStat; b: TeamStat }) {
           <a href={teamPath(b.name)} className="font-num text-[22px] font-semibold text-ink max-sm:text-[17px]">{b.name}</a>
         </div>
         {series.length ? (
-          <p className="m-0 border-t border-line px-4 py-2.5 text-center text-[12px] text-mute">
+          <p className="m-0 border-t border-line px-4 py-2.5 text-center text-[13px] text-mute">
             マップ <b className="num text-ink">{mw}-{maps.length - mw}</b> ・ キル合計 <b className="num text-ink">{killsA}-{killsB}</b>
           </p>
         ) : (
-          <p className="m-0 border-t border-line px-4 py-2.5 text-center text-[12px] text-mute">レポートの中では、まだ直接対戦していません。</p>
+          <p className="m-0 border-t border-line px-4 py-2.5 text-center text-[13px] text-mute">レポートの中では、まだ直接対戦していません。</p>
         )}
       </Panel>
 
@@ -96,7 +96,7 @@ function Versus({ a, b }: { a: TeamStat; b: TeamStat }) {
           <ul className="m-0 list-none p-0 pt-1">
             {series.map((x, i) => (
               <li key={i} className="grid grid-cols-[84px_1fr_auto] items-center gap-3 border-b border-line px-4 py-2 last:border-0 max-sm:grid-cols-[1fr_auto]">
-                <span className="num text-[12px] text-mute max-sm:hidden">{seriesDate(x.report, x.series).replaceAll("-", ".")}</span>
+                <span className="num text-[13px] text-mute max-sm:hidden">{seriesDate(x.report, x.series).replaceAll("-", ".")}</span>
                 <a href={reportPath(x.report.id)}>#{x.report.id} {x.series.region} {stageOf(x.series)}</a>
                 <span className={cn("num font-num text-[17px] font-bold", x.win ? "text-win" : "text-lose")}>{x.score[0]}-{x.score[1]}</span>
               </li>
@@ -112,7 +112,7 @@ function Versus({ a, b }: { a: TeamStat; b: TeamStat }) {
                     return (
                       <tr key={m.ctx.report.id + m.ctx.map.id} className="border-b border-line last:border-0">
                         <td className="py-1.5 pl-4 whitespace-nowrap"><a href={mapLink(m.ctx)}>{mapShort(m.ctx.map)}</a></td>
-                        <td className={cn("px-2 text-[12px] font-bold whitespace-nowrap", m.win ? "text-win" : "text-lose")}>{m.win ? a.name : b.name} 勝ち</td>
+                        <td className={cn("px-2 text-[13px] font-bold whitespace-nowrap", m.win ? "text-win" : "text-lose")}>{m.win ? a.name : b.name} 勝ち</td>
                         <td className="px-2"><span className="flex gap-0.5">{mine.picks.map((h) => <HeroIcon key={h} hero={h} size={20} />)}</span></td>
                         <td className="px-1 text-[11px] text-mute">vs</td>
                         <td className="py-1.5 pr-4"><span className="flex gap-0.5">{theirs.picks.map((h) => <HeroIcon key={h} hero={h} size={20} />)}</span></td>
@@ -144,7 +144,7 @@ function TeamSide({ t, vsMaps }: { t: TeamStat; vsMaps: { ctx: TeamStat["maps"][
     <Panel>
       <div className="flex items-baseline justify-between px-4 pt-3.5">
         <a href={teamPath(t.name)} className="font-num text-[17px] font-semibold text-ink">{t.name}</a>
-        <span className="num text-[12px] text-mute">全体 マップ {wins(t.maps)}-{t.maps.length - wins(t.maps)}（{pct(wins(t.maps), t.maps.length)}%）</span>
+        <span className="num text-[13px] text-mute">全体 マップ {wins(t.maps)}-{t.maps.length - wins(t.maps)}（{pct(wins(t.maps), t.maps.length)}%）</span>
       </div>
       <Mini title={`よく使う（${t.maps.length}マップ）`} rows={picks.slice(0, 6)} record />
       <Mini title={`よく BAN する（${drafted.length}マップ）`} rows={bannedBy.slice(0, 5)} />

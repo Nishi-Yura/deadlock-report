@@ -2,7 +2,7 @@
 // 始まってから6時間たったものは出さない
 import { useEffect, useState } from "react"
 import schedule from "@/schedule.json"
-import { Label, Panel } from "./parts"
+import { Label, Note, Panel } from "./parts"
 import { Term } from "./term"
 
 export interface Scheduled {
@@ -52,21 +52,21 @@ export function NextEvents() {
           return (
             <li key={s.url} className="grid grid-cols-[92px_1fr_auto] items-center gap-3 border-b border-line px-4 py-2.5 last:border-0 max-sm:grid-cols-[76px_1fr]">
               <span className="leading-tight">
-                <span className="num block font-num text-[17px] font-bold">{parts.month}/{parts.day}<span className="ml-1 text-[12px] font-semibold text-mute">（{parts.weekday}）</span></span>
-                <span className="num block text-[12px] text-mute">{parts.hour}:{parts.minute}〜</span>
+                <span className="num block font-num text-[17px] font-bold">{parts.month}/{parts.day}<span className="ml-1 text-[13px] font-semibold text-mute">（{parts.weekday}）</span></span>
+                <span className="num block text-[13px] text-mute">{parts.hour}:{parts.minute}〜</span>
               </span>
               <span className="min-w-0">
                 <a href={s.url} className="block font-semibold">{s.event} <span className="text-ink">{s.region}</span></a>
-                <span className={live ? "text-[12px] font-bold text-win" : "num text-[12px] text-mute"}>{until(s.t - now)}</span>
+                <span className={live ? "text-[13px] font-bold text-win" : "num text-[13px] text-mute"}>{until(s.t - now)}</span>
               </span>
-              <a href={STREAM} className="text-[12px] max-sm:col-start-2 max-sm:-mt-1.5">配信（YouTube）</a>
+              <a href={STREAM} className="text-[13px] max-sm:col-start-2 max-sm:-mt-1.5">配信（YouTube）</a>
             </li>
           )
         })}
       </ul>
-      <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
+      <Note label="時刻について">
         日本時間。<Term k="night-shift">Night Shift</Term> の開始時刻は EDL.GG のカウントダウンから。最初の試合はふつう 15〜30 分あと。
-      </p>
+      </Note>
     </Panel>
   )
 }

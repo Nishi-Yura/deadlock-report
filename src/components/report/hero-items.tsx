@@ -1,7 +1,7 @@
 // ヒーローページの「プロのアイテム」。src/items.json（npm run timeline が作る）は大きいので、
 // ヒーローページを開いたときだけ読み込む（他のページの JS を重くしない）
 import { useEffect, useState } from "react"
-import { Label, Panel } from "./parts"
+import { Label, Note, Panel } from "./parts"
 import { pct, type MapCtx } from "@/lib/stats"
 import { mmss } from "@/lib/trends"
 import { cn } from "@/lib/utils"
@@ -98,19 +98,19 @@ export function HeroItems({
   return (
     <Panel>
       <Label>{title}（{runs.length} 回分）</Label>
-      <p className="m-0 px-4 pt-1 text-[12px] text-mute">
+      <Note label="この数字の読み方" className="mt-2">
         {note ?? "大会でこのヒーローを使った選手が買ったアイテム。"}
         「購入率」は何回のうち何回買ったか、時刻は買った時間の平均（売って買い直した分は最初の1回）。T1〜T4 は<Term k="tier">ティア</Term>。
-      </p>
+      </Note>
       {opening.length > 0 && (
         <div className="px-4 pt-3">
-          <div className="lab mb-1.5">最初の5つによく入るもの（買う順）</div>
+          <div className="mb-1.5 text-[14px] font-bold">最初の5つによく入るもの（買う順）</div>
           <ol className="m-0 flex list-none flex-wrap items-center gap-x-1 gap-y-2 p-0">
             {opening.map((r, i) => (
               <li key={r.id} className="flex items-center gap-1">
                 {i > 0 && <span aria-hidden className="px-0.5 text-mute">→</span>}
                 <ItemIcon item={r.item} />
-                <span className="text-[12px]">
+                <span className="text-[13px]">
                   {r.item.name}
                   <span className="num ml-1 text-mute">{mmss(r.avgT)}</span>
                 </span>
@@ -139,7 +139,7 @@ export function HeroItems({
                     <span className="truncate">{r.item.name}</span>
                   </span>
                 </td>
-                <td className="px-2 text-[12px] whitespace-nowrap text-mute">
+                <td className="px-2 text-[13px] whitespace-nowrap text-mute">
                   {SLOT[r.item.slot] ?? r.item.slot} T{r.item.tier}
                 </td>
                 <td className="num px-2 text-right">

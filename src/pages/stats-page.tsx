@@ -1,4 +1,4 @@
-import { HeroIcon, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { HeroIcon, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar, SortTable, type Column } from "@/components/report/sort-table"
 import {
@@ -23,8 +23,8 @@ export function StatsPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">ヒーロー統計</h1>
-            <p className="m-0 mt-1 text-mute">
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">ヒーロー統計</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">
               全レポートのマップを合わせたピック・勝敗・BAN。見出しを押すと並べ替えられます。
             </p>
           </div>
@@ -37,7 +37,7 @@ export function StatsPage() {
             </p>
           ) : (
             <>
-              <p className="m-0 px-4 pt-3 pb-1 text-[12px] text-mute">
+              <p className="m-0 px-4 pt-3 pb-1 text-[13px] text-mute">
                 <span className="num">{table.maps}</span> マップ（レポート <span className="num">{reportsIn}</span> 本）。
                 <Term k="ban-rate">BAN 率</Term>は配信でドラフトが見えた <span className="num">{table.draftMaps}</span> マップが分母。
               </p>
@@ -47,7 +47,7 @@ export function StatsPage() {
         </Panel>
         {patchesIn.length > 0 && (
           <Panel delay={0.05}>
-            <p className="m-0 px-4 py-3 text-[12px] text-mute">
+            <p className="m-0 px-4 py-3 text-[13px] text-mute">
               {f.days ? `この期間に出たパッチ：` : "パッチ："}
               {patchesIn.slice(0, 5).map((p, i) => (
                 <span key={p.path}>
@@ -86,7 +86,7 @@ function WinRate({ wins, n }: { wins: number; n: number }) {
 }
 
 function SmallNote() {
-  return <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">灰色の勝率はピック {MIN_HERO} 回未満。回数が少ないので参考程度に。</p>
+  return <Note label="この数字の読み方">灰色の勝率はピック {MIN_HERO} 回未満。回数が少ないので参考程度に。</Note>
 }
 
 function HeroStatsTable({ table }: { table: HeroTable }) {
@@ -187,10 +187,10 @@ function Compare({ days, region }: { days: number; region: string }) {
   ]
   return (
     <>
-      <p className="m-0 px-4 pt-3 pb-1 text-[12px] text-mute">
+      <Note label="この数字の読み方" className="mt-2">
         過去 {days} 日 <span className="num">{post.maps}</span> マップ / それ以前 <span className="num">{pre.maps}</span> マップ。
         「差」はピック率の増減（ポイント）。マップ数が少ないうちは1マップで大きく動きます。
-      </p>
+      </Note>
       <SortTable
         rows={rows}
         columns={columns}

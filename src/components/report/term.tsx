@@ -79,7 +79,7 @@ function TermPop({ def, children, className }: { def: TermDef; children: ReactNo
           id={id}
           role="tooltip"
           style={{ transform: `translateX(calc(-50% + ${shift}px))` }}
-          className="absolute top-full left-1/2 z-50 mt-1.5 block w-[min(280px,calc(100vw-16px))] bg-ink px-3 py-2 text-left text-[12px] leading-relaxed font-normal tracking-normal text-panel normal-case shadow-sm"
+          className="absolute top-full left-1/2 z-50 mt-1.5 block w-[min(280px,calc(100vw-16px))] bg-ink px-3 py-2 text-left text-[13px] leading-relaxed font-normal tracking-normal text-panel normal-case shadow-sm"
         >
           <b className="mb-0.5 block font-bold">{def.term}</b>
           {def.text}

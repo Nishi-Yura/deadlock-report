@@ -1,4 +1,4 @@
-import { Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { Label, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { GLOSSARY } from "@/glossary"
 
 const GROUPS = ["マップと目標", "試合の流れ", "ドラフト", "数字の見方", "大会"] as const
@@ -10,12 +10,12 @@ export function GlossaryPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">用語集</h1>
-            <p className="m-0 mt-1 text-mute">
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">用語集</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">
               レポートに出てくる言葉の短い説明。ページの中で点線の下線が付いた言葉は、マウスを乗せるかタップすると同じ説明が出ます。
             </p>
           </div>
-          <nav aria-label="用語の分類" className="flex flex-wrap gap-x-1 border-t border-line px-3 py-1 text-[12px]">
+          <nav aria-label="用語の分類" className="flex flex-wrap gap-x-1 border-t border-line px-3 py-1 text-[13px]">
             {GROUPS.map((g) => (
               <a key={g} href={`#g-${g}`} className="inline-flex min-h-9 items-center px-1.5">{g}</a>
             ))}
@@ -41,9 +41,9 @@ export function GlossaryPage() {
           )
         })}
         <Panel>
-          <p className="m-0 px-4 py-3 text-[12px] text-mute">
+          <Note label="出典">
             マップと目標の説明は <a href="https://deadlock.wiki/Cursed_Apple">Deadlock Wiki</a>（2026年11月28日時点）をもとにしています。パッチで変わることがあります。
-          </p>
+          </Note>
         </Panel>
       </main>
       <SiteFoot />

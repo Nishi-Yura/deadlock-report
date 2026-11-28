@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator"
-import { HeroIcon, Label, Panel } from "./parts"
-import { hasTimeline, SoulGraph } from "./soul-graph"
+import { Fold, HeroIcon, Label, Panel } from "./parts"
+import { hasTimeline, SoulGraph, soulHint } from "./soul-graph"
 import { fmt, kills, mapLabel, winnerFirst } from "@/lib/report"
 import { playerPath, teamPath } from "@/lib/stats"
 import type { MapData, MapTeam, PlayerRow } from "@/types"
@@ -41,38 +41,29 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
           {map.flow && (
             <>
               <Separator />
-              <p className="px-4 py-3 text-mute"><Glossed text={map.flow} /></p>
+              <p className="px-4 py-3"><Glossed text={map.flow} /></p>
             </>
           )}
         </Panel>
       </div>
-
-      {hasTimeline(map) && (
-        <Panel>
-          <Label>ソウル差の推移</Label>
-          <SoulGraph map={map} />
-        </Panel>
-      )}
 
       <Panel>
         <Scoreboard team={w} result="勝ち" best={best} />
         <Scoreboard team={l} result="負け" best={best} last />
       </Panel>
 
+      {hasTimeline(map) && (
+        <Fold title="ソウル差の推移" hint={soulHint(map)}>
+          <SoulGraph map={map} />
+        </Fold>
+      )}
+
       {map.screenshot && (
-        <Panel>
-          <details className="group">
-            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3.5 hover:bg-cellhover [&::-webkit-details-marker]:hidden">
-              <span className="lab">配信画面のドラフト</span>
-              <span className="text-[12px] text-link group-open:hidden">開く</span>
-              <span className="hidden text-[12px] text-link group-open:inline">閉じる</span>
-            </summary>
-            <div className="px-4 pb-4">
-              <img src={base + map.screenshot} alt={`${mapLabel(map)} のドラフト画面`} loading="lazy" className="block h-auto w-full" />
-              {map.screenshotNote && <p className="mt-1.5 text-[12px] text-mute">{map.screenshotNote}</p>}
-            </div>
-          </details>
-        </Panel>
+        <Fold title="配信画面のドラフト" hint={map.screenshotNote}>
+          <div className="px-4 pb-4">
+            <img src={base + map.screenshot} alt={`${mapLabel(map)} のドラフト画面`} loading="lazy" className="block h-auto w-full" />
+          </div>
+        </Fold>
       )}
     </div>
   )
@@ -137,7 +128,7 @@ function Scoreboard({ team, result, best, last }: { team: MapTeam; result: strin
         <h3 className="font-num text-[17px] font-semibold"><a href={teamPath(team.name)} className="text-ink">{team.name}</a></h3>
         <span className={cn("text-[11px] font-bold", win ? "text-win" : "text-lose")}>{result}</span>
       </div>
-      <Table className="mt-1 min-w-[480px] table-fixed max-sm:min-w-[420px] max-sm:text-[12px] border-separate border-spacing-[3px] text-[13px]">
+      <Table className="mt-1 min-w-[480px] table-fixed max-sm:min-w-[420px] max-sm:text-[13px] border-separate border-spacing-[3px] text-[14px]">
         <colgroup>
           <col className="w-[34%]" />
           <col className="w-[17%]" />

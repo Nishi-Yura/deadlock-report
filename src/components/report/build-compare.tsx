@@ -1,6 +1,6 @@
 // 「比べる」の1試合：自分が買ったアイテムの順番を、大会で同じヒーローを使った選手の買い方と並べる
 import { useEffect, useState } from "react"
-import { Label, Panel } from "./parts"
+import { Label, Note, Panel } from "./parts"
 import { ItemIcon, loadItemData, proItems, type Item, type ItemData } from "./hero-items"
 import { allMaps } from "@/lib/stats"
 import { mmss } from "@/lib/trends"
@@ -91,15 +91,15 @@ export function BuildCompare({ hero, purchases }: { hero: string; purchases: Pur
     <Panel>
       <Label>アイテムの買い方</Label>
       {!pro.runs ? (
-        <p className="m-0 px-4 pt-1 text-[12px] text-mute">{hero} は大会でまだ使われていないので、この試合で買った順番だけ出します。</p>
+        <p className="m-0 px-4 pt-1 text-[13px] text-mute">{hero} は大会でまだ使われていないので、この試合で買った順番だけ出します。</p>
       ) : (
-        <p className="m-0 px-4 pt-1 text-[12px] text-mute">
+        <Note label="この数字の読み方" className="mt-2">
           大会で {hero} を使った {pro.runs} 回の買い方と並べます。<b className="font-semibold text-win">✓</b> は大会で最初によく買うものにも入っているもの。
-        </p>
+        </Note>
       )}
       <div className="grid gap-x-6 px-4 pt-3 pb-3 sm:grid-cols-2">
         <div>
-          <div className="lab mb-1.5">あなたの最初の6つ</div>
+          <div className="mb-1.5 text-[14px] font-bold">あなたの最初の6つ</div>
           {mine.length ? (
             <ol className="m-0 list-none p-0">
               {mine.slice(0, 6).map((p, i) => {
@@ -111,7 +111,7 @@ export function BuildCompare({ hero, purchases }: { hero: string; purchases: Pur
                     <ItemIcon item={item} />
                     <span className={cn("min-w-0 flex-1 truncate", match && "font-semibold")}>{item.name}</span>
                     {match && <b className="text-win" aria-label="大会で最初によく買うものにも入っている">✓</b>}
-                    <span className="num text-[12px] text-mute">{mmss(p.game_time_s)}</span>
+                    <span className="num text-[13px] text-mute">{mmss(p.game_time_s)}</span>
                   </li>
                 )
               })}
@@ -122,14 +122,14 @@ export function BuildCompare({ hero, purchases }: { hero: string; purchases: Pur
         </div>
         {pro.runs > 0 && (
           <div className="max-sm:mt-3">
-            <div className="lab mb-1.5">大会で最初によく買うもの（買う順）</div>
+            <div className="mb-1.5 text-[14px] font-bold">大会で最初によく買うもの（買う順）</div>
             <ol className="m-0 list-none p-0">
               {pro.opening.map((r, i) => (
                 <li key={r.id} className="flex min-h-8 items-center gap-2">
                   <span className="num w-3 text-right text-[11px] text-mute">{i + 1}</span>
                   <ItemIcon item={r.item} />
                   <span className={cn("min-w-0 flex-1 truncate", mineIds.has(r.id) && "font-semibold")}>{r.item.name}</span>
-                  <span className="num text-[12px] text-mute">{mmss(r.avgT)}</span>
+                  <span className="num text-[13px] text-mute">{mmss(r.avgT)}</span>
                 </li>
               ))}
             </ol>
@@ -138,13 +138,13 @@ export function BuildCompare({ hero, purchases }: { hero: string; purchases: Pur
       </div>
       {missing.length > 0 && (
         <div className="border-t border-line px-4 py-3">
-          <div className="lab mb-1.5">大会ではよく買う（{Math.round(POPULAR * 100)}% 以上）のに、この試合で買っていないもの</div>
+          <div className="mb-1.5 text-[14px] font-bold">大会ではよく買う（{Math.round(POPULAR * 100)}% 以上）のに、この試合で買っていないもの</div>
           <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1.5 p-0">
             {missing.map((r) => (
               <li key={r.id} className="flex items-center gap-1.5">
                 <ItemIcon item={r.item} />
                 <span>{r.item.name}</span>
-                <span className="num text-[12px] text-mute">{Math.round((r.n / pro.runs) * 100)}%・平均 {mmss(r.avgT)}</span>
+                <span className="num text-[13px] text-mute">{Math.round((r.n / pro.runs) * 100)}%・平均 {mmss(r.avgT)}</span>
               </li>
             ))}
           </ul>

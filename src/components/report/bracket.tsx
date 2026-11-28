@@ -5,7 +5,7 @@ import type { Series } from "@/types"
 import { cn } from "@/lib/utils"
 
 const R = 34 // チーム1行の高さ
-const H = 22 // 見出し（ステージ名）の高さ
+const H = 24 // 見出し（ステージ名）の高さ
 
 const winnerOf = (s: Series) => (s.score[0] > s.score[1] ? s.teams[0] : s.teams[1])
 
@@ -40,7 +40,7 @@ export function Bracket({ series, onPick }: { series: Series[]; onPick?: (key: s
         {series.map((s, i) => (
           <div key={seriesKey(s)}>
             {i > 0 && (
-              <p className="m-0 py-1 pl-2 text-[11px] text-mute">
+              <p className="m-0 py-1 pl-2 text-[13px] text-mute">
                 ↓ <b className="font-semibold text-ink">{incoming[i]}</b> が{stageOf(s)}へ
               </p>
             )}
@@ -61,7 +61,7 @@ function Box({ s, incoming, last, onPick }: { s: Series; incoming?: string; last
       className="block w-full cursor-pointer text-left hover:[&_.row]:bg-cellhover"
       aria-label={`${s.region} ${stageOf(s)} のマップを見る`}
     >
-      <span className="flex items-baseline justify-between gap-2 text-[11px] text-mute" style={{ height: H }}>
+      <span className="flex items-baseline justify-between gap-2 text-[13px] text-mute" style={{ height: H }}>
         <span className={cn(last && "font-bold text-ink")}>{stageOf(s)}</span>
         {s.date && <span className="num">{formatDate(s.date).replace(/^\d+年/, "")}</span>}
       </span>

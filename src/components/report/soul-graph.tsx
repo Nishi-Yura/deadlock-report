@@ -4,6 +4,7 @@ import timelines from "@/timelines.json"
 import { fmt } from "@/lib/report"
 import type { MapData } from "@/types"
 import { Term } from "@/components/report/term"
+import { Note } from "@/components/report/parts"
 
 interface Timeline {
   t: number[]
@@ -36,6 +37,16 @@ const k = (n: number) => (Math.abs(n) >= 1000 ? `${n > 0 ? "+" : n < 0 ? "−" :
 
 export function hasTimeline(map: MapData) {
   return !!data[map.matchId]
+}
+
+/** たたんだときの見出しに出す一言（最初の Mid-Boss と終了時のリード） */
+export function soulHint(map: MapData): string | undefined {
+  const tl = data[map.matchId]
+  if (!tl) return undefined
+  const last = tl.lead[tl.lead.length - 1]
+  const lead = `終了時 ${last >= 0 ? map.teams[0].name : map.teams[1].name} +${fmt(Math.abs(last))}`
+  const mb = tl.mid[0]
+  return mb ? `最初の Mid-Boss ${Math.floor(mb.t / 60)}:${String(mb.t % 60).padStart(2, "0")} ${map.teams[mb.team].name} ・ ${lead}` : lead
 }
 
 export function SoulGraph({ map }: { map: MapData }) {
@@ -106,7 +117,7 @@ function Graph({ map, tl }: { map: MapData; tl: Timeline }) {
 
   return (
     <figure className="m-0 px-4 pt-1 pb-3">
-      <div className="mb-1 flex justify-between gap-3 text-[12px]">
+      <div className="mb-1 flex justify-between gap-3 text-[13px]">
         <span>↑ <b className="font-num font-semibold">{a.name}</b> がリード</span>
         <span>↓ <b className="font-num font-semibold">{b.name}</b> がリード</span>
       </div>
@@ -153,7 +164,7 @@ function Graph({ map, tl }: { map: MapData; tl: Timeline }) {
       </svg>
       {tl.kills && <Events tl={tl} map={map} W={W} x={x} end={end} />}
       </div>
-      <figcaption className="mt-1 text-[12px] text-mute">
+      <figcaption className="-mx-4 mt-2 -mb-3"><Note label="グラフの読み方">
         {narrow && <>MB は <Term k="midboss">Mid-Boss</Term> を取った時刻とチーム。</>}
         Deadlock API のスナップショット（序盤は3分、15分以降は5分ごと）と試合終了時の値。終了時は {last >= 0 ? a.name : b.name} が{" "}
         <span className="num">{fmt(Math.abs(last))}</span> リード。
@@ -163,7 +174,7 @@ function Graph({ map, tl }: { map: MapData; tl: Timeline }) {
             （{Object.entries(OBJ).map(([k, [c, n]], i) => (<span key={k}>{i > 0 && "・"}{c} <Term k={k === "g" ? "guardian" : k === "w" ? "walker" : k === "b" ? "base-guardian" : k === "s" ? "shrine" : "patron"}>{n}</Term></span>))}）。
           </>
         )}
-      </figcaption>
+      </Note></figcaption>
     </figure>
   )
 }

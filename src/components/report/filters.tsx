@@ -43,7 +43,7 @@ export function Segmented<T extends string>({
 }: { label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void }) {
   return (
     <div className="flex min-w-0 items-center gap-1">
-      <span className="lab shrink-0 pr-1">{label}</span>
+      <span className="shrink-0 pr-1 text-[13px] text-mute">{label}</span>
       <div role="radiogroup" aria-label={label} className="flex min-w-0 flex-wrap">
         {options.map((o) => (
           <button
@@ -53,7 +53,7 @@ export function Segmented<T extends string>({
             aria-checked={value === o.value}
             onClick={() => onChange(o.value)}
             className={cn(
-              "relative h-11 shrink-0 cursor-pointer px-2.5 text-[12px] whitespace-nowrap text-ink hover:bg-cellhover",
+              "relative h-11 shrink-0 cursor-pointer px-2.5 text-[13px] whitespace-nowrap text-ink hover:bg-cellhover",
               value === o.value && "font-bold after:absolute after:inset-x-2 after:bottom-1.5 after:h-0.5 after:bg-ink"
             )}
           >
@@ -85,7 +85,7 @@ export function FilterBar({ f, compare }: { f: FilterState; compare?: boolean })
         <Segmented label="地域" value={f.region} options={regionOptions} onChange={f.setRegion} />
       </div>
       {f.days > 0 && (
-        <div className="flex flex-wrap items-center gap-x-3 pb-2 text-[12px] text-mute">
+        <div className="flex flex-wrap items-center gap-x-3 pb-2 text-[13px] text-mute">
           <span>
             今日から数えて過去 {f.days} 日（<span className="num">{rangeLabel(f.days)}</span>）の試合。
             一番新しい試合は <span className="num">{shortDate(latestMatchDate())}</span>。

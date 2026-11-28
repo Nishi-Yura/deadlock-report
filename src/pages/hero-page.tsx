@@ -1,4 +1,4 @@
-import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { HeroIcon, Label, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { HeroItems } from "@/components/report/hero-items"
 import { Stat } from "@/pages/teams-page"
 import { rangeLabel } from "@/components/report/filters"
@@ -84,7 +84,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
         <Panel>
           <div className="flex flex-wrap items-center justify-between gap-x-3 border-b border-line px-4">
             <a href="/deadlock-report/stats/" className="py-3 font-semibold">ヒーロー統計</a>
-            <span className="py-3 text-[12px] text-mute">全 {all.maps} マップ</span>
+            <span className="py-3 text-[13px] text-mute">全 {all.maps} マップ</span>
           </div>
           <div className="flex items-center gap-4 px-4 pt-4 pb-4">
             <HeroIcon hero={hero} size={64} />
@@ -106,7 +106,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
             <div className="grid grid-cols-2 gap-px pt-2">
               {periods.map((p) => (
                 <div key={String(p.older)} className="px-4 pb-3">
-                  <div className="text-[12px] text-mute">
+                  <div className="text-[13px] text-mute">
                     {p.older ? `${shortDate(sinceDate(RECENT))} より前` : `過去 ${RECENT} 日（${rangeLabel(RECENT)}）`}（{p.maps} マップ）
                   </div>
                   {p.maps ? (
@@ -121,7 +121,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
                 </div>
               ))}
             </div>
-            <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
+            <p className="m-0 border-t border-line px-4 py-2.5 text-[13px] text-mute">
               ほかの日数で比べるなら <a href={`/deadlock-report/stats/?days=${RECENT}&cmp=1`}>ヒーロー統計</a>。
               {latestPatch && <> 最新のパッチ：<a href={latestPatch.path}>{latestPatch.title}</a></>}
             </p>
@@ -133,7 +133,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
         {played.length > 0 && (
           <Panel>
             <Label>一緒にピックされたヒーロー</Label>
-            <p className="m-0 px-4 pt-1 text-[12px] text-mute">同じチームで使われた回数と、そのときの勝敗。まだマップが少ないので、1〜2回の組み合わせは参考程度に。</p>
+            <Note label="この数字の読み方" className="mt-2">同じチームで使われた回数と、そのときの勝敗。まだマップが少ないので、1〜2回の組み合わせは参考程度に。</Note>
             <div className="grid grid-cols-2 gap-x-2 pt-1 pb-2 max-sm:grid-cols-1">
               {partners(allMaps, hero).slice(0, 10).map((h) => (
                 <div key={h.hero} className="grid grid-cols-[22px_1fr_24px_40px] items-center gap-2 px-4 py-[4px] odd:bg-cellhover">
@@ -203,7 +203,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
                 <tbody>
                   {played.map((p) => (
                     <tr key={p.ctx.report.id + p.ctx.map.id + p.team} className="border-b border-line last:border-0 hover:bg-cellhover">
-                      <td className="num py-1.5 pl-4 text-[12px] whitespace-nowrap text-mute">{p.ctx.date.slice(5).replace("-", "/")}</td>
+                      <td className="num py-1.5 pl-4 text-[13px] whitespace-nowrap text-mute">{p.ctx.date.slice(5).replace("-", "/")}</td>
                       <td className="px-2 whitespace-nowrap"><a href={mapLink(p.ctx)}>{mapShort(p.ctx.map)}</a></td>
                       <td className="px-2 whitespace-nowrap">
                         <a href={teamPath(p.team)} className="font-semibold">{p.team}</a>
@@ -211,7 +211,7 @@ export function HeroPage({ slug: s }: { slug: string }) {
                         <a href={teamPath(p.opponent)}>{p.opponent}</a>
                       </td>
                       <td className={cn("px-2 font-bold", p.win ? "text-win" : "text-lose")}>{p.win ? "勝ち" : "負け"}</td>
-                      <td className="num px-2 text-right text-[12px] text-mute">{p.pick ? `${p.pick}番目` : ""}</td>
+                      <td className="num px-2 text-right text-[13px] text-mute">{p.pick ? `${p.pick}番目` : ""}</td>
                       <td className="px-2 whitespace-nowrap">{p.row && <a href={playerPath(p.row[0])}>{p.row[0]}</a>}</td>
                       <td className="num py-1.5 pr-4 text-right whitespace-nowrap">
                         {p.row && <>{p.row[2]} / {p.row[3]} / {p.row[4]} <span className="text-mute">・{fmt(p.row[5])}</span></>}

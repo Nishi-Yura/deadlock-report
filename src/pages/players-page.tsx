@@ -59,8 +59,8 @@ export function PlayersPage() {
       <main className="mx-auto grid max-w-[760px] grid-cols-[minmax(0,1fr)] gap-3 px-4 pt-5 pb-3">
         <Panel>
           <div className="px-4 pt-4 pb-3">
-            <h1 className="font-num text-[26px] leading-tight font-bold">選手</h1>
-            <p className="m-0 mt-1 text-mute">
+            <h1 className="text-[20px] leading-snug font-bold max-sm:text-[18px]">選手</h1>
+            <p className="m-0 mt-1 text-[14px] text-mute">
               レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均（{MIN_MAPS}マップ未満の選手の勝率・KDA は灰色）、<Term k="kda">KDA</Term> は (K+A)/D。
             </p>
           </div>
@@ -98,7 +98,7 @@ export function PlayerPage({ slug: s }: { slug: string }) {
         <Panel>
           <div className="flex flex-wrap items-center justify-between gap-x-3 border-b border-line px-4">
             <a href="/deadlock-report/players/" className="py-3 font-semibold">選手一覧</a>
-            <span className="py-3 text-[12px]">
+            <span className="py-3 text-[13px]">
               {p.teams.map((name, i) => (
                 <span key={name}>{i > 0 && " / "}<a href={teamPath(name)}>{name}</a></span>
               ))}
@@ -151,7 +151,7 @@ export function PlayerPage({ slug: s }: { slug: string }) {
               <tbody>
                 {p.maps.map((m) => (
                   <tr key={m.ctx.report.id + m.ctx.map.id} className="border-t border-line hover:bg-cellhover">
-                    <td className="num py-1.5 pl-4 text-[12px] whitespace-nowrap text-mute">{m.ctx.date.slice(5).replace("-", "/")}</td>
+                    <td className="num py-1.5 pl-4 text-[13px] whitespace-nowrap text-mute">{m.ctx.date.slice(5).replace("-", "/")}</td>
                     <td className="px-2 whitespace-nowrap">
                       <a href={mapLink(m.ctx)}>{mapShort(m.ctx.map)}</a>{" "}
                       <b className={cn("text-[11px]", m.win ? "text-win" : "text-lose")}>{m.win ? "勝ち" : "負け"}</b>
