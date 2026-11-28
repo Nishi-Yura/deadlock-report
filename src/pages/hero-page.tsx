@@ -1,5 +1,6 @@
 import { HeroIcon, Label, Note, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { HeroItems } from "@/components/report/hero-items"
+import { HeroLanes } from "@/components/report/lanes"
 import { Stat } from "@/pages/teams-page"
 import { rangeLabel } from "@/components/report/filters"
 import { fmt } from "@/lib/report"
@@ -127,6 +128,8 @@ export function HeroPage({ slug: s }: { slug: string }) {
             </p>
           </Panel>
         )}
+
+        {played.length > 0 && <HeroLanes hero={hero} maps={allMaps} />}
 
         {played.length > 0 && <HeroItems hero={hero} maps={played.map((p) => p.ctx)} />}
 

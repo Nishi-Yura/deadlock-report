@@ -6,10 +6,11 @@ import { fmt } from "@/lib/report"
 import { allMaps, filterMaps, heroPath, mapLink, mapShort, pct, teamPath, MIN_HERO } from "@/lib/stats"
 import {
   bansBySide, comebacks, draftedCount, durations, firstMidBoss, firstPickRate, firstPicks, firstTo,
-  leaderAt, mmss, pairs, pickOrder, withTimeline, type HeroCount, type Rate,
+  laneMajority, LANE_MIN, leaderAt, mmss, pairs, pickOrder, withTimeline, type HeroCount, type Rate,
 } from "@/lib/trends"
 import { cn } from "@/lib/utils"
 import { Glossed } from "@/components/report/term"
+import { LaneTable } from "@/components/report/lanes"
 
 export function TrendsPage() {
   const f = useFilter()
@@ -36,6 +37,7 @@ export function TrendsPage() {
         {maps.length > 0 && (
           <>
             <Flow maps={maps} />
+            <LaneTable maps={maps} />
             <Draft maps={maps} />
           </>
         )}
@@ -85,6 +87,11 @@ function Flow({ maps }: { maps: Parameters<typeof leaderAt>[0] }) {
           {[5000, 10000, 20000].map((x) => (
             <RateRow key={x} label={`先に ${fmt(x)} ソウル差をつけたチーム`} r={firstTo(maps, x)} />
           ))}
+          <RateRow
+            label="3本のレーンのうち2本以上で勝ったチーム"
+            sub={`${LANE_MIN}:00 の時点、同じレーンの2人のソウルの合計で比べる`}
+            r={laneMajority(maps)}
+          />
           <RateRow
             label="最初の Mid-Boss を取ったチーム"
             sub={mid.n ? `最初の Mid-Boss は平均 ${mmss(mid.avgT)}` : undefined}

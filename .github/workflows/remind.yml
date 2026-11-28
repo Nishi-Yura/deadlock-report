@@ -1,0 +1,40 @@
+# 大会の開始1時間前に、Discord にお知らせを投稿する（scripts/remind.mjs）。
+# 30分ごとに動き、前に成功した実行から今までの間に「開始1時間前」が来た大会だけを投稿する。
+# 投稿先はリポジトリの Secrets の DISCORD_WEBHOOK_URL。登録されていなければ何もしない。
+name: Event reminder
+
+on:
+  schedule:
+    - cron: "5,35 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: remind
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # 区切りは「実行が始まった時刻」。前に成功した実行の開始〜この実行の開始の間に
+      # 「開始1時間前」が来た大会を知らせる（次の実行はこの実行の開始から数えるので、重ならない）
+      - id: window
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          since=$(gh run list --workflow remind.yml --status success --limit 5 \
+            --json createdAt,databaseId -q '[.[] | select(.databaseId != ${{ github.run_id }})][0].createdAt' 2>/dev/null || true)
+          now=$(gh run view ${{ github.run_id }} --json createdAt -q .createdAt 2>/dev/null || true)
+          echo "since=${since}" >> "$GITHUB_OUTPUT"
+          echo "now=${now}" >> "$GITHUB_OUTPUT"
+      - run: node scripts/remind.mjs --since "${{ steps.window.outputs.since }}" --now "${{ steps.window.outputs.now }}"
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

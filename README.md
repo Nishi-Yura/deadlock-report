@@ -20,7 +20,7 @@ deadlock-report/
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui）。ページごとに分けて読み込む（src/main.tsx）
   src/patches.json          ← パッチまとめの一覧（目次・RSS・ヒーロー統計のパッチ一覧が使う）
-  src/timelines.json        ← 各マップのソウル差の推移・Mid-Boss・キル・オブジェクト破壊（npm run timeline が作る）
+  src/timelines.json        ← 各マップのソウル差の推移・Mid-Boss・キル・オブジェクト破壊・レーン（9:00 のソウル）（npm run timeline が作る）
   src/items.json            ← 各選手のアイテム購入（npm run timeline が作る。ヒーローページを開いたときだけ読む）
   src/item-catalog.json     ← アイテムの名前・ティア・画像（npm run timeline が作る）
   patch-src/                ← パッチまとめの下書きの元（deadlock.wiki から取り出した英語の JSON）
@@ -140,6 +140,7 @@ git push
   ```
   （実行すると値を聞かれるので、ウェブフックの URL を貼る）。登録していなければ投稿しないだけで、公開は普通に終わる。
 - **サイトの機能を足したとき**は、`src/updates.json` に1件足す（`id`・`date`・`title`・`items`）。push すると Discord に「サイトの更新」として投稿され、目次の一番下の「サイトの更新」にも出る。`id` は一度公開したら変えない（変えると同じ内容がもう一度投稿される）。細かい修正だけのときは足さなければ投稿されない。
+- **大会前のお知らせ**：`.github/workflows/remind.yml` が30分ごとに `scripts/remind.mjs` を実行し、`src/schedule.json` の大会が始まる1時間前に投稿する（前に成功した実行から今までに「1時間前」が来たものだけなので、Actions が遅れても2回は投稿しない。始まって30分以上たったものは投稿しない）。文面の確認は `npm run remind -- --at 2026-12-02T20:10:00Z`。
 - **文面を確かめる（投稿しない）**：`npm run discord -- --report 5`、`npm run discord -- --patch 2026-12-03`、`npm run discord -- --update <id>`
 - 比べる相手は「前に公開まで成功した push」なので、続けて push して途中の実行が取り消されても、告知が抜けない。逆に、同じ実行を GitHub で「Re-run」すると同じ告知がもう一度出る。
 

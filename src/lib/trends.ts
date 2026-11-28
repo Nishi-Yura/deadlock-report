@@ -9,9 +9,11 @@ export interface Timeline {
   lead: number[]
   /** team はレポートの teams の添字 */
   mid: { t: number; team: number }[]
+  /** レーン戦（下の LaneRow） */
+  lanes?: LaneRow[]
 }
 
-const data = timelines as Record<string, Timeline>
+const data = timelines as unknown as Record<string, Timeline>
 export const timelineOf = (m: MapData): Timeline | undefined => data[m.matchId]
 
 export const durationSec = (m: MapData) => {
@@ -229,4 +231,92 @@ export function partners(maps: MapCtx[], hero: string) {
     }
   }
   return [...by.values()].sort((a, b) => b.n - a.n || b.win - a.win || a.hero.localeCompare(b.hero))
+}
+
+// ---- レーン戦（9:00 時点のソウル。npm run timeline が timelines.json の lanes に書く） ----
+
+/** [ヒーロー, レポートの teams の添字, レーン番号, 9:00 のソウル] */
+export type LaneRow = [string, number, number, number]
+export const LANE_MIN = 9
+
+export interface LaneMatch {
+  ctx: MapCtx
+  hero: string
+  side: number
+  /** 同じレーンの味方 */
+  mate: string
+  /** 同じレーンの相手2体 */
+  opp: string[]
+  /** 自分 − 相手2体の平均 */
+  diff: number
+  /** 2体の合計で相手より多かったか */
+  laneWin: boolean
+  win: boolean
+}
+
+/** マップごと・選手ごとのレーンの結果 */
+export function laneMatches(maps: MapCtx[]): LaneMatch[] {
+  const out: LaneMatch[] = []
+  for (const ctx of maps) {
+    const rows = timelineOf(ctx.map)?.lanes
+    if (!rows) continue
+    for (const [hero, side, lane, souls] of rows) {
+      const mates = rows.filter((r) => r[2] === lane && r[1] === side)
+      const opps = rows.filter((r) => r[2] === lane && r[1] !== side)
+      if (mates.length !== 2 || opps.length !== 2) continue
+      const sum = (xs: LaneRow[]) => xs.reduce((s, r) => s + r[3], 0)
+      out.push({
+        ctx,
+        hero,
+        side,
+        mate: mates.find((r) => r[0] !== hero)?.[0] ?? "",
+        opp: opps.map((r) => r[0]),
+        diff: Math.round(souls - sum(opps) / 2),
+        laneWin: sum(mates) > sum(opps),
+        win: ctx.map.teams[side].name === ctx.map.winner,
+      })
+    }
+  }
+  return out
+}
+
+export interface LaneStat {
+  hero: string
+  n: number
+  laneWin: number
+  /** 自分 − 相手の平均、の平均 */
+  avgDiff: number
+}
+
+/** ヒーローごとのレーン戦。回数の多い順 */
+export function laneStats(maps: MapCtx[]): LaneStat[] {
+  const by = new Map<string, LaneMatch[]>()
+  for (const x of laneMatches(maps)) by.set(x.hero, [...(by.get(x.hero) ?? []), x])
+  return [...by.entries()]
+    .map(([hero, xs]) => ({
+      hero,
+      n: xs.length,
+      laneWin: xs.filter((x) => x.laneWin).length,
+      avgDiff: Math.round(xs.reduce((s, x) => s + x.diff, 0) / xs.length),
+    }))
+    .sort((a, b) => b.n - a.n || b.avgDiff - a.avgDiff)
+}
+
+/** 3本のレーンのうち2本以上で勝ったチームの勝率 */
+export function laneMajority(maps: MapCtx[]): Rate {
+  const r = { n: 0, win: 0 }
+  for (const ctx of maps) {
+    const rows = timelineOf(ctx.map)?.lanes
+    if (!rows) continue
+    const won = [0, 0]
+    for (const lane of new Set(rows.map((x) => x[2]))) {
+      const s = [0, 1].map((side) => rows.filter((x) => x[2] === lane && x[1] === side).reduce((a, x) => a + x[3], 0))
+      if (s[0] !== s[1]) won[s[0] > s[1] ? 0 : 1]++
+    }
+    if (won[0] === won[1]) continue
+    const side = won[0] > won[1] ? 0 : 1
+    r.n++
+    if (side === winSide(ctx.map)) r.win++
+  }
+  return r
 }

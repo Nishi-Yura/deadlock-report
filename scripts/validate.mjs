@@ -132,6 +132,11 @@ for (const name of ["timelines.json", "items.json"]) {
   const data = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {}
   const missing = reports.flatMap(({ file, r }) => r.maps.filter((m) => !data[m.matchId]).map((m) => `${file} ${m.id}`))
   if (missing.length) err(`src/${name}`, `${missing.length} マップ分がない（${missing.slice(0, 3).join("、")}${missing.length > 3 ? " ほか" : ""}）。npm run timeline を実行してコミットする`)
+  // レーン戦は 2対2×3本がそろったマップだけ書かれる。古い timeline のままなら全マップにない
+  if (name === "timelines.json") {
+    const noLane = reports.flatMap(({ file, r }) => r.maps.filter((m) => data[m.matchId] && !data[m.matchId].lanes).map((m) => `${file} ${m.id}`))
+    if (noLane.length) warn("src/timelines.json", `レーン戦のデータがない ${noLane.length} マップ（${noLane.slice(0, 3).join("、")}）。npm run timeline を実行し直す。それでもないなら、途中で抜けた選手などでレーンがそろっていないマップ`)
+  }
 }
 
 // ---- アイコン画像がサイトにあるか（npm run assets / npm run timeline が取り込む） ----

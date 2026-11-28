@@ -2,6 +2,7 @@
 //   npm run timeline
 //   src/timelines.json   … ソウル差の推移と Mid-Boss（マップ詳細のグラフ、/trends/）
 //                          API のスナップショットは序盤3分・15分以降5分ごと＋試合終了時
+//                          lanes: 各選手のレーンと 9:00 のソウル（レーン戦の統計）
 //   src/items.json       … 各選手のアイテム購入（時刻・アイテム）。ヒーローページの「プロのアイテム」
 //   src/item-catalog.json … 上に出てくるアイテムの名前・ティア・種類・値段・画像
 // npm run validate は、どちらかにないマップがあるとエラーにする（入れ忘れ防止）
@@ -16,6 +17,9 @@ const catalog = new Map(
     .filter((i) => i.type === "upgrade")
     .map((i) => [i.id, i])
 )
+
+// レーン戦の区切り（秒）。スナップショットは序盤3分ごとなので 9:00 を使う（このあたりで Guardian が落ち始める）
+const LANE_T = 540
 
 // API の team_objective_id → 種類（g Guardian / w Walker / b Base Guardian / s Shrine / p Patron / c Patron の最後）
 const OBJ = { 0: "c", 1: "g", 2: "g", 3: "g", 4: "g", 5: "w", 6: "w", 7: "w", 8: "w", 9: "p", 10: "s", 11: "s", 12: "b", 13: "b", 14: "b", 15: "b" }
@@ -73,11 +77,15 @@ for (const { file, r } of loadReports()) {
     }
 
     // アイテム：ヒーロー名（レポートの綴り）→ [[買った秒, アイテム ID], ...]
+    // レーン：[ヒーロー名, レポートの teams の添字, レーン番号, LANE_T 秒のソウル]（レーン戦の統計）
     const byHero = {}
+    const lanes = []
     for (const p of info.players) {
       const t = m.teams[side[p.team]]
       const hero = t.players.find((x) => heroKey(x[1]) === heroKey(names.get(p.hero_id) ?? ""))?.[1]
       if (!hero) continue
+      const souls = p.stats.find((s) => s.time_stamp_s === LANE_T)?.net_worth
+      if (p.assigned_lane && souls !== undefined) lanes.push([hero, side[p.team], p.assigned_lane, souls])
       byHero[hero] = p.items
         .filter((i) => catalog.has(i.item_id) && i.game_time_s >= 0)
         .map((i) => {
@@ -88,6 +96,10 @@ for (const { file, r } of loadReports()) {
         .filter(([, id], k, xs) => xs.findIndex((x) => x[1] === id) === k)
     }
     items[m.matchId] = byHero
+    // 2対2のレーンが3本そろったときだけ（途中で抜けた選手などで崩れたマップは使わない）
+    const perLane = new Map()
+    for (const x of lanes) perLane.set(`${x[2]}-${x[1]}`, (perLane.get(`${x[2]}-${x[1]}`) ?? 0) + 1)
+    if (lanes.length === 12 && [...perLane.values()].every((n) => n === 2)) timelines[m.matchId].lanes = lanes.sort((a, b) => a[2] - b[2] || a[1] - b[1])
   }
 }
 
