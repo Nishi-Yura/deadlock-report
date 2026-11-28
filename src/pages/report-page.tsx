@@ -23,6 +23,8 @@ export function ReportPage({ report: r }: { report: Report }) {
   const [hashMap] = useState(() => r.maps.find((m) => "#" + m.id === location.hash))
   const hashSeries = hashMap && ordered.find((s) => s.region === hashMap.region && stageOf(s) === stageOf(hashMap))
   const [tab, setTab] = useState(seriesKey(hashSeries ?? ordered.find(isFinal) ?? ordered[0]))
+  const [showAllHeroes, setShowAllHeroes] = useState(false)
+  const [showAllBans, setShowAllBans] = useState(false)
   useEffect(() => {
     if (hashMap) document.getElementById("maps")?.scrollIntoView({ block: "start" })
   }, [hashMap])
@@ -42,6 +44,18 @@ export function ReportPage({ report: r }: { report: Report }) {
             <span className="py-3 text-[12px] text-mute">{formatDate(r.date)} ・ レポート #{r.id}</span>
           </div>
           <h1 className="px-4 pt-4 text-[17px] leading-snug font-bold">{r.headline}</h1>
+          {/* ページ内の移動（スマホだと8画面ほどあるので） */}
+          <nav aria-label="このページ" className="flex flex-wrap items-center gap-x-1 px-3 pt-1 text-[12px]">
+            <span className="lab px-1">このページ</span>
+            {[
+              ["#maps", "マップ別"],
+              ["#heroes", "ヒーローと BAN"],
+              ["#takeaways", "持ち帰ること"],
+              ["#sources", "出典"],
+            ].map(([href, label]) => (
+              <a key={href} href={href} className="inline-flex min-h-9 items-center px-1.5">{label}</a>
+            ))}
+          </nav>
           {groups.map(({ region, series }) => (
             <div key={region} className="border-b border-line pb-4 last:border-0">
               {series.filter(isFinal).map((s) => <FinalBlock key={seriesKey(s)} r={r} s={s} />)}
@@ -101,12 +115,12 @@ export function ReportPage({ report: r }: { report: Report }) {
           })}
         </Tabs>
 
-        {/* 3. 集計 */}
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
+        {/* 3. 集計（長くなるので上位だけ出し、残りはボタンで開く） */}
+        <div id="heroes" className="grid scroll-mt-3 grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-2">
           <Panel>
             <Label>ヒーロー別の勝敗（{r.maps.length}マップ）</Label>
             <div className="pt-2 pb-2">
-              {heroes.map((h) => (
+              {(showAllHeroes ? heroes : heroes.slice(0, TOP)).map((h) => (
                 <div key={h.hero} className="grid grid-cols-[26px_88px_1fr_40px] items-center gap-2 px-4 py-[5px] even:bg-cellhover">
                   <HeroIcon hero={h.hero} />
                   <span className="truncate">{h.hero}</span>
@@ -118,12 +132,13 @@ export function ReportPage({ report: r }: { report: Report }) {
                 </div>
               ))}
             </div>
+            <MoreButton total={heroes.length} open={showAllHeroes} onToggle={() => setShowAllHeroes((v) => !v)} unit="体" />
             {r.heroNote && <p className="border-t border-line px-4 py-3 text-[12px] text-mute">{r.heroNote}</p>}
           </Panel>
           <Panel>
             <Label>{banMaps < r.maps.length ? `BAN されたマップ数（配信のあった${banMaps}マップ）` : "BAN されたマップ数"}</Label>
             <div className="pt-2 pb-2">
-              {bans.map((b) => (
+              {(showAllBans ? bans : bans.slice(0, TOP)).map((b) => (
                 <div key={b.hero} className="grid grid-cols-[26px_88px_1fr_40px] items-center gap-2 px-4 py-[5px] even:bg-cellhover">
                   <HeroIcon hero={b.hero} />
                   <span className="truncate">{b.hero}</span>
@@ -136,11 +151,13 @@ export function ReportPage({ report: r }: { report: Report }) {
                 </div>
               ))}
             </div>
+            <MoreButton total={bans.length} open={showAllBans} onToggle={() => setShowAllBans((v) => !v)} unit="体" />
             {r.banNote && <p className="border-t border-line px-4 py-3 text-[12px] text-mute">{r.banNote}</p>}
           </Panel>
         </div>
 
         {/* 4. 持ち帰り */}
+        <div id="takeaways" className="scroll-mt-3">
         <Panel>
           <Label>自分の試合に持ち帰ること</Label>
           <ol className="m-0 list-none px-4 pt-2 pb-1">
@@ -149,7 +166,7 @@ export function ReportPage({ report: r }: { report: Report }) {
                 <span className="num font-num text-[16px] leading-6 font-bold text-mute">{i + 1}</span>
                 <div>
                   <div className="font-bold">{t.title}</div>
-                  <p className="m-0 text-mute">{t.body}</p>
+                  <p className="m-0">{t.body}</p>
                 </div>
               </li>
             ))}
@@ -163,8 +180,10 @@ export function ReportPage({ report: r }: { report: Report }) {
             </div>
           )}
         </Panel>
+        </div>
 
         {/* 5. 出典 */}
+        <div id="sources" className="scroll-mt-3">
         <Panel>
           <Label>出典</Label>
           <ul className="m-0 grid list-none gap-x-4 px-4 pt-1 pb-3 sm:grid-cols-2">
@@ -173,6 +192,7 @@ export function ReportPage({ report: r }: { report: Report }) {
             ))}
           </ul>
         </Panel>
+        </div>
       </main>
       <SiteFoot />
     </>
@@ -220,5 +240,23 @@ function FinalBlock({ r, s }: { r: Report; s: Series }) {
         })}
       </div>
     </>
+  )
+}
+
+/** 集計の一覧で最初に出す数 */
+const TOP = 8
+
+/** 「すべて表示（あと n 体）」。上位 TOP 件より多いときだけ出す */
+function MoreButton({ total, open, onToggle, unit }: { total: number; open: boolean; onToggle: () => void; unit: string }) {
+  if (total <= TOP) return null
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      className="flex min-h-11 w-full cursor-pointer items-center justify-center border-t border-line text-[12px] font-semibold text-link hover:bg-cellhover"
+    >
+      {open ? `上位 ${TOP} ${unit}だけ表示` : `すべて表示（あと ${total - TOP} ${unit}）`}
+    </button>
   )
 }

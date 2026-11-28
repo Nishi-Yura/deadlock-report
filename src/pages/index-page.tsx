@@ -4,6 +4,14 @@ import { isFinal, reportPath, reports } from "@/lib/report"
 import { patches } from "@/lib/stats"
 
 
+// 目次に置く、全レポートをまたぐページの案内
+const GUIDE = [
+  { href: "/deadlock-report/stats/", title: "ヒーロー統計", text: "ピック率・勝率・BAN 率。過去○日とそれ以前も比べられる" },
+  { href: "/deadlock-report/trends/", title: "試合の傾向", text: "何分にリードしていれば勝てるか、先行ピックや Mid-Boss の勝率" },
+  { href: "/deadlock-report/teams/", title: "チーム・対戦カード", text: "チームの戦績、2チームの直接対戦" },
+  { href: "/deadlock-report/compare/", title: "自分の試合と比べる", text: "マッチ ID や直近の試合を、大会の同じヒーローと並べる" },
+]
+
 export function IndexPage() {
   return (
     <>
@@ -49,8 +57,21 @@ export function IndexPage() {
             ))}
           </ol>
         </Panel>
+        <Panel delay={0.03}>
+          <h2 className="lab px-4 pt-3.5 pb-2 text-[12px] text-ink">レポートをまたいで見る</h2>
+          <ul className="m-0 grid list-none border-t border-line p-0 sm:grid-cols-2">
+            {GUIDE.map((g) => (
+              <li key={g.href} className="border-b border-line sm:odd:border-r">
+                <a href={g.href} className="block px-4 py-3 text-ink hover:bg-cellhover hover:no-underline">
+                  <span className="block font-semibold text-link">{g.title}</span>
+                  <span className="block text-[12px] text-mute">{g.text}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Panel>
         <Panel delay={0.05}>
-          <h2 className="lab px-4 pt-3.5 pb-2">パッチまとめ</h2>
+          <h2 className="lab px-4 pt-3.5 pb-2 text-[12px] text-ink">パッチまとめ</h2>
           <ol className="m-0 list-none border-t border-line p-0">
             {patches.map((p) => (
               <li key={p.path} className="border-b border-line last:border-0">

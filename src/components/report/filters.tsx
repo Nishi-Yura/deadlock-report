@@ -1,6 +1,6 @@
-// 期間・地域の切り替え。選んだ値は URL の ?period=&region= に残す（そのまま共有できる）
+// 期間・地域の切り替え。選んだ値は URL の ?days=&cmp=&region= に残す（そのまま共有できる）
 import { useEffect, useState } from "react"
-import { latestPatch, regions, shortDate, type Filter, type Period } from "@/lib/stats"
+import { DAY_OPTIONS, latestMatchDate, regions, shortDate, sinceDate, todayISO, type Filter } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 
 /** allowed は使える値の一覧か、値を確かめる関数 */
@@ -20,11 +20,23 @@ export function useQueryState<T extends string>(key: string, initial: T, allowed
   return [value, setValue] as const
 }
 
-export function useFilter(extraPeriods: string[] = []) {
-  const [period, setPeriod] = useQueryState<string>("period", "all", ["all", "post", "pre", ...extraPeriods])
+/** 期間（?days=7）・比べる（?cmp=1）・地域（?region=）。URL に残るのでそのまま共有できる */
+export function useFilter() {
+  const [daysStr, setDaysStr] = useQueryState<string>("days", "", ["", ...DAY_OPTIONS.map(String)])
+  const [cmp, setCmp] = useQueryState<string>("cmp", "", ["", "1"])
   const [region, setRegion] = useQueryState<string>("region", "", ["", ...regions])
-  return { period, setPeriod, region, setRegion }
+  const days = Number(daysStr) || 0
+  return {
+    days,
+    setDays: (d: number) => setDaysStr(d ? String(d) : ""),
+    compare: cmp === "1" && days > 0,
+    setCompare: (v: boolean) => setCmp(v ? "1" : ""),
+    region,
+    setRegion,
+  }
 }
+
+export type FilterState = ReturnType<typeof useFilter>
 
 export function Segmented<T extends string>({
   label, value, options, onChange,
@@ -53,31 +65,46 @@ export function Segmented<T extends string>({
   )
 }
 
-export function periodOptions(compare = false): { value: string; label: string }[] {
-  if (!latestPatch) return [{ value: "all", label: "全期間" }]
-  const d = shortDate(latestPatch.date)
-  return [
-    { value: "all", label: "全期間" },
-    { value: "post", label: `${d} パッチ後` },
-    { value: "pre", label: `${d} パッチ前` },
-    ...(compare ? [{ value: "compare", label: "前後を比較" }] : []),
-  ]
-}
+const dayOptions = [
+  { value: "0", label: "全期間" },
+  ...DAY_OPTIONS.map((d) => ({ value: String(d), label: `過去${d}日` })),
+]
 
 export const regionOptions = [{ value: "", label: "全地域" }, ...regions.map((r) => ({ value: r, label: r }))]
 
-export function FilterBar({
-  period, setPeriod, region, setRegion, compare,
-}: ReturnType<typeof useFilter> & { compare?: boolean }) {
+/** "11/22〜11/28" */
+export function rangeLabel(days: number) {
+  return `${shortDate(sinceDate(days))}〜${shortDate(todayISO())}`
+}
+
+export function FilterBar({ f, compare }: { f: FilterState; compare?: boolean }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-5 border-b border-line px-4">
-      <Segmented label="期間" value={period} options={periodOptions(compare)} onChange={setPeriod} />
-      <Segmented label="地域" value={region} options={regionOptions} onChange={setRegion} />
+    <div className="border-b border-line px-4">
+      <div className="flex flex-wrap items-center gap-x-5">
+        <Segmented label="期間" value={String(f.days)} options={dayOptions} onChange={(v) => f.setDays(Number(v))} />
+        <Segmented label="地域" value={f.region} options={regionOptions} onChange={f.setRegion} />
+      </div>
+      {f.days > 0 && (
+        <div className="flex flex-wrap items-center gap-x-3 pb-2 text-[12px] text-mute">
+          <span>
+            今日から数えて過去 {f.days} 日（<span className="num">{rangeLabel(f.days)}</span>）の試合。
+            一番新しい試合は <span className="num">{shortDate(latestMatchDate())}</span>。
+          </span>
+          {compare && (
+            <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-ink">
+              <input
+                type="checkbox"
+                checked={f.compare}
+                onChange={(e) => f.setCompare(e.target.checked)}
+                className="size-4 cursor-pointer accent-(--ink)"
+              />
+              それ以前と比べる
+            </label>
+          )}
+        </div>
+      )}
     </div>
   )
 }
 
-export const asFilter = (period: string, region: string): Filter => ({
-  period: (period === "compare" ? "all" : period) as Period,
-  region,
-})
+export const asFilter = (f: Pick<FilterState, "days" | "region">): Filter => ({ days: f.days, region: f.region })

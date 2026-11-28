@@ -1,9 +1,10 @@
 import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { HeroItems } from "@/components/report/hero-items"
 import { Stat } from "@/pages/teams-page"
+import { rangeLabel } from "@/components/report/filters"
 import { fmt } from "@/lib/report"
 import {
-  allMaps, heroPath, heroTable, latestPatch, mapLink, mapShort, pct, periodOf, playerPath, shortDate, slug, teamPath,
+  allMaps, filterMaps, heroPath, heroTable, latestPatch, mapLink, mapShort, pct, playerPath, shortDate, sinceDate, slug, teamPath,
   type MapCtx,
 } from "@/lib/stats"
 import { partners } from "@/lib/trends"
@@ -47,14 +48,13 @@ export function HeroPage({ slug: s }: { slug: string }) {
   const draftMaps = all.draftMaps
   const wins = played.filter((p) => p.win).length
 
-  const periods = latestPatch
-    ? (["pre", "post"] as const).map((per) => {
-        const maps = allMaps.filter((x) => periodOf(x.date) === per)
-        const t = heroTable(maps)
-        const r = t.rows.find((x) => x.hero === hero)
-        return { per, maps: t.maps, draftMaps: t.draftMaps, picks: r?.picks ?? 0, wins: r?.wins ?? 0, bans: r?.bans ?? 0 }
-      })
-    : []
+  // 過去7日とそれ以前（今日から数える）
+  const RECENT = 7
+  const periods = ([false, true] as const).map((older) => {
+    const t = heroTable(filterMaps(allMaps, { days: RECENT, region: "", older }))
+    const r = t.rows.find((x) => x.hero === hero)
+    return { older, maps: t.maps, draftMaps: t.draftMaps, picks: r?.picks ?? 0, wins: r?.wins ?? 0, bans: r?.bans ?? 0 }
+  })
 
   // 選手ごと
   const byPlayer = new Map<string, { name: string; team: string; n: number; win: number; k: number; d: number; a: number; souls: number }>()
@@ -100,13 +100,15 @@ export function HeroPage({ slug: s }: { slug: string }) {
           </div>
         </Panel>
 
-        {latestPatch && (
+        {(
           <Panel>
-            <Label>{shortDate(latestPatch.date)} パッチの前と後</Label>
+            <Label>過去 {RECENT} 日とそれ以前</Label>
             <div className="grid grid-cols-2 gap-px pt-2">
               {periods.map((p) => (
-                <div key={p.per} className="px-4 pb-3">
-                  <div className="text-[12px] text-mute">{p.per === "pre" ? "パッチ前" : "パッチ後"}（{p.maps} マップ）</div>
+                <div key={String(p.older)} className="px-4 pb-3">
+                  <div className="text-[12px] text-mute">
+                    {p.older ? `${shortDate(sinceDate(RECENT))} より前` : `過去 ${RECENT} 日（${rangeLabel(RECENT)}）`}（{p.maps} マップ）
+                  </div>
                   {p.maps ? (
                     <div className="mt-1 leading-7">
                       <div>ピック <b className="num">{pct(p.picks, p.maps)}%</b> <span className="num text-mute">{p.picks}</span></div>
@@ -119,7 +121,10 @@ export function HeroPage({ slug: s }: { slug: string }) {
                 </div>
               ))}
             </div>
-            <p className="m-0 border-t border-line px-4 py-2.5 text-[12px]"><a href={latestPatch.path}>{latestPatch.title} のまとめ</a></p>
+            <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">
+              ほかの日数で比べるなら <a href={`/deadlock-report/stats/?days=${RECENT}&cmp=1`}>ヒーロー統計</a>。
+              {latestPatch && <> 最新のパッチ：<a href={latestPatch.path}>{latestPatch.title}</a></>}
+            </p>
           </Panel>
         )}
 

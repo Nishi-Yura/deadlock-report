@@ -19,7 +19,7 @@ deadlock-report/
   reports/1.json            ← レポートの中身（ここだけ書けばページになる）
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
-  src/patches.json          ← パッチまとめの一覧（目次・ヒーロー統計のパッチ前後・RSS が使う）
+  src/patches.json          ← パッチまとめの一覧（目次・RSS・ヒーロー統計のパッチ一覧が使う）
   src/timelines.json        ← 各マップのソウル差の推移・Mid-Boss・キル・オブジェクト破壊（npm run timeline が作る）
   src/items.json            ← 各選手のアイテム購入（npm run timeline が作る。ヒーローページを開いたときだけ読む）
   src/item-catalog.json     ← アイテムの名前・ティア・画像（npm run timeline が作る）
@@ -125,7 +125,7 @@ git push
    - 構成：概要 → まずはここだけ（6項目前後）→ 全体の変更 → モード → アイテム表 → ヒーロー（強化/弱体/調整/修正）→ 最近の流れ → 出典
    - 数値は「前 → 後」で書く。ヒーロー数などの数は、表示された件数と合わせる。
    - 非公開（Undocumented）の小修正だけの日はページを作らない。
-3. `src/patches.json` に1件足す（`date` は `YYYY-MM-DD`。並びは自動で新しい順）。リンクを貼ったときのカード画像（`patch/YYYY-MM-DD/og.png`：タイトル・概要・変更ヒーロー数・強化/弱体の数・変更アイテム数）は `npm run build` が自動で作る。ページの `<head>` には `og:image` のタグが要る（下書きを使えば前のページから引き継がれる。ないと validate がエラーにする）。前のページの「最近の流れ」はそのままでよい。ヒーロー統計の「パッチ前・後」は、ここにある一番新しいパッチの日付で自動的に区切られる。
+3. `src/patches.json` に1件足す（`date` は `YYYY-MM-DD`。並びは自動で新しい順）。リンクを貼ったときのカード画像（`patch/YYYY-MM-DD/og.png`：タイトル・概要・変更ヒーロー数・強化/弱体の数・変更アイテム数）は `npm run build` が自動で作る。ページの `<head>` には `og:image` のタグが要る（下書きを使えば前のページから引き継がれる。ないと validate がエラーにする）。前のページの「最近の流れ」はそのままでよい。
 4. `npm run build` → commit → push（⑤と同じ）。
 
 ---

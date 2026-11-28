@@ -14,7 +14,7 @@ type Row = PlayerStat & { t: PlayerTotals }
 
 export function PlayersPage() {
   const f = useFilter()
-  const filter = asFilter(f.period, f.region)
+  const filter = asFilter(f)
   const rows: Row[] = playerStats()
     .map((p) => {
       const maps = p.maps.filter((m) => filterMaps([m.ctx], filter).length > 0)
@@ -63,7 +63,7 @@ export function PlayersPage() {
               レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均、KDA は (K+A)/D。
             </p>
           </div>
-          <FilterBar {...f} />
+          <FilterBar f={f} />
           {rows.length ? (
             <SortTable rows={rows} columns={columns} rowKey={(r) => r.name} initialSort={{ key: "kda", desc: true }} minWidth={720} caption="選手の成績" />
           ) : (

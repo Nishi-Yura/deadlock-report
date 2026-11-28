@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 
 export function TrendsPage() {
   const f = useFilter()
-  const maps = filterMaps(allMaps, asFilter(f.period, f.region))
+  const maps = filterMaps(allMaps, asFilter(f))
   const tlMaps = withTimeline(maps)
 
   return (
@@ -26,7 +26,7 @@ export function TrendsPage() {
               ソウル差・Mid-Boss・ドラフトが勝敗とどれくらい結びついているか。全レポートのマップから数えています。
             </p>
           </div>
-          <FilterBar {...f} />
+          <FilterBar f={f} />
           <p className="m-0 px-4 py-3 text-[12px] text-mute">
             <span className="num">{maps.length}</span> マップ（ソウル推移があるのは <span className="num">{tlMaps}</span>、
             ドラフトが分かるのは <span className="num">{draftedCount(maps)}</span>）。マップ数が少ないうちは、1マップで数字が大きく動きます。

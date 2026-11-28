@@ -165,7 +165,7 @@ async function siteCards(reports, pub) {
   await render(statCard({
     kicker: "DEADLOCK レポート", title: "ヒーロー統計", sub,
     stats: byPick.slice(0, 4).map(([h, x]) => [h, `${pct(x.picks, n)}%`]),
-    foot: "ピック率・勝率・BAN 率。パッチ前後の比較つき",
+    foot: "ピック率・勝率・BAN 率。過去○日とそれ以前を比べられる",
   }), join(pub, "stats", "og.png"))
 
   const fpWin = drafted.filter((m) => m.winner === m.teams[0].name).length

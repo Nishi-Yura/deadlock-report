@@ -3,28 +3,25 @@ import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { SortTable, type Column } from "@/components/report/sort-table"
 import { kills, reportPath, stageOf } from "@/lib/report"
 import {
-  filterMaps, heroPath, heroUsage, mapLink, mapShort, pct, periodOf, playerPath, playerStats, playerTotals,
-  seriesDate, slug, teamPath, teamStats, wins, type TeamStat,
+  filterMaps, heroPath, heroUsage, inDays, mapLink, mapShort, pct, playerPath, playerStats, playerTotals,
+  seriesDate, slug, teamPath, teamStats, wins, type Filter, type TeamStat,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 import { vsPath } from "@/pages/vs-page"
 
 /** 期間・地域で絞ったチームの戦績 */
-function filtered(t: TeamStat, period: string, region: string): TeamStat {
-  const f = asFilter(period, region)
+function filtered(t: TeamStat, f: Filter): TeamStat {
   return {
     ...t,
     maps: t.maps.filter((m) => filterMaps([m.ctx], f).length > 0),
-    series: t.series.filter(
-      (s) => (f.period === "all" || periodOf(seriesDate(s.report, s.series)) === f.period) && (!f.region || s.series.region === f.region)
-    ),
+    series: t.series.filter((s) => inDays(seriesDate(s.report, s.series), f.days) && (!f.region || s.series.region === f.region)),
   }
 }
 
 export function TeamsPage() {
   const f = useFilter()
   const rows = teamStats()
-    .map((t) => filtered(t, f.period, f.region))
+    .map((t) => filtered(t, asFilter(f)))
     .filter((t) => t.series.length > 0)
     .map((t) => ({ ...t, titles: t.series.filter((s) => s.win && stageOf(s.series) === "決勝").length }))
 
@@ -60,7 +57,7 @@ export function TeamsPage() {
             <h1 className="font-num text-[26px] leading-tight font-bold">チーム</h1>
             <p className="m-0 mt-1 text-mute">レポートに出てきたチームの戦績。チーム名からそのチームのページへ。2チームを並べるなら<a href="/deadlock-report/vs/">対戦カード</a>。</p>
           </div>
-          <FilterBar {...f} />
+          <FilterBar f={f} />
           {rows.length ? (
             <SortTable rows={rows} columns={columns} rowKey={(t) => t.name} initialSort={{ key: "titles", desc: true }} minWidth={440} caption="チームの戦績" />
           ) : (

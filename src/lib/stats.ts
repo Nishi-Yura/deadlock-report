@@ -50,22 +50,42 @@ export const allMaps: MapCtx[] = reports
 
 export const regions: string[] = [...new Set(reports.flatMap((r) => r.series.map((s) => s.region)))].sort()
 
-export type Period = "all" | "post" | "pre"
+// ---- 期間（今日から数えて過去 N 日） ----
 
-/** 最新パッチの前か後か */
-export const periodOf = (date: string): Exclude<Period, "all"> =>
-  latestPatch && date >= latestPatch.date ? "post" : "pre"
+/** 期間の選択肢（日数）。0 は全期間 */
+export const DAY_OPTIONS = [3, 7, 14, 30] as const
+
+const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+
+/** 過去 N 日の最初の日（今日を含めて N 日）。"2026-11-22" など */
+export function sinceDate(days: number, today = new Date()): string {
+  const d = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  d.setDate(d.getDate() - (days - 1))
+  return iso(d)
+}
+
+export const todayISO = () => iso(new Date())
 
 export interface Filter {
-  period: Period
+  /** 過去何日か。0 なら全期間 */
+  days: number
   region: string // "" で全地域
+  /** true なら「過去 N 日より前」のマップ（比べる用） */
+  older?: boolean
+}
+
+export function inDays(date: string, days: number, older = false) {
+  if (!days) return !older
+  const since = sinceDate(days)
+  return older ? date < since : date >= since
 }
 
 export function filterMaps(maps: MapCtx[], f: Filter): MapCtx[] {
-  return maps.filter(
-    (x) => (f.period === "all" || periodOf(x.date) === f.period) && (!f.region || x.map.region === f.region)
-  )
+  return maps.filter((x) => inDays(x.date, f.days, f.older) && (!f.region || x.map.region === f.region))
 }
+
+/** 一番新しい試合の日（データがいつまでか） */
+export const latestMatchDate = (): string => allMaps[0]?.date ?? ""
 
 // ---- ヒーロー ----
 

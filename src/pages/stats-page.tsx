@@ -2,16 +2,19 @@ import { HeroIcon, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar, SortTable, type Column } from "@/components/report/sort-table"
 import {
-  allMaps, filterMaps, heroPath, heroTable, latestPatch, pct, shortDate, type HeroStat, type HeroTable,
+  allMaps, filterMaps, heroPath, heroTable, latestMatchDate, patches, pct, shortDate, sinceDate, type HeroStat, type HeroTable,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 
 export function StatsPage() {
-  const f = useFilter(["compare"])
-  const compare = f.period === "compare"
-  const base = asFilter(f.period, f.region)
+  const f = useFilter()
+  const compare = f.compare
+  const base = asFilter(f)
   const table = heroTable(filterMaps(allMaps, base))
   const reportsIn = new Set(filterMaps(allMaps, base).map((x) => x.report.id)).size
+  // 期間内に出たパッチ（数字の変化の手がかり）
+  const since = f.days ? sinceDate(f.days) : ""
+  const patchesIn = patches.filter((p) => !since || p.date >= since)
 
   return (
     <>
@@ -24,11 +27,13 @@ export function StatsPage() {
               全レポートのマップを合わせたピック・勝敗・BAN。見出しを押すと並べ替えられます。
             </p>
           </div>
-          <FilterBar {...f} compare />
+          <FilterBar f={f} compare />
           {compare ? (
-            <Compare region={f.region} />
+            <Compare days={f.days} region={f.region} />
           ) : table.maps === 0 ? (
-            <p className="m-0 px-4 py-4 text-mute">この条件のマップはまだありません。</p>
+            <p className="m-0 px-4 py-4 text-mute">
+              この期間のマップはありません（一番新しい試合は {shortDate(latestMatchDate())}）。期間を長くしてみてください。
+            </p>
           ) : (
             <>
               <p className="m-0 px-4 pt-3 pb-1 text-[12px] text-mute">
@@ -39,12 +44,16 @@ export function StatsPage() {
             </>
           )}
         </Panel>
-        {latestPatch && (
+        {patchesIn.length > 0 && (
           <Panel delay={0.05}>
             <p className="m-0 px-4 py-3 text-[12px] text-mute">
-              パッチ前・後の区切りは{" "}
-              <a href={latestPatch.path}>{shortDate(latestPatch.date)} {latestPatch.title.replace(/^[\d/]+\s*/, "")}</a>
-              。その日以降に行われたマップを「パッチ後」にしています。
+              {f.days ? `この期間に出たパッチ：` : "パッチ："}
+              {patchesIn.slice(0, 5).map((p, i) => (
+                <span key={p.path}>
+                  {i > 0 && "、"}
+                  <a href={p.path}>{p.title}</a>
+                </span>
+              ))}
             </p>
           </Panel>
         )}
@@ -125,12 +134,16 @@ interface CompareRow {
   post?: HeroStat
 }
 
-function Compare({ region }: { region: string }) {
-  const pre = heroTable(filterMaps(allMaps, { period: "pre", region }))
-  const post = heroTable(filterMaps(allMaps, { period: "post", region }))
-  if (!latestPatch) return null
+/** 過去 N 日（post）と、それより前（pre）を比べる */
+function Compare({ days, region }: { days: number; region: string }) {
+  const pre = heroTable(filterMaps(allMaps, { days, region, older: true }))
+  const post = heroTable(filterMaps(allMaps, { days, region }))
   if (!pre.maps || !post.maps) {
-    return <p className="m-0 px-4 py-4 text-mute">この地域ではパッチ前・後の両方のマップがそろっていません。</p>
+    return (
+      <p className="m-0 px-4 py-4 text-mute">
+        {!post.maps ? `過去 ${days} 日のマップがありません。` : `過去 ${days} 日より前のマップがありません。`}期間を変えてみてください。
+      </p>
+    )
   }
   const heroes = new Set([...pre.rows, ...post.rows].map((r) => r.hero))
   const rows: CompareRow[] = [...heroes].map((hero) => ({
@@ -149,17 +162,17 @@ function Compare({ region }: { region: string }) {
   )
   const columns: Column<CompareRow>[] = [
     heroCol,
-    { key: "prePick", label: "前 ピック", sort: (r) => pickRate(r.pre, pre), render: (r) => `${pickRate(r.pre, pre)}%` },
-    { key: "postPick", label: "後 ピック", sort: (r) => pickRate(r.post, post), render: (r) => `${pickRate(r.post, post)}%` },
+    { key: "prePick", label: "以前 ピック", sort: (r) => pickRate(r.pre, pre), render: (r) => `${pickRate(r.pre, pre)}%` },
+    { key: "postPick", label: "期間内 ピック", sort: (r) => pickRate(r.post, post), render: (r) => `${pickRate(r.post, post)}%` },
     { key: "diff", label: "差", sort: diff, render: (r) => signed(diff(r)) },
-    { key: "preWr", label: "前 勝率", sort: (r) => (r.pre?.picks ? r.pre.wins / r.pre.picks : -1), render: (r) => <WinRate wins={r.pre?.wins ?? 0} n={r.pre?.picks ?? 0} /> },
-    { key: "postWr", label: "後 勝率", sort: (r) => (r.post?.picks ? r.post.wins / r.post.picks : -1), render: (r) => <WinRate wins={r.post?.wins ?? 0} n={r.post?.picks ?? 0} /> },
+    { key: "preWr", label: "以前 勝率", sort: (r) => (r.pre?.picks ? r.pre.wins / r.pre.picks : -1), render: (r) => <WinRate wins={r.pre?.wins ?? 0} n={r.pre?.picks ?? 0} /> },
+    { key: "postWr", label: "期間内 勝率", sort: (r) => (r.post?.picks ? r.post.wins / r.post.picks : -1), render: (r) => <WinRate wins={r.post?.wins ?? 0} n={r.post?.picks ?? 0} /> },
     { key: "banDiff", label: "BAN 率の差", sort: banDiff, render: (r) => (banRate(r.pre, pre) || banRate(r.post, post) ? <span>{banRate(r.pre, pre)}→{banRate(r.post, post)}% {signed(banDiff(r))}</span> : <span className="text-mute">–</span>) },
   ]
   return (
     <>
       <p className="m-0 px-4 pt-3 pb-1 text-[12px] text-mute">
-        パッチ前 <span className="num">{pre.maps}</span> マップ / パッチ後 <span className="num">{post.maps}</span> マップ。
+        過去 {days} 日 <span className="num">{post.maps}</span> マップ / それ以前 <span className="num">{pre.maps}</span> マップ。
         「差」はピック率の増減（ポイント）。マップ数が少ないうちは1マップで大きく動きます。
       </p>
       <SortTable
@@ -168,7 +181,7 @@ function Compare({ region }: { region: string }) {
         rowKey={(r) => r.hero}
         initialSort={{ key: "diff", desc: true }}
         minWidth={600}
-        caption="パッチ前後のピック率・勝率・BAN 率"
+        caption="過去の期間とそれ以前のピック率・勝率・BAN 率"
       />
     </>
   )

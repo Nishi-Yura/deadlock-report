@@ -91,7 +91,7 @@ const sub = (dir, depth, { title, description, data }) =>
 
 sub("stats", 2, {
   title: "ヒーロー統計",
-  description: "Deadlock の大会のピック率・勝率・BAN 率。パッチ前後の比較と地域別の絞り込みつき。",
+  description: "Deadlock の大会のピック率・勝率・BAN 率。過去3日〜30日での絞り込みと、それ以前との比較つき。",
   data: { page: "stats" },
 })
 sub("trends", 2, {

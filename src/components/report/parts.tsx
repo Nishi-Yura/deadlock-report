@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from "react"
 import { useReducedMotion } from "motion/react"
-import { NumberTicker } from "@/components/magicui/number-ticker"
 import { BlurFade } from "@/components/magicui/blur-fade"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { heroImage, heroInitials } from "@/heroes"
@@ -80,15 +79,14 @@ export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: n
   )
 }
 
-/** Magic UI NumberTicker。動きを減らす設定のときは数字をそのまま出す */
+/** スコア。以前は 0 から数え上げていたが、画面に入るまで「0:0」のまま見えることがあったので、最初から本当の数字を出す */
 export function Score({ value, className }: { value: number; className?: string }) {
-  const reduce = useReducedMotion()
-  if (reduce || value === 0) return <span className={cn("tabular-nums", className)}>{value}</span>
-  return <NumberTicker value={value} className={cn("tracking-normal text-inherit dark:text-inherit", className)} />
+  return <span className={cn("tabular-nums", className)}>{value}</span>
 }
 
+/** パネルの見出し。長いページで区切りを見つけやすいよう、本文の色で少し大きめに */
 export function Label({ children, className }: { children: ReactNode; className?: string }) {
-  return <h2 className={cn("lab px-4 pt-3.5", className)}>{children}</h2>
+  return <h2 className={cn("lab px-4 pt-3.5 text-[12px] text-ink", className)}>{children}</h2>
 }
 
 /** ヒーローのアイコン。読み込めないときは頭文字 */
