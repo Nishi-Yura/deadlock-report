@@ -9,6 +9,7 @@ import {
 } from "@/lib/report"
 import type { Report, Series } from "@/types"
 import { cn } from "@/lib/utils"
+import { Glossed, Term } from "@/components/report/term"
 
 export function ReportPage({ report: r }: { report: Report }) {
   const base = reportPath(r.id)
@@ -136,7 +137,7 @@ export function ReportPage({ report: r }: { report: Report }) {
             {r.heroNote && <p className="border-t border-line px-4 py-3 text-[12px] text-mute">{r.heroNote}</p>}
           </Panel>
           <Panel>
-            <Label>{banMaps < r.maps.length ? `BAN されたマップ数（配信のあった${banMaps}マップ）` : "BAN されたマップ数"}</Label>
+            <Label><Term k="ban">BAN</Term> されたマップ数{banMaps < r.maps.length && `（配信のあった${banMaps}マップ）`}</Label>
             <div className="pt-2 pb-2">
               {(showAllBans ? bans : bans.slice(0, TOP)).map((b) => (
                 <div key={b.hero} className="grid grid-cols-[26px_88px_1fr_40px] items-center gap-2 px-4 py-[5px] even:bg-cellhover">
@@ -166,7 +167,7 @@ export function ReportPage({ report: r }: { report: Report }) {
                 <span className="num font-num text-[16px] leading-6 font-bold text-mute">{i + 1}</span>
                 <div>
                   <div className="font-bold">{t.title}</div>
-                  <p className="m-0">{t.body}</p>
+                  <p className="m-0"><Glossed text={t.body} /></p>
                 </div>
               </li>
             ))}

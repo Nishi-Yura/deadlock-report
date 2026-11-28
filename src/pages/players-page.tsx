@@ -9,6 +9,7 @@ import {
   type PlayerStat, type PlayerTotals,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
+import { Term } from "@/components/report/term"
 
 type Row = PlayerStat & { t: PlayerTotals }
 
@@ -60,7 +61,7 @@ export function PlayersPage() {
           <div className="px-4 pt-4 pb-3">
             <h1 className="font-num text-[26px] leading-tight font-bold">選手</h1>
             <p className="m-0 mt-1 text-mute">
-              レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均、KDA は (K+A)/D。
+              レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均、<Term k="kda">KDA</Term> は (K+A)/D。
             </p>
           </div>
           <FilterBar f={f} />

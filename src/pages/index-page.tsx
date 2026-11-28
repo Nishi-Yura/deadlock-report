@@ -1,4 +1,5 @@
 import { Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { NextEvents } from "@/components/report/schedule"
 import { isFinal, reportPath, reports } from "@/lib/report"
 // パッチまとめ（public/deadlock-report/patch/ の静的ページ）の一覧は src/patches.json に書く
 import { patches } from "@/lib/stats"
@@ -57,6 +58,7 @@ export function IndexPage() {
             ))}
           </ol>
         </Panel>
+        <NextEvents />
         <Panel delay={0.03}>
           <h2 className="lab px-4 pt-3.5 pb-2 text-[12px] text-ink">レポートをまたいで見る</h2>
           <ul className="m-0 grid list-none border-t border-line p-0 sm:grid-cols-2">

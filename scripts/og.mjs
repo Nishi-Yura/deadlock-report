@@ -177,6 +177,7 @@ async function siteCards(reports, pub) {
   await render(statCard({ kicker: "DEADLOCK レポート", title: "チーム", sub: `${teams.size} チーム・${n} マップ`, foot: "大会に出たチームの戦績" }), join(pub, "teams", "og.png"))
   await render(statCard({ kicker: "DEADLOCK レポート", title: "選手", sub: `${players.size} 人・${n} マップ`, foot: "K/D/A・ソウル・ダメージ・回復" }), join(pub, "players", "og.png"))
   await render(statCard({ kicker: "DEADLOCK レポート", title: "対戦カード", sub: `${teams.size} チーム・${n} マップ`, foot: "2チームの直接の対戦成績と、よく使う・よく BAN するヒーロー" }), join(pub, "vs", "og.png"))
+  await render(statCard({ kicker: "DEADLOCK レポート", title: "用語集", sub: "Guardian・Walker・Mid-Boss・ソウル・BAN など", foot: "レポートに出てくる言葉の短い説明" }), join(pub, "glossary", "og.png"))
   await render(statCard({ kicker: "DEADLOCK レポート", title: "自分の試合と比べる", sub: "マッチ ID を入れると、同じヒーローの大会の平均と並べて表示", foot: "ソウル・ダメージ・回復・K/D/A を1分あたりで比べる" }), join(pub, "compare", "og.png"))
 
   for (const [name, t] of teams) {

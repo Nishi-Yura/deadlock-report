@@ -50,6 +50,8 @@ export function SiteFoot() {
         <a href="/deadlock-report/" className="inline-block py-3 text-(--onpage-link)">レポート一覧</a>
         <span className="px-2">・</span>
         <a href="/deadlock-report/feed.xml" className="inline-block py-3 text-(--onpage-link)">RSS</a>
+        <span className="px-2">・</span>
+        <a href="/deadlock-report/glossary/" className="inline-block py-3 text-(--onpage-link)">用語集</a>
       </span>
       {/* 灰色の地の上なので、ラベルとボタンの文字も地に合わせた濃さにする */}
       <span className="[&_.lab]:text-(--onpage) [&_button]:text-(--onpage) [&_button[aria-checked=true]]:text-ink [&_button:hover]:bg-transparent">

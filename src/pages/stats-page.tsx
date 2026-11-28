@@ -5,6 +5,7 @@ import {
   allMaps, filterMaps, heroPath, heroTable, latestMatchDate, patches, pct, shortDate, sinceDate, type HeroStat, type HeroTable,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
+import { Term } from "@/components/report/term"
 
 export function StatsPage() {
   const f = useFilter()
@@ -38,7 +39,7 @@ export function StatsPage() {
             <>
               <p className="m-0 px-4 pt-3 pb-1 text-[12px] text-mute">
                 <span className="num">{table.maps}</span> マップ（レポート <span className="num">{reportsIn}</span> 本）。
-                BAN 率は配信でドラフトが見えた <span className="num">{table.draftMaps}</span> マップが分母。
+                <Term k="ban-rate">BAN 率</Term>は配信でドラフトが見えた <span className="num">{table.draftMaps}</span> マップが分母。
               </p>
               <HeroStatsTable table={table} />
             </>

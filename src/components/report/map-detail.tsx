@@ -6,6 +6,7 @@ import { fmt, kills, mapLabel, winnerFirst } from "@/lib/report"
 import { playerPath, teamPath } from "@/lib/stats"
 import type { MapData, MapTeam, PlayerRow } from "@/types"
 import { cn } from "@/lib/utils"
+import { Glossed, Term } from "@/components/report/term"
 
 export function MapDetail({ map, base }: { map: MapData; base: string }) {
   const [k0, k1] = kills(map)
@@ -20,7 +21,7 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
     <div className="grid grid-cols-[minmax(0,1fr)] gap-3">
       <div className="grid grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
         <Panel>
-          <Label>{map.draftUnknown ? "使用ヒーロー（配信なし・ピック順と BAN は不明）" : "ドラフト（ピック順）"}</Label>
+          <Label>{map.draftUnknown ? "使用ヒーロー（配信なし・ピック順と BAN は不明）" : <><Term k="draft">ドラフト</Term>（ピック順）</>}</Label>
           <Draft map={map} />
         </Panel>
         <Panel>
@@ -32,7 +33,7 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
             <dd className="num">{map.duration}</dd>
             <dt className="text-mute">キル</dt>
             <dd className="num">{wk} - {lk}</dd>
-            <dt className="text-mute">先行ピック</dt>
+            <dt className="text-mute"><Term k="first-pick">先行ピック</Term></dt>
             <dd className={cn(!map.firstPick && "text-mute")}>{map.firstPick || "不明"}</dd>
             <dt className="text-mute">マッチ ID</dt>
             <dd className="num">{map.matchId}</dd>
@@ -40,7 +41,7 @@ export function MapDetail({ map, base }: { map: MapData; base: string }) {
           {map.flow && (
             <>
               <Separator />
-              <p className="px-4 py-3 text-mute">{map.flow}</p>
+              <p className="px-4 py-3 text-mute"><Glossed text={map.flow} /></p>
             </>
           )}
         </Panel>

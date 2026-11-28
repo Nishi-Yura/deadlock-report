@@ -5,6 +5,7 @@ import { Label, Panel } from "./parts"
 import { pct, type MapCtx } from "@/lib/stats"
 import { mmss } from "@/lib/trends"
 import { cn } from "@/lib/utils"
+import { Term } from "@/components/report/term"
 
 interface Item {
   name: string
@@ -80,7 +81,7 @@ export function HeroItems({
       <Label>{title}（{runs.length} 回分）</Label>
       <p className="m-0 px-4 pt-1 text-[12px] text-mute">
         {note ?? "大会でこのヒーローを使った選手が買ったアイテム。"}
-        「購入率」は何回のうち何回買ったか、時刻は買った時間の平均（売って買い直した分は最初の1回）。
+        「購入率」は何回のうち何回買ったか、時刻は買った時間の平均（売って買い直した分は最初の1回）。T1〜T4 は<Term k="tier">ティア</Term>。
       </p>
       {opening.length > 0 && (
         <div className="px-4 pt-3">

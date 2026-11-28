@@ -105,6 +105,7 @@ sub("compare", 2, {
   data: { page: "compare" },
 })
 sub("teams", 2, { title: "チーム", description: "Deadlock の大会に出たチームの戦績。", data: { page: "teams" } })
+sub("glossary", 2, { title: "用語集", description: "Deadlock の大会レポートに出てくる言葉（Guardian・Walker・Mid-Boss・ソウル・BAN など）の短い説明。", data: { page: "glossary" } })
 sub("vs", 2, { title: "対戦カード", description: "Deadlock の大会に出た2チームの直接の対戦成績と、よく使う・よく BAN するヒーロー。", data: { page: "vs" } })
 sub("players", 2, { title: "選手", description: "Deadlock の大会に出た選手の成績（K/D/A・ソウル・ダメージ・回復）。", data: { page: "players" } })
 

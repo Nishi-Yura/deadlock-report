@@ -1,0 +1,20 @@
+[
+  {
+    "start": "2026-12-02T21:00:00Z",
+    "event": "Deadlock Night Shift 67",
+    "region": "EU",
+    "url": "https://edl.gg/events/deadlock-night-shift-67-eu"
+  },
+  {
+    "start": "2026-12-03T00:00:00Z",
+    "event": "Deadlock Night Shift 67",
+    "region": "NA",
+    "url": "https://edl.gg/events/deadlock-night-shift-67-na"
+  },
+  {
+    "start": "2026-12-04T09:00:00Z",
+    "event": "Deadlock Night Shift 5",
+    "region": "APAC",
+    "url": "https://edl.gg/events/deadlock-night-shift-5-apac"
+  }
+]

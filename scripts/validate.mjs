@@ -134,6 +134,19 @@ for (const name of ["timelines.json", "items.json"]) {
   if (missing.length) err(`src/${name}`, `${missing.length} マップ分がない（${missing.slice(0, 3).join("、")}${missing.length > 3 ? " ほか" : ""}）。npm run timeline を実行してコミットする`)
 }
 
+// ---- 大会の予定（src/schedule.json） ----
+{
+  const f = join(root, "src", "schedule.json")
+  const list = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : []
+  if (!Array.isArray(list)) err("src/schedule.json", "配列ではない")
+  else list.forEach((s, i) => {
+    const at = `src/schedule.json [${i}]`
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?Z$/.test(s.start ?? "")) err(at, `start は UTC の "2026-12-02T21:00:00Z" の形で書く（今は ${s.start}）`)
+    if (!s.event || !s.region) err(at, "event と region を書く")
+    if (!/^https:\/\//.test(s.url ?? "")) err(at, "url（EDL.GG の大会ページ）を書く")
+  })
+}
+
 // ---- パッチまとめ：下書きのまま公開しない ----
 const patchDir = join(root, "public", "deadlock-report", "patch")
 if (existsSync(patchDir)) {

@@ -9,6 +9,7 @@ import {
   leaderAt, mmss, pairs, pickOrder, withTimeline, type HeroCount, type Rate,
 } from "@/lib/trends"
 import { cn } from "@/lib/utils"
+import { Glossed } from "@/components/report/term"
 
 export function TrendsPage() {
   const f = useFilter()
@@ -49,7 +50,7 @@ function RateRow({ label, sub, r }: { label: ReactNode; sub?: ReactNode; r: Rate
   return (
     <div className="grid grid-cols-[1fr_auto_auto_44px] items-center gap-3 border-b border-line px-4 py-2 last:border-0 max-sm:grid-cols-[1fr_auto_44px]">
       <div className="min-w-0">
-        <div>{label}</div>
+        <div>{typeof label === "string" ? <Glossed text={label} /> : label}</div>
         {sub && <div className="text-[11px] text-mute">{sub}</div>}
       </div>
       <span className="num text-[12px] text-mute">{r.n ? `${r.win}-${r.n - r.win}` : "–"}</span>

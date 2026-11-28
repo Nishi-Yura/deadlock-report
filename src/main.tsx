@@ -11,6 +11,7 @@ import { TrendsPage } from "@/pages/trends-page"
 import { HeroPage } from "@/pages/hero-page"
 import { ComparePage } from "@/pages/compare-page"
 import { VsPage } from "@/pages/vs-page"
+import { GlossaryPage } from "@/pages/glossary-page"
 import { startScrollHints } from "@/lib/scroll-hints"
 import "./index.css"
 
@@ -27,6 +28,7 @@ function route(): ReactNode {
     case "compare": return <ComparePage />
     case "teams": return <TeamsPage />
     case "vs": return <VsPage />
+    case "glossary": return <GlossaryPage />
     case "team": return <TeamPage slug={slug} />
     case "players": return <PlayersPage />
     case "player": return <PlayerPage slug={slug} />

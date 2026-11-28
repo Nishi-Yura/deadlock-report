@@ -3,6 +3,7 @@ import { useLayoutEffect, useRef, useState } from "react"
 import timelines from "@/timelines.json"
 import { fmt } from "@/lib/report"
 import type { MapData } from "@/types"
+import { Term } from "@/components/report/term"
 
 interface Timeline {
   t: number[]
@@ -153,13 +154,13 @@ function Graph({ map, tl }: { map: MapData; tl: Timeline }) {
       {tl.kills && <Events tl={tl} map={map} W={W} x={x} end={end} />}
       </div>
       <figcaption className="mt-1 text-[12px] text-mute">
-        {narrow && "MB は Mid-Boss を取った時刻とチーム。"}
+        {narrow && <>MB は <Term k="midboss">Mid-Boss</Term> を取った時刻とチーム。</>}
         Deadlock API のスナップショット（序盤は3分、15分以降は5分ごと）と試合終了時の値。終了時は {last >= 0 ? a.name : b.name} が{" "}
         <span className="num">{fmt(Math.abs(last))}</span> リード。
         {tl.kills && (
           <>
             {" "}下の帯は2分ごとのキル数（上が {a.name}、下が {b.name}）と、壊したオブジェクト
-            （{Object.values(OBJ).map(([c, n]) => `${c} ${n}`).join("・")}）。
+            （{Object.entries(OBJ).map(([k, [c, n]], i) => (<span key={k}>{i > 0 && "・"}{c} <Term k={k === "g" ? "guardian" : k === "w" ? "walker" : k === "b" ? "base-guardian" : k === "s" ? "shrine" : "patron"}>{n}</Term></span>))}）。
           </>
         )}
       </figcaption>

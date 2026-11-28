@@ -6,6 +6,7 @@ import { reportPath, reports } from "@/lib/report"
 import { heroPath, heroTable, allMaps, patches, playerPath, playerStats, teamPath, teamStats } from "@/lib/stats"
 import { HeroIcon } from "./parts"
 import { cn } from "@/lib/utils"
+import { GLOSSARY } from "@/glossary"
 
 interface Entry {
   kind: string
@@ -21,6 +22,7 @@ const PAGES: Entry[] = [
   { kind: "ページ", label: "チーム", href: "/deadlock-report/teams/" },
   { kind: "ページ", label: "対戦カード", sub: "2チームを並べる", href: "/deadlock-report/vs/" },
   { kind: "ページ", label: "選手", href: "/deadlock-report/players/" },
+  { kind: "ページ", label: "用語集", sub: "Guardian・Mid-Boss・ソウルなどの説明", href: "/deadlock-report/glossary/" },
   { kind: "ページ", label: "自分の試合と比べる", sub: "マッチ ID・直近の試合", href: "/deadlock-report/compare/" },
 ]
 
@@ -31,6 +33,7 @@ function buildIndex(): Entry[] {
     ...playerStats().map((p) => ({ kind: "選手", label: p.name, sub: p.teams.join(" / "), href: playerPath(p.name) })),
     ...reports.map((r) => ({ kind: "レポート", label: `#${r.id} ${r.event}`, sub: r.headline, href: reportPath(r.id) })),
     ...patches.map((p) => ({ kind: "パッチ", label: p.title, sub: p.summary, href: p.path })),
+    ...GLOSSARY.map((t) => ({ kind: "用語", label: t.term, sub: t.text, href: `/deadlock-report/glossary/#${t.key}` })),
     ...PAGES,
   ]
 }
