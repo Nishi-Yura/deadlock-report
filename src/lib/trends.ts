@@ -183,3 +183,50 @@ export function bansBySide(maps: MapCtx[], side: 0 | 1): HeroCount[] {
 
 export const draftedCount = (maps: MapCtx[]) => drafted(maps).length
 export const withTimeline = (maps: MapCtx[]) => maps.filter((x) => timelineOf(x.map)).length
+
+// ---- ヒーローの組み合わせ ----
+
+export interface Pair {
+  a: string
+  b: string
+  n: number
+  win: number
+}
+
+/** 同じチームで一緒にピックされた2体。min 回以上のもの、回数の多い順 */
+export function pairs(maps: MapCtx[], min = 3): Pair[] {
+  const by = new Map<string, Pair>()
+  for (const { map } of maps) {
+    for (const t of map.teams) {
+      const hs = [...t.picks].sort()
+      for (let i = 0; i < hs.length; i++) {
+        for (let j = i + 1; j < hs.length; j++) {
+          const key = hs[i] + "|" + hs[j]
+          const p = by.get(key) ?? { a: hs[i], b: hs[j], n: 0, win: 0 }
+          p.n++
+          if (t.name === map.winner) p.win++
+          by.set(key, p)
+        }
+      }
+    }
+  }
+  return [...by.values()].filter((p) => p.n >= min).sort((x, y) => y.n - x.n || y.win - x.win || (x.a + x.b).localeCompare(y.a + y.b))
+}
+
+/** そのヒーローと同じチームでピックされたヒーロー */
+export function partners(maps: MapCtx[], hero: string) {
+  const by = new Map<string, { hero: string; n: number; win: number }>()
+  for (const { map } of maps) {
+    for (const t of map.teams) {
+      if (!t.picks.includes(hero)) continue
+      for (const h of t.picks) {
+        if (h === hero) continue
+        const r = by.get(h) ?? { hero: h, n: 0, win: 0 }
+        r.n++
+        if (t.name === map.winner) r.win++
+        by.set(h, r)
+      }
+    }
+  }
+  return [...by.values()].sort((a, b) => b.n - a.n || b.win - a.win || a.hero.localeCompare(b.hero))
+}

@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url"
 export const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const cache = join(root, ".cache")
 
-async function cached(name, url) {
+export async function cached(name, url) {
   const file = join(cache, name)
   if (existsSync(file)) return JSON.parse(readFileSync(file, "utf8"))
   const res = await fetch(url)

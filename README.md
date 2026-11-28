@@ -1,7 +1,10 @@
 # Deadlock レポートの作り方
 
-`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/hero/<名前>/`・`/trends/`（試合展開とドラフトの傾向）・`/teams/`・`/team/<名前>/`・`/players/`・`/player/<名前>/`・`/compare/`（自分の試合と比べる）を作るリポジトリです。
-`/compare/` だけはブラウザから Deadlock API を直接読みます（ビルド時のデータは使わない部分がある）。
+`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/hero/<名前>/`・`/trends/`（試合展開とドラフトの傾向）・`/teams/`・`/team/<名前>/`・`/vs/`（対戦カード）・`/players/`・`/player/<名前>/`・`/compare/`（自分の試合と比べる：1試合・直近の試合）を作るリポジトリです。上のバーにはサイト内検索（`/` キーでも開く）があります。
+`/compare/` だけはブラウザから Deadlock API を直接読みます（大会側の平均はビルド時のデータ）。
+
+**レポートを足したときに自動で更新されるもの**：ヒーロー統計・傾向・ヒーロー/チーム/選手のページ・対戦カード・検索・カード画像・RSS は、`reports/*.json` から毎回ビルドで作り直すので、JSON を足して push するだけで全部に反映されます。
+**手で1回実行するもの**：`npm run timeline`（ソウル推移・Mid-Boss・アイテム購入を API から取って `src/*.json` に書く）。忘れると `npm run validate`（＝ build）がエラーで止めます。パッチまとめは `src/patches.json` に足したときだけ反映されます。
 サイト本体の `Nishi-Yura.github.io` とは別のリポジトリで、リポジトリ名が `deadlock-report` なので URL もそのまま `/deadlock-report/` になります。
 
 デザインの決まりは [design/DESIGN.md](design/DESIGN.md)。見た目を変えるときは、先にそちらを直してください。
@@ -17,7 +20,10 @@ deadlock-report/
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
   src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
   src/patches.json          ← パッチまとめの一覧（目次・ヒーロー統計のパッチ前後・RSS が使う）
-  src/timelines.json        ← 各マップのソウル差の推移（npm run timeline が作る）
+  src/timelines.json        ← 各マップのソウル差の推移と Mid-Boss（npm run timeline が作る）
+  src/items.json            ← 各選手のアイテム購入（npm run timeline が作る。ヒーローページを開いたときだけ読む）
+  src/item-catalog.json     ← アイテムの名前・ティア・画像（npm run timeline が作る）
+  patch-src/                ← パッチまとめの下書きの元（deadlock.wiki から取り出した英語の JSON）
   scripts/                  ← ビルド用のスクリプト
   design/                   ← DESIGN.md、参考サイトのスクショ、比較した3案
 ```
@@ -84,10 +90,10 @@ npm run fill -- 5 EU:決勝:145000001,145000002 EU:チャレンジャー:1450000
 - キル数・シリーズのキル合計・ヒーロー別の勝敗・BAN の集計は**自動で計算**されます。手で書かない。
 - **`takeaways`**：3〜5個。「何が起きたか」の事実と、自分の試合で何をするかをセットで。
 
-### ④ 確かめる・ソウル推移を取る
+### ④ 確かめる・ソウル推移とアイテムを取る
 ```powershell
 npm run validate -- --api   # JSON の中身を Deadlock API と照らし合わせる
-npm run timeline            # ソウル差のグラフ用データを src/timelines.json に足す
+npm run timeline            # ソウル推移・Mid-Boss・アイテム購入を src/timelines.json と src/items.json に足す
 npm run dev
 ```
 `validate` が拾うもの：ヒーロー名の綴り（`The Doorman` ではなく `Doorman` など）、BAN したヒーローが同じマップでピックされている（BAN の読み違い）、ピックと選手のヒーローのずれ、先行ピックと `teams[0]` のずれ、シリーズのスコアとマップの勝者のずれ。`--api` を付けると勝者・時間・K/D/A・ソウル・ダメージ・回復も API と比べる。API の結果は `.cache/` に保存される（コミットしない）。
@@ -108,8 +114,14 @@ git push
 
 公式のアップデートが出るたびに、日本語のまとめページを1枚足します。試合レポートの JSON とは別の、ただの HTML です。
 
-1. 中身を取る：<https://deadlock.wiki/Updates> で最新の日付を見て、`https://deadlock.wiki/Update:<Month>_<D>,_<YYYY>` を開く（公式フォーラムの Changelog と同じ内容）。
-2. `public/deadlock-report/patch/2026-11-26/index.html` をコピーして `patch/YYYY-MM-DD/index.html` を作り、中身を差し替える。CSS とヒーローのアイコン表（ファイル名は `src/heroes.ts` と同じ）はそのまま使う。
+1. 中身を取る：<https://deadlock.wiki/Updates> で最新の日付を見て、`https://deadlock.wiki/Update:<Month>_<D>,_<YYYY>` をブラウザで開く（公式フォーラムの Changelog と同じ内容）。
+   deadlock.wiki はスクリプトからの直接取得を止めているので、開いたページで F12 → Console に `scripts/patch-extract.js` の中身を貼って Enter。出てきた JSON を `patch-src/YYYY-MM-DD.json` に保存する。
+2. 下書きを作る：
+   ```powershell
+   npm run patch-draft -- YYYY-MM-DD
+   ```
+   `public/deadlock-report/patch/YYYY-MM-DD/index.html` ができる。見た目は一番新しいパッチページと同じで、変更点は英語のまま（黄色）入る。ヒーローの区分（強化/弱体/調整/修正）は英語の言葉から仮に付けてあるので、訳しながら直す。「最近の流れ」には今回の行が先頭に入る。
+   日本語に直して、見出し・概要・「まずはここだけ」を書き、`下書き: 未翻訳`・`[EN] `・`class="en"` を全部消す。残っていると `npm run validate`（＝ build）がエラーで止める。
    - 構成：概要 → まずはここだけ（6項目前後）→ 全体の変更 → モード → アイテム表 → ヒーロー（強化/弱体/調整/修正）→ 最近の流れ → 出典
    - 数値は「前 → 後」で書く。ヒーロー数などの数は、表示された件数と合わせる。
    - 非公開（Undocumented）の小修正だけの日はページを作らない。

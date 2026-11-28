@@ -6,7 +6,7 @@ import { fmt } from "@/lib/report"
 import { allMaps, filterMaps, heroPath, mapLink, mapShort, pct, teamPath } from "@/lib/stats"
 import {
   bansBySide, comebacks, draftedCount, durations, firstMidBoss, firstPickRate, firstPicks, firstTo,
-  leaderAt, mmss, pickOrder, withTimeline, type HeroCount, type Rate,
+  leaderAt, mmss, pairs, pickOrder, withTimeline, type HeroCount, type Rate,
 } from "@/lib/trends"
 import { cn } from "@/lib/utils"
 
@@ -172,7 +172,38 @@ function Draft({ maps }: { maps: Parameters<typeof leaderAt>[0] }) {
           <Counts rows={bansBySide(maps, 1)} plain />
         </Panel>
       </div>
+      <Pairs maps={maps} />
     </>
+  )
+}
+
+function Pairs({ maps }: { maps: Parameters<typeof pairs>[0] }) {
+  const rows = pairs(maps, 3).slice(0, 12)
+  return (
+    <Panel>
+      <Label>よく一緒にピックされる2体（3回以上）</Label>
+      <p className="m-0 px-4 pt-1 text-[12px] text-mute">同じチームで一緒に使われた回数と、そのときの勝敗。配信のないマップも含む。</p>
+      {rows.length ? (
+        <div className="grid grid-cols-2 gap-x-2 pt-1 pb-2 max-sm:grid-cols-1">
+          {rows.map((p) => {
+            const rate = pct(p.win, p.n)
+            return (
+              <div key={p.a + p.b} className="grid grid-cols-[48px_1fr_24px_36px_38px] items-center gap-2 px-4 py-[5px] odd:bg-cellhover">
+                <span className="flex gap-0.5"><HeroIcon hero={p.a} size={22} /><HeroIcon hero={p.b} size={22} /></span>
+                <span className="min-w-0 truncate text-[12px]">
+                  <a href={heroPath(p.a)} className="text-ink">{p.a}</a> + <a href={heroPath(p.b)} className="text-ink">{p.b}</a>
+                </span>
+                <span className="num text-right">{p.n}</span>
+                <span className="num text-right text-mute">{p.win}-{p.n - p.win}</span>
+                <b className={cn("num text-right font-semibold", rate > 50 && "text-win", rate < 50 && "text-lose")}>{rate}%</b>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        <p className="m-0 px-4 py-3 text-mute">3回以上一緒に使われた組み合わせはまだありません。</p>
+      )}
+    </Panel>
   )
 }
 

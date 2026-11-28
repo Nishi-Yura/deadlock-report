@@ -1,10 +1,12 @@
 import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
+import { HeroItems } from "@/components/report/hero-items"
 import { Stat } from "@/pages/teams-page"
 import { fmt } from "@/lib/report"
 import {
-  allMaps, heroTable, latestPatch, mapLink, mapShort, pct, periodOf, playerPath, shortDate, slug, teamPath,
+  allMaps, heroPath, heroTable, latestPatch, mapLink, mapShort, pct, periodOf, playerPath, shortDate, slug, teamPath,
   type MapCtx,
 } from "@/lib/stats"
+import { partners } from "@/lib/trends"
 import { cn } from "@/lib/utils"
 import type { PlayerRow } from "@/types"
 
@@ -118,6 +120,25 @@ export function HeroPage({ slug: s }: { slug: string }) {
               ))}
             </div>
             <p className="m-0 border-t border-line px-4 py-2.5 text-[12px]"><a href={latestPatch.path}>{latestPatch.title} のまとめ</a></p>
+          </Panel>
+        )}
+
+        {played.length > 0 && <HeroItems hero={hero} maps={played.map((p) => p.ctx)} />}
+
+        {played.length > 0 && (
+          <Panel>
+            <Label>一緒にピックされたヒーロー</Label>
+            <p className="m-0 px-4 pt-1 text-[12px] text-mute">同じチームで使われた回数と、そのときの勝敗。まだマップが少ないので、1〜2回の組み合わせは参考程度に。</p>
+            <div className="grid grid-cols-2 gap-x-2 pt-1 pb-2 max-sm:grid-cols-1">
+              {partners(allMaps, hero).slice(0, 10).map((h) => (
+                <div key={h.hero} className="grid grid-cols-[22px_1fr_24px_40px] items-center gap-2 px-4 py-[4px] odd:bg-cellhover">
+                  <HeroIcon hero={h.hero} size={22} />
+                  <a href={heroPath(h.hero)} className="truncate text-ink">{h.hero}</a>
+                  <span className="num text-right">{h.n}</span>
+                  <span className="num text-right text-mute">{h.win}-{h.n - h.win}</span>
+                </div>
+              ))}
+            </div>
           </Panel>
         )}
 

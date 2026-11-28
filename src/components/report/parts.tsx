@@ -5,6 +5,7 @@ import { BlurFade } from "@/components/magicui/blur-fade"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { heroImage, heroInitials } from "@/heroes"
 import { cn } from "@/lib/utils"
+import { SiteSearch } from "./search"
 
 /** サイト共通の上部バー */
 const NAV = [
@@ -36,6 +37,7 @@ export function SiteBar({ current }: { current?: NavKey } = {}) {
             {n.label}
           </a>
         ))}
+        <SiteSearch />
       </nav>
     </header>
   )

@@ -10,6 +10,7 @@ import { PlayerPage, PlayersPage } from "@/pages/players-page"
 import { TrendsPage } from "@/pages/trends-page"
 import { HeroPage } from "@/pages/hero-page"
 import { ComparePage } from "@/pages/compare-page"
+import { VsPage } from "@/pages/vs-page"
 import "./index.css"
 
 // scripts/entries.mjs が <div id="root" data-page="..." data-report="1" data-slug="..."> を書く
@@ -24,6 +25,7 @@ function route(): ReactNode {
     case "trends": return <TrendsPage />
     case "compare": return <ComparePage />
     case "teams": return <TeamsPage />
+    case "vs": return <VsPage />
     case "team": return <TeamPage slug={slug} />
     case "players": return <PlayersPage />
     case "player": return <PlayerPage slug={slug} />

@@ -2,7 +2,7 @@
 //   npm run validate          … ファイルだけで分かること（npm run build でも毎回実行）
 //   npm run validate -- --api … Deadlock API のマッチ情報とも照らし合わせる（ネットが必要）
 // エラーが1つでもあれば終了コード 1（ビルドが止まる）。「注意」は止めない。
-import { readFileSync, existsSync } from "node:fs"
+import { readFileSync, existsSync, readdirSync } from "node:fs"
 import { join } from "node:path"
 import { root, loadReports, matchInfo, heroNames, heroKey, sides } from "./api.mjs"
 import { slug } from "./slug.mjs"
@@ -125,6 +125,30 @@ const bySlug = (names, kind) => {
 }
 bySlug(playerTeams.keys(), "選手名")
 bySlug(teamNames, "チーム名")
+
+// ---- API から作るデータ（npm run timeline）の入れ忘れ ----
+for (const name of ["timelines.json", "items.json"]) {
+  const f = join(root, "src", name)
+  const data = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : {}
+  const missing = reports.flatMap(({ file, r }) => r.maps.filter((m) => !data[m.matchId]).map((m) => `${file} ${m.id}`))
+  if (missing.length) err(`src/${name}`, `${missing.length} マップ分がない（${missing.slice(0, 3).join("、")}${missing.length > 3 ? " ほか" : ""}）。npm run timeline を実行してコミットする`)
+}
+
+// ---- パッチまとめ：下書きのまま公開しない ----
+const patchDir = join(root, "public", "deadlock-report", "patch")
+if (existsSync(patchDir)) {
+  for (const d of readdirSync(patchDir)) {
+    const f = join(patchDir, d, "index.html")
+    if (!existsSync(f)) continue
+    const html = readFileSync(f, "utf8")
+    const left = ["下書き: 未翻訳", "[EN] ", 'class="en"'].filter((m) => html.includes(m))
+    if (left.length) err(`patch/${d}`, `訳していない下書きが残っている（${left.join("、")}）。訳し終えたら消す`)
+  }
+  const listed = JSON.parse(readFileSync(join(root, "src", "patches.json"), "utf8")).map((p) => p.date)
+  for (const d of readdirSync(patchDir)) {
+    if (existsSync(join(patchDir, d, "index.html")) && !listed.includes(d)) warn(`patch/${d}`, "src/patches.json にない（目次・RSS に出ない）")
+  }
+}
 
 // ---- API と照らし合わせる ----
 if (useApi) {

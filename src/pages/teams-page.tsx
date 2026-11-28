@@ -7,6 +7,7 @@ import {
   seriesDate, slug, teamPath, teamStats, wins, type TeamStat,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
+import { vsPath } from "@/pages/vs-page"
 
 /** 期間・地域で絞ったチームの戦績 */
 function filtered(t: TeamStat, period: string, region: string): TeamStat {
@@ -57,7 +58,7 @@ export function TeamsPage() {
         <Panel>
           <div className="px-4 pt-4 pb-3">
             <h1 className="font-num text-[26px] leading-tight font-bold">チーム</h1>
-            <p className="m-0 mt-1 text-mute">レポートに出てきたチームの戦績。チーム名からそのチームのページへ。</p>
+            <p className="m-0 mt-1 text-mute">レポートに出てきたチームの戦績。チーム名からそのチームのページへ。2チームを並べるなら<a href="/deadlock-report/vs/">対戦カード</a>。</p>
           </div>
           <FilterBar {...f} />
           {rows.length ? (
@@ -129,6 +130,7 @@ export function TeamPage({ slug: s }: { slug: string }) {
                 <span className="min-w-0">
                   <a href={teamPath(x.opponent)} className="font-semibold">vs {x.opponent}</a>
                   <a href={reportPath(x.report.id)} className="ml-2 text-[12px] text-mute">#{x.report.id} {x.series.region} {stageOf(x.series)}</a>
+                  <a href={vsPath(t.name, x.opponent)} className="ml-2 text-[12px]">対戦カード</a>
                 </span>
                 <span className={cn("num font-num text-[17px] font-bold", x.win ? "text-win" : "text-lose")}>
                   {x.score[0]}-{x.score[1]}
