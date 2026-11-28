@@ -7,6 +7,7 @@ import { heroPath, heroTable, allMaps, patches, playerPath, playerStats, teamPat
 import { HeroIcon } from "./parts"
 import { cn } from "@/lib/utils"
 import { GLOSSARY } from "@/glossary"
+import { HERO_KANA, normKana } from "@/hero-kana"
 
 interface Entry {
   kind: string
@@ -14,6 +15,8 @@ interface Entry {
   sub?: string
   href: string
   hero?: string
+  /** 別の呼び方（ヒーローのカタカナなど）。見出しと同じ強さで当てる */
+  alt?: string[]
 }
 
 const PAGES: Entry[] = [
@@ -28,7 +31,14 @@ const PAGES: Entry[] = [
 
 function buildIndex(): Entry[] {
   return [
-    ...heroTable(allMaps).rows.map((r) => ({ kind: "ヒーロー", label: r.hero, sub: `${r.picks} ピック・${r.bans} BAN`, href: heroPath(r.hero), hero: r.hero })),
+    ...heroTable(allMaps).rows.map((r) => ({
+      kind: "ヒーロー",
+      label: r.hero,
+      sub: `${HERO_KANA[r.hero]?.[0] ?? ""}　${r.picks} ピック・${r.bans} BAN`.trim(),
+      href: heroPath(r.hero),
+      hero: r.hero,
+      alt: HERO_KANA[r.hero],
+    })),
     ...teamStats().map((t) => ({ kind: "チーム", label: t.name, sub: t.regions.join(" / "), href: teamPath(t.name) })),
     ...playerStats().map((p) => ({ kind: "選手", label: p.name, sub: p.teams.join(" / "), href: playerPath(p.name) })),
     ...reports.map((r) => ({ kind: "レポート", label: `#${r.id} ${r.event}`, sub: r.headline, href: reportPath(r.id) })),
@@ -38,16 +48,17 @@ function buildIndex(): Entry[] {
   ]
 }
 
-const norm = (s: string) => s.toLowerCase().normalize("NFKC").replace(/[\s_\-・#]/g, "")
+// ひらがな→カタカナ・ヴ→ブ・長音を消す、なども含めてそろえる（「びりー」でも「ビリ」でも Billy が出る）
+const norm = normKana
 
 function search(index: Entry[], q: string): Entry[] {
   const n = norm(q)
   if (!n) return []
   const score = (e: Entry) => {
-    const l = norm(e.label)
-    if (l === n) return 0
-    if (l.startsWith(n)) return 1
-    if (l.includes(n)) return 2
+    const names = [e.label, ...(e.alt ?? [])].map(norm)
+    if (names.some((l) => l === n)) return 0
+    if (names.some((l) => l.startsWith(n))) return 1
+    if (names.some((l) => l.includes(n))) return 2
     if (e.sub && norm(e.sub).includes(n)) return 3
     return -1
   }

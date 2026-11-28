@@ -6,7 +6,7 @@ import { HeroItems } from "@/components/report/hero-items"
 import { fmt } from "@/lib/report"
 import {
   filterMaps, heroUsage, mapLink, mapShort, pct, playerPath, playerStats, playerTotals, slug, teamPath,
-  type PlayerStat, type PlayerTotals,
+  MIN_MAPS, type PlayerStat, type PlayerTotals,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 import { Term } from "@/components/report/term"
@@ -36,7 +36,7 @@ export function PlayersPage() {
     },
     { key: "maps", label: "マップ", sort: (r) => r.t.maps, render: (r) => r.t.maps },
     { key: "wr", label: "勝率", sort: (r) => r.t.wins / r.t.maps, render: (r) => <WinPct w={r.t.wins} n={r.t.maps} /> },
-    { key: "kda", label: "KDA", sort: (r) => r.t.kda, render: (r) => <b className="font-semibold">{r.t.kda.toFixed(2)}</b> },
+    { key: "kda", label: "KDA", sort: (r) => r.t.kda, render: (r) => <b className={cn("font-semibold", r.t.maps < MIN_MAPS && "font-normal text-mute")}>{r.t.kda.toFixed(2)}</b> },
     { key: "k", label: "K", sort: (r) => r.t.k / r.t.maps, render: (r) => avg(r.t.k, r) },
     { key: "d", label: "D", sort: (r) => r.t.d / r.t.maps, render: (r) => avg(r.t.d, r) },
     { key: "a", label: "A", sort: (r) => r.t.a / r.t.maps, render: (r) => avg(r.t.a, r) },
@@ -61,7 +61,7 @@ export function PlayersPage() {
           <div className="px-4 pt-4 pb-3">
             <h1 className="font-num text-[26px] leading-tight font-bold">選手</h1>
             <p className="m-0 mt-1 text-mute">
-              レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均、<Term k="kda">KDA</Term> は (K+A)/D。
+              レポートのマップに出た選手。K・D・A・ソウル・ダメージ・回復は1マップ平均（{MIN_MAPS}マップ未満の選手の勝率・KDA は灰色）、<Term k="kda">KDA</Term> は (K+A)/D。
             </p>
           </div>
           <FilterBar f={f} />
@@ -79,6 +79,8 @@ export function PlayersPage() {
 
 function WinPct({ w, n }: { w: number; n: number }) {
   const p = pct(w, n)
+  // マップが少ないときは色を付けない（stats.ts の MIN_MAPS）
+  if (n < MIN_MAPS) return <span className="text-mute" title={`${MIN_MAPS}マップ未満`}>{p}%</span>
   return <span className={cn("font-semibold", p > 50 && "text-win", p < 50 && "text-lose")}>{p}%</span>
 }
 

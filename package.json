@@ -13,7 +13,9 @@
     "new": "node scripts/new-report.mjs",
     "fill": "node scripts/fill.mjs",
     "patch-draft": "node scripts/patch-draft.mjs",
-    "discord": "node scripts/discord.mjs"
+    "discord": "node scripts/discord.mjs",
+    "assets": "node scripts/assets.mjs",
+    "schedule-sync": "node scripts/schedule-sync.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

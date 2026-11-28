@@ -8,6 +8,7 @@
 import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { root, loadReports, matchInfo, sides, heroNames, heroKey, cached } from "./api.mjs"
+import { heroAssets, itemAssets } from "./assets.mjs"
 
 const names = await heroNames()
 const catalog = new Map(
@@ -99,14 +100,20 @@ for (const id of [...used].sort((a, b) => a - b)) {
     tier: i.item_tier ?? 0,
     slot: SLOT[i.item_slot_type] ?? i.item_slot_type ?? "",
     cost: i.cost ?? 0,
-    img: i.shop_image_small ?? i.shop_image ?? i.image ?? "",
+    // ショップの絵の WebP（PNG の半分以下の大きさ）
+    img: i.shop_image_webp ?? i.shop_image ?? i.image ?? "",
   }
 }
+
+// アイテムの画像をこのサイトに取り込み、img をサイトのパスにする（scripts/assets.mjs）
+const got = await itemAssets(cat)
+const heroes = await heroAssets()
 
 const lines = (o) => JSON.stringify(o).replace(/},"/g, '},\n"').replace(/\]\],"/g, ']],\n"') + "\n"
 writeFileSync(join(root, "src", "timelines.json"), lines(timelines))
 writeFileSync(join(root, "src", "items.json"), lines(items))
 writeFileSync(join(root, "src", "item-catalog.json"), lines(cat))
+console.log(`画像：アイテム新しく ${got.added}・ヒーロー新しく ${heroes.added}（public/deadlock-report/img/）`)
 console.log(
   `timeline: ${Object.keys(timelines).length} マップ${skipped ? `（${skipped} マップはとばした）` : ""}` +
     ` → src/timelines.json、src/items.json、src/item-catalog.json（アイテム ${used.size} 種類）`

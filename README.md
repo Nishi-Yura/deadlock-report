@@ -18,7 +18,7 @@ deadlock-report/
   .github/workflows/deploy.yml   ← main に push するとビルドして公開する
   reports/1.json            ← レポートの中身（ここだけ書けばページになる）
   public/deadlock-report/1/img/   ← そのレポートで使う画像（配信のドラフト画面など）
-  src/                      ← 画面の部品（React + shadcn/ui + Magic UI）
+  src/                      ← 画面の部品（React + shadcn/ui）。ページごとに分けて読み込む（src/main.tsx）
   src/patches.json          ← パッチまとめの一覧（目次・RSS・ヒーロー統計のパッチ一覧が使う）
   src/timelines.json        ← 各マップのソウル差の推移・Mid-Boss・キル・オブジェクト破壊（npm run timeline が作る）
   src/items.json            ← 各選手のアイテム購入（npm run timeline が作る。ヒーローページを開いたときだけ読む）
@@ -167,6 +167,8 @@ git push
 
 ## 4. 使っている部品
 
-- **shadcn/ui**：Tabs（マップ切り替え）、Table（スコアボード）、Tooltip（ヒーロー名）、Separator。色と角丸は `src/index.css` で DESIGN.md の値に作り直してある。
-- **Magic UI**：NumberTicker（シリーズのスコア）、BlurFade（パネルの出現）。`src/components/magicui/` にソースをそのまま置いている。端末で「視差効果を減らす」が有効なら動かない。
+- **shadcn/ui**：Tabs（マップ切り替え）、Table（スコアボード）、Separator。ヒーロー名はアイコンの title で出す。色と角丸は `src/index.css` で DESIGN.md の値に作り直してある。
+- **アニメーション**：パネルの出現だけ。CSS（`src/index.css` の `.reveal`）で、端末で「視差効果を減らす」が有効なら動かない。
+- **画像**：ヒーローとアイテムのアイコンは `public/deadlock-report/img/` に置いている（`npm run assets`。`npm run timeline` でも新しい分を取り込む）。
+- **大会の予定**：`.github/workflows/schedule.yml` が毎日 EDL.GG を見て、新しい Night Shift を `src/schedule.json` に足して公開し直す（`npm run schedule-sync` で手元でも実行できる）。時刻は地域ごとの決まった時刻（EU 21:00・NA 0:00・APAC 9:00 UTC）なので、違ったら手で直す。
 - フォント：Barlow Semi Condensed（数字・チーム名）、IBM Plex Sans JP（本文）。Inter は使わない。

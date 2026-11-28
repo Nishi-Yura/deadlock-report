@@ -8,6 +8,7 @@ import { allMaps, heroPath, pct } from "@/lib/stats"
 import { durationSec } from "@/lib/trends"
 import { cn } from "@/lib/utils"
 import { drawShareCard, shareOrSave, type ShareCard } from "@/lib/share-image"
+import { BuildCompare, type Purchase } from "@/components/report/build-compare"
 
 const API = "https://api.deadlock-api.com/v1"
 
@@ -21,6 +22,8 @@ interface ApiPlayer {
   assists: number
   net_worth: number
   stats: { player_damage?: number; player_healing?: number }[]
+  /** 買ったもの（スキルの強化も混ざる。アイテムだけにするのは BuildCompare） */
+  items?: Purchase[]
 }
 
 interface Match {
@@ -208,6 +211,7 @@ function SingleResult() {
     <>
       <MatchPicker match={match} me={me} pick={(p) => setSlotParam(String(p.player_slot))} />
       {me && <Result match={match} me={me} />}
+      {me && <BuildCompare hero={me.hero} purchases={me.items ?? []} />}
     </>
   )
 }

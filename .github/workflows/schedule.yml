@@ -1,0 +1,43 @@
+# 毎日、EDL.GG の大会一覧を見て、これからの Night Shift を src/schedule.json に足す（scripts/schedule-sync.mjs）。
+# 増えたときだけ main にコミットして、公開（deploy.yml）をやり直す。
+# Actions の GITHUB_TOKEN で push しても deploy.yml は動かないので、最後に workflow_dispatch で呼ぶ。
+name: Schedule sync
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 毎日 00:00 UTC（日本時間 9:00）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: schedule-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/schedule-sync.mjs
+      - id: commit
+        run: |
+          if git diff --quiet -- src/schedule.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/schedule.json
+          git commit -m "Add upcoming Night Shift events from EDL.GG"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

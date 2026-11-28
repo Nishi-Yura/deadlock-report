@@ -1,7 +1,4 @@
 import { useState, type ReactNode } from "react"
-import { useReducedMotion } from "motion/react"
-import { BlurFade } from "@/components/magicui/blur-fade"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { heroImage, heroInitials } from "@/heroes"
 import { cn } from "@/lib/utils"
 import { SiteSearch } from "./search"
@@ -70,14 +67,14 @@ export function Panel({ className, children, delay = 0 }: { className?: string; 
   )
 }
 
-/** Magic UI BlurFade。動きを減らす設定のときは何もしない */
+/** パネルの出現（0.3秒で下から 6px・フェードイン）。CSS だけで動かす（index.css の .reveal）。
+ *  以前は Magic UI BlurFade（motion ライブラリ）だったが、それだけで JS が 500KB 以上増えていた。
+ *  「動きを減らす」設定のときは index.css 側で止める */
 export function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
-  const reduce = useReducedMotion()
-  if (reduce) return <>{children}</>
   return (
-    <BlurFade inView inViewMargin="-20px" duration={0.3} offset={6} blur="2px" delay={delay}>
+    <div className="reveal" style={delay ? { animationDelay: `${delay}s` } : undefined}>
       {children}
-    </BlurFade>
+    </div>
   )
 }
 
@@ -91,28 +88,26 @@ export function Label({ children, className }: { children: ReactNode; className?
   return <h2 className={cn("lab px-4 pt-3.5 text-[12px] text-ink", className)}>{children}</h2>
 }
 
-/** ヒーローのアイコン。読み込めないときは頭文字 */
+/** ヒーローのアイコン。名前はマウスを乗せると出る（ブラウザの title）。読み込めないときは頭文字 */
 export function HeroIcon({ hero, size = 26, dim = false }: { hero: string; size?: number; dim?: boolean }) {
   const src = heroImage(hero)
   const [failed, setFailed] = useState(false)
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={<span />}
-        className={cn(
-          "inline-grid shrink-0 place-items-center overflow-hidden bg-[#3a3a3a] text-[10px] font-bold text-white",
-          dim && "opacity-45 grayscale"
-        )}
-        style={{ width: size, height: size }}
-        aria-label={hero}
-      >
-        {src && !failed ? (
-          <img src={src} alt="" width={size} height={size} loading="lazy" onError={() => setFailed(true)} className="size-full object-cover" />
-        ) : (
-          heroInitials(hero)
-        )}
-      </TooltipTrigger>
-      <TooltipContent>{hero}</TooltipContent>
-    </Tooltip>
+    <span
+      role="img"
+      title={hero}
+      aria-label={hero}
+      className={cn(
+        "inline-grid shrink-0 place-items-center overflow-hidden bg-[#3a3a3a] text-[10px] font-bold text-white",
+        dim && "opacity-45 grayscale"
+      )}
+      style={{ width: size, height: size }}
+    >
+      {src && !failed ? (
+        <img src={src} alt="" width={size} height={size} loading="lazy" onError={() => setFailed(true)} className="size-full object-cover" />
+      ) : (
+        heroInitials(hero)
+      )}
+    </span>
   )
 }

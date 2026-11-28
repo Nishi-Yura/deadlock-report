@@ -1,6 +1,6 @@
-// ヒーロー名 → アイコン画像（deadlock-api の画像バケット）
-// 新しいヒーローが出たら、statlocker.gg/heroes の画像の URL を見て追加する。
-const BASE = "https://assets-bucket.deadlock-api.com/assets-api-res/images/heroes/"
+// ヒーロー名 → アイコン画像。画像はこのサイトの public/deadlock-report/img/heroes/ にある（npm run assets で取り込む）。
+// 新しいヒーローが出たら、statlocker.gg/heroes の画像の URL からファイル名を見て1行足し、npm run assets を実行する。
+const BASE = "/deadlock-report/img/heroes/"
 
 const FILES: Record<string, string> = {
   Abrams: "bull_mm.webp",

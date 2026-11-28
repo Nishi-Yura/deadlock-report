@@ -281,3 +281,7 @@ export const mapShort = (m: MapData) => `${m.region} ${stageOf(m)} M${m.no}`
 export const mapLink = (ctx: MapCtx) => `/deadlock-report/${ctx.report.id}/#${ctx.map.id}`
 
 export const heroPath = (name: string) => `/deadlock-report/hero/${slug(name)}/`
+
+/** これより少ない回数の勝率は、色を付けずに灰色で出す（たまたまの 100% を強く見せない） */
+export const MIN_HERO = 5 // ヒーロー：ピック回数
+export const MIN_MAPS = 3 // 選手・チーム：マップ数

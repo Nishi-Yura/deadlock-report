@@ -2,7 +2,7 @@ import { HeroIcon, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar, SortTable, type Column } from "@/components/report/sort-table"
 import {
-  allMaps, filterMaps, heroPath, heroTable, latestMatchDate, patches, pct, shortDate, sinceDate, type HeroStat, type HeroTable,
+  allMaps, filterMaps, heroPath, heroTable, latestMatchDate, MIN_HERO, patches, pct, shortDate, sinceDate, type HeroStat, type HeroTable,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 import { Term } from "@/components/report/term"
@@ -41,7 +41,7 @@ export function StatsPage() {
                 <span className="num">{table.maps}</span> マップ（レポート <span className="num">{reportsIn}</span> 本）。
                 <Term k="ban-rate">BAN 率</Term>は配信でドラフトが見えた <span className="num">{table.draftMaps}</span> マップが分母。
               </p>
-              <HeroStatsTable table={table} />
+              <HeroStatsWithNote table={table} />
             </>
           )}
         </Panel>
@@ -77,10 +77,16 @@ const heroCol: Column<{ hero: string }> = {
   ),
 }
 
+/** 勝率。回数が少ない（MIN_HERO 未満）ときは色を付けず灰色にする（たまたまの 100% を強く見せない） */
 function WinRate({ wins, n }: { wins: number; n: number }) {
   if (!n) return <span className="text-mute">–</span>
   const p = pct(wins, n)
+  if (n < MIN_HERO) return <span className="text-mute" title={`${MIN_HERO}回未満`}>{p}%</span>
   return <span className={cn("font-semibold", p > 50 && "text-win", p < 50 && "text-lose")}>{p}%</span>
+}
+
+function SmallNote() {
+  return <p className="m-0 border-t border-line px-4 py-2.5 text-[12px] text-mute">灰色の勝率はピック {MIN_HERO} 回未満。回数が少ないので参考程度に。</p>
 }
 
 function HeroStatsTable({ table }: { table: HeroTable }) {
@@ -126,6 +132,15 @@ function HeroStatsTable({ table }: { table: HeroTable }) {
       minWidth={520}
       caption="ヒーロー別のピック・勝敗・BAN"
     />
+  )
+}
+
+function HeroStatsWithNote({ table }: { table: HeroTable }) {
+  return (
+    <>
+      <HeroStatsTable table={table} />
+      <SmallNote />
+    </>
   )
 }
 
@@ -184,6 +199,7 @@ function Compare({ days, region }: { days: number; region: string }) {
         minWidth={600}
         caption="過去の期間とそれ以前のピック率・勝率・BAN 率"
       />
+      <SmallNote />
     </>
   )
 }

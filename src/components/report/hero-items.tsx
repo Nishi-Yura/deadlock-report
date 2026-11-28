@@ -7,7 +7,7 @@ import { mmss } from "@/lib/trends"
 import { cn } from "@/lib/utils"
 import { Term } from "@/components/report/term"
 
-interface Item {
+export interface Item {
   name: string
   tier: number
   slot: string
@@ -15,11 +15,15 @@ interface Item {
   img: string
 }
 type Buys = Record<string, Record<string, [number, number][]>>
+export interface ItemData {
+  buys: Buys
+  cat: Record<string, Item>
+}
 
-const SLOT: Record<string, string> = { weapon: "武器", vitality: "体力", spirit: "スピリット" }
+export const SLOT: Record<string, string> = { weapon: "武器", vitality: "体力", spirit: "スピリット" }
 const EARLY = 10 * 60
 
-interface Row {
+export interface Row {
   id: number
   item: Item
   n: number
@@ -28,34 +32,19 @@ interface Row {
   first: number
 }
 
-export function HeroItems({
-  hero, maps, title = "プロのアイテム", note, limit = 14,
-}: {
-  hero: string
-  maps: MapCtx[]
-  title?: string
-  /** 表の上の説明。省略するとヒーローページ用の文 */
-  note?: string
-  /** 「よく買われたアイテム」の行数 */
-  limit?: number
-}) {
-  const [data, setData] = useState<{ buys: Buys; cat: Record<string, Item> } | null>(null)
-  useEffect(() => {
-    Promise.all([import("@/items.json"), import("@/item-catalog.json")]).then(([b, c]) =>
-      setData({ buys: b.default as unknown as Buys, cat: c.default as unknown as Record<string, Item> })
-    )
-  }, [])
-  if (!data) {
-    return (
-      <Panel>
-        <Label>{title}</Label>
-        <p className="m-0 px-4 py-3 text-mute">読み込み中…</p>
-      </Panel>
-    )
-  }
+let itemData: Promise<ItemData> | undefined
+/** src/items.json と item-catalog.json を、使うページで初めて読み込む */
+export function loadItemData(): Promise<ItemData> {
+  itemData ??= Promise.all([import("@/items.json"), import("@/item-catalog.json")]).then(([b, c]) => ({
+    buys: b.default as unknown as Buys,
+    cat: c.default as unknown as Record<string, Item>,
+  }))
+  return itemData
+}
 
+/** そのヒーローを使った試合の購入をまとめる。runs は試合の数、opening は「最初の5つによく入るもの（買う順）」 */
+export function proItems(data: ItemData, hero: string, maps: MapCtx[]) {
   const runs = maps.map((x) => data.buys[x.map.matchId]?.[hero]).filter((r): r is [number, number][] => !!r && r.length > 0)
-  if (!runs.length) return null
   const by = new Map<number, { n: number; t: number; early: number; first: number }>()
   for (const run of runs) {
     const sorted = [...run].sort((a, b) => a[0] - b[0])
@@ -71,10 +60,40 @@ export function HeroItems({
   const rows: Row[] = [...by.entries()]
     .filter(([id]) => data.cat[id])
     .map(([id, r]) => ({ id, item: data.cat[id], n: r.n, avgT: r.t / r.n, early: r.early, first: r.first }))
-  const popular = [...rows].sort((a, b) => b.n - a.n || a.avgT - b.avgT).slice(0, limit)
   // 1回しか使っていないときは、その試合で最初に買った5つをそのまま出す
   const minFirst = runs.length === 1 ? 1 : Math.max(2, runs.length * 0.3)
   const opening = [...rows].filter((r) => r.first >= minFirst).sort((a, b) => a.avgT - b.avgT).slice(0, 6)
+  return { runs: runs.length, rows, opening }
+}
+
+export function HeroItems({
+  hero, maps, title = "プロのアイテム", note, limit = 14,
+}: {
+  hero: string
+  maps: MapCtx[]
+  title?: string
+  /** 表の上の説明。省略するとヒーローページ用の文 */
+  note?: string
+  /** 「よく買われたアイテム」の行数 */
+  limit?: number
+}) {
+  const [data, setData] = useState<ItemData | null>(null)
+  useEffect(() => {
+    loadItemData().then(setData)
+  }, [])
+  if (!data) {
+    return (
+      <Panel>
+        <Label>{title}</Label>
+        <p className="m-0 px-4 py-3 text-mute">読み込み中…</p>
+      </Panel>
+    )
+  }
+
+  const { runs: n, rows, opening } = proItems(data, hero, maps)
+  if (!n) return null
+  const runs = { length: n }
+  const popular = [...rows].sort((a, b) => b.n - a.n || a.avgT - b.avgT).slice(0, limit)
 
   return (
     <Panel>
@@ -137,7 +156,7 @@ export function HeroItems({
   )
 }
 
-function ItemIcon({ item }: { item: Item }) {
+export function ItemIcon({ item }: { item: Item }) {
   const [failed, setFailed] = useState(false)
   return (
     <span className="inline-grid size-6 shrink-0 place-items-center overflow-hidden bg-[#3a3a3a]" title={item.name}>

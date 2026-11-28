@@ -134,6 +134,27 @@ for (const name of ["timelines.json", "items.json"]) {
   if (missing.length) err(`src/${name}`, `${missing.length} マップ分がない（${missing.slice(0, 3).join("、")}${missing.length > 3 ? " ほか" : ""}）。npm run timeline を実行してコミットする`)
 }
 
+// ---- アイコン画像がサイトにあるか（npm run assets / npm run timeline が取り込む） ----
+{
+  const img = join(root, "public", "deadlock-report", "img")
+  const heroFiles = [...new Set([...heroesTs.slice(heroesTs.indexOf("FILES")).matchAll(/:\s*"([^"]+\.(?:webp|png))"/g)].map((m) => m[1]))]
+  const noHero = heroFiles.filter((f) => !existsSync(join(img, "heroes", f)))
+  if (noHero.length) err("public/deadlock-report/img/heroes", `${noHero.length} 個ない（${noHero.slice(0, 3).join("、")}）。npm run assets を実行する`)
+  const catFile = join(root, "src", "item-catalog.json")
+  const cat = existsSync(catFile) ? JSON.parse(readFileSync(catFile, "utf8")) : {}
+  const noItem = Object.entries(cat).filter(([, i]) => i.img?.startsWith("/") && !existsSync(join(root, "public", i.img)))
+  if (noItem.length) err("public/deadlock-report/img/items", `${noItem.length} 個ない。npm run assets を実行する`)
+}
+
+// ---- ヒーローのカタカナ（src/hero-kana.ts。サイト内検索用） ----
+{
+  const kanaTs = readFileSync(join(root, "src", "hero-kana.ts"), "utf8")
+  const withKana = new Set([...kanaTs.matchAll(/^\s+(?:"([^"]+)"|([A-Za-z]+)):\s*\[/gm)].map((m) => m[1] ?? m[2]))
+  const used = new Set(reports.flatMap(({ r }) => r.maps.flatMap((m) => m.teams.flatMap((t) => [...t.picks, ...t.bans]))))
+  const missing = [...used].filter((h) => !withKana.has(h))
+  if (missing.length) warn("src/hero-kana.ts", `カタカナがないヒーロー：${missing.join(", ")}（検索でカタカナから見つからない）`)
+}
+
 // ---- 大会の予定（src/schedule.json） ----
 {
   const f = join(root, "src", "schedule.json")

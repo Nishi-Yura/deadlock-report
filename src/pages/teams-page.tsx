@@ -4,7 +4,7 @@ import { SortTable, type Column } from "@/components/report/sort-table"
 import { kills, reportPath, stageOf } from "@/lib/report"
 import {
   filterMaps, heroPath, heroUsage, inDays, mapLink, mapShort, pct, playerPath, playerStats, playerTotals,
-  seriesDate, slug, teamPath, teamStats, wins, type Filter, type TeamStat,
+  MIN_MAPS, seriesDate, slug, teamPath, teamStats, wins, type Filter, type TeamStat,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 import { vsPath } from "@/pages/vs-page"
@@ -72,6 +72,8 @@ export function TeamsPage() {
 
 function WinPct({ w, n }: { w: number; n: number }) {
   const p = pct(w, n)
+  // マップが少ないときは色を付けない（stats.ts の MIN_MAPS）
+  if (n < MIN_MAPS) return <span className="text-mute" title={`${MIN_MAPS}マップ未満`}>{p}%</span>
   return <span className={cn("font-semibold", p > 50 && "text-win", p < 50 && "text-lose")}>{p}%</span>
 }
 

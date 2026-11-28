@@ -3,7 +3,7 @@ import { HeroIcon, Label, Panel, SiteBar, SiteFoot } from "@/components/report/p
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar } from "@/components/report/sort-table"
 import { fmt } from "@/lib/report"
-import { allMaps, filterMaps, heroPath, mapLink, mapShort, pct, teamPath } from "@/lib/stats"
+import { allMaps, filterMaps, heroPath, mapLink, mapShort, pct, teamPath, MIN_HERO } from "@/lib/stats"
 import {
   bansBySide, comebacks, draftedCount, durations, firstMidBoss, firstPickRate, firstPicks, firstTo,
   leaderAt, mmss, pairs, pickOrder, withTimeline, type HeroCount, type Rate,
@@ -47,6 +47,8 @@ export function TrendsPage() {
 
 function RateRow({ label, sub, r }: { label: ReactNode; sub?: ReactNode; r: Rate }) {
   const p = pct(r.win, r.n)
+  // 回数が少ないときは色を付けない
+  const small = r.n > 0 && r.n < MIN_HERO
   return (
     <div className="grid grid-cols-[1fr_auto_auto_44px] items-center gap-3 border-b border-line px-4 py-2 last:border-0 max-sm:grid-cols-[1fr_auto_44px]">
       <div className="min-w-0">
@@ -54,8 +56,8 @@ function RateRow({ label, sub, r }: { label: ReactNode; sub?: ReactNode; r: Rate
         {sub && <div className="text-[11px] text-mute">{sub}</div>}
       </div>
       <span className="num text-[12px] text-mute">{r.n ? `${r.win}-${r.n - r.win}` : "–"}</span>
-      <span className="max-sm:hidden"><Bar value={p} className={p > 50 ? "bg-win" : p < 50 ? "bg-lose" : ""} /></span>
-      <b className={cn("num text-right text-[15px] font-semibold", r.n && p > 50 && "text-win", r.n && p < 50 && "text-lose", !r.n && "text-mute")}>
+      <span className="max-sm:hidden"><Bar value={p} className={small ? "" : p > 50 ? "bg-win" : p < 50 ? "bg-lose" : ""} /></span>
+      <b title={small ? `${MIN_HERO}回未満` : undefined} className={cn("num text-right text-[15px] font-semibold", !small && p > 50 && "text-win", !small && p < 50 && "text-lose", (!r.n || small) && "font-normal text-mute")}>
         {r.n ? `${p}%` : "–"}
       </b>
     </div>

@@ -133,6 +133,18 @@
     @apply text-[11px] font-bold uppercase tracking-[.08em] text-mute;
   }
 
+  /* パネルの出現（src/components/report/parts.tsx の Reveal）。端末で「視差効果を減らす」なら動かさない。
+     ページが見えている状態で開いたときだけ（main.tsx が <html class="anim"> を付ける）。
+     裏のタブで開いたときなどはアニメーションが止まったまま透明になるので、最初から出す */
+  .anim .reveal {
+    animation: reveal 0.3s ease-out both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      animation: none;
+    }
+  }
+
   /* 横スクロールの続きがある側の端を薄くする（src/lib/scroll-hints.ts が data-more を付ける）。
      表の先頭の列は固定表示なので、左側は細く */
   .overflow-x-auto[data-more="right"] {
@@ -143,5 +155,16 @@
   }
   .overflow-x-auto[data-more="both"] {
     mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 40px), transparent);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
