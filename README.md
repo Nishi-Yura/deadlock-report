@@ -1,6 +1,7 @@
 # Deadlock レポートの作り方
 
-`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/teams/`・`/team/<名前>/`・`/players/`・`/player/<名前>/` を作るリポジトリです。
+`https://nishi-yura.github.io/deadlock-report/`（目次）と `/deadlock-report/N/`（各レポート）、それに全レポートをまたぐ `/stats/`（ヒーロー統計）・`/hero/<名前>/`・`/trends/`（試合展開とドラフトの傾向）・`/teams/`・`/team/<名前>/`・`/players/`・`/player/<名前>/`・`/compare/`（自分の試合と比べる）を作るリポジトリです。
+`/compare/` だけはブラウザから Deadlock API を直接読みます（ビルド時のデータは使わない部分がある）。
 サイト本体の `Nishi-Yura.github.io` とは別のリポジトリで、リポジトリ名が `deadlock-report` なので URL もそのまま `/deadlock-report/` になります。
 
 デザインの決まりは [design/DESIGN.md](design/DESIGN.md)。見た目を変えるときは、先にそちらを直してください。
@@ -25,7 +26,7 @@ deadlock-report/
 `npm run build` がやること：
 0. `scripts/validate.mjs` で `reports/*.json` を確かめる。エラーがあればここで止まる（下の ④）
 1. `reports/*.json` を全部読んで、目次とレポートのページを作る（Discord や X に貼ったときのカード用のタグも入る）
-   - カードの画像（1200×630、スコアと見出し）も `scripts/og.mjs` が自動で作る。見た目を確認したいときは `npm run og` を実行して `public/deadlock-report/N/og.png` を開く
+   - カードの画像（1200×630、スコアと見出し）も `scripts/og.mjs` が自動で作る。統計・傾向・チーム・選手・ヒーローの各ページの分も作る（全部で130枚ほど、40秒くらいかかる）。見た目を確認したいときは `npm run og` を実行して `public/deadlock-report/N/og.png` や `public/deadlock-report/team/<名前>/og.png` を開く
    - Discord は一度読んだカードをしばらく覚えているので、公開後に直した内容はすぐには反映されないことがある
    - 更新フィード `feed.xml`（レポートとパッチまとめ）も書く
    - チーム・選手のページは JSON に出てくる名前から自動で作る。名前の綴りがレポートごとに違うと別人・別チームになるので、前のレポートと同じ綴りで書く
@@ -57,7 +58,20 @@ npm run new
 | ピック順・BAN | 配信アーカイブ（YouTube）のドラフト画面。スクショを `img/` に保存 |
 
 ### ③ `reports/N.json` を埋める
-`reports/1.json`（決勝だけ）と `reports/2.json`（予選・チャレンジャーも入り）が完成例です。項目の意味は `src/types.ts` に書いてあります。
+まずマッチ ID から下書きを作ります（地域:ステージ:マッチID をシリーズごとに。マップ番号は書いた順）：
+```powershell
+npm run fill -- 5 EU:決勝:145000001,145000002 EU:チャレンジャー:145000000 NA:決勝:145000010,145000011
+```
+- チーム名・選手・ヒーロー・K/D/A・ソウル・ダメージ・回復・時間・勝者・シリーズのスコアが入る。マップごとの要点（10分・20分のソウル差、Mid-Boss、KDA 最高の選手）も表示されるので `flow` を書くときに使う
+- 前のレポートで見た選手はアカウントから同じ名前とチームになる。初めての選手は Steam 名に `?` を付けて仮に入れ、知らないチームは `?チームA` / `?チームB` になる。EDL.GG のスコアボードを見て置き換える：
+  ```powershell
+  npm run fill -- 5 "?チームB=EGO" "van3k?=vanek"
+  ```
+  `?` が残っていると `npm run validate` がエラーにする。手で直した名前は、もう一度 `fill` しても消えない
+- **ピック順・BAN・先行ピック（`teams[0]`）・`firstPick` は入らない**（API にない）。配信を見て書く。`picks` は使ったヒーローが順不同で入っているので、ピック順に並べ替える
+- あとから `npm run fill -- 5` だけ実行すると、JSON にあるマップを API の値で埋め直す（書いたピック順・BAN・flow は残る）
+
+残りは手で書きます。`reports/1.json`（決勝だけ）と `reports/2.json`（予選・チャレンジャーも入り）が完成例です。項目の意味は `src/types.ts` に書いてあります。
 
 - **決勝以外のシリーズ**：`series` と `maps` に `stage`（"チャレンジャー"、"予選" など）を付ける。付けないと決勝扱い。大会当日以外の試合は `series[].date` も書く。決勝のスコアは大きく出て、その下に地域ごとの勝ち上がり表（予選 → チャレンジャー → 決勝）が自動で描かれる。マップのタブも同じ順でシリーズごとにまとまる。
 - **配信がないマップ**（予選など）：`draftUnknown: true`、`firstPick: ""`、`bans: []`、`picks` には使ったヒーローを順不同で書く。BAN の集計からは外れる。

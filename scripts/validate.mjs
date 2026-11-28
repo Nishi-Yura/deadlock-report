@@ -5,6 +5,7 @@
 import { readFileSync, existsSync } from "node:fs"
 import { join } from "node:path"
 import { root, loadReports, matchInfo, heroNames, heroKey, sides } from "./api.mjs"
+import { slug } from "./slug.mjs"
 
 const useApi = process.argv.includes("--api")
 const errors = []
@@ -23,8 +24,6 @@ const ALIAS = { "The Doorman": "Doorman" }
 
 const FINAL = "決勝"
 const stageOf = (x) => x.stage ?? FINAL
-const slug = (name) =>
-  name.toLowerCase().trim().replace(/[\s&]+/g, "-").replace(/[^a-z0-9_-]/g, "").replace(/-+/g, "-") || "x"
 
 const reports = loadReports()
 const matchIds = new Map()
@@ -100,7 +99,9 @@ for (const { file, r } of reports) {
       if (new Set(t.bans).size !== t.bans.length) err(tw, "BAN が重複")
       const ph = t.players.map((p) => p[1]).sort().join()
       if (ph !== [...t.picks].sort().join()) err(tw, `選手のヒーロー（${ph}）とピック（${[...t.picks].sort().join()}）が違う`)
+      if (/^\?|\?$/.test(t.name)) err(tw, `チーム名 "${t.name}" が仮のまま（npm run fill の置き換えで直す）`)
       for (const p of t.players) {
+        if (/\?$/.test(p[0])) err(tw, `選手名 "${p[0]}" が仮のまま（EDL.GG の名前に直す）`)
         if (p.length !== 8 || p.slice(2).some((n) => typeof n !== "number" || n < 0)) err(tw, `選手の行の形が違う: ${JSON.stringify(p)}`)
         const teams = playerTeams.get(p[0]) ?? new Set()
         teams.add(t.name)

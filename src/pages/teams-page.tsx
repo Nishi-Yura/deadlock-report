@@ -3,7 +3,7 @@ import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { SortTable, type Column } from "@/components/report/sort-table"
 import { kills, reportPath, stageOf } from "@/lib/report"
 import {
-  filterMaps, heroUsage, mapLink, mapShort, pct, periodOf, playerPath, playerStats, playerTotals,
+  filterMaps, heroPath, heroUsage, mapLink, mapShort, pct, periodOf, playerPath, playerStats, playerTotals,
   seriesDate, slug, teamPath, teamStats, wins, type TeamStat,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
@@ -251,7 +251,7 @@ export function HeroList({ rows, plain }: { rows: { hero: string; n: number; win
       {rows.map((h) => (
         <div key={h.hero} className={cn("grid items-center gap-2 px-4 py-[4px] even:bg-cellhover", plain ? "grid-cols-[22px_1fr_24px]" : "grid-cols-[22px_1fr_28px_44px]")}>
           <HeroIcon hero={h.hero} size={22} />
-          <span className="truncate">{h.hero}</span>
+          <a href={heroPath(h.hero)} className="truncate text-ink">{h.hero}</a>
           <span className="num text-right">{h.n}</span>
           {!plain && <span className="num text-right text-mute">{h.win}-{h.n - h.win}</span>}
         </div>

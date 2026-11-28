@@ -3,10 +3,12 @@ import { useEffect, useState } from "react"
 import { latestPatch, regions, shortDate, type Filter, type Period } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 
-export function useQueryState<T extends string>(key: string, initial: T, allowed: readonly T[]) {
+/** allowed は使える値の一覧か、値を確かめる関数 */
+export function useQueryState<T extends string>(key: string, initial: T, allowed: readonly T[] | ((v: string) => boolean)) {
   const read = () => {
     const v = new URLSearchParams(location.search).get(key) as T | null
-    return v && allowed.includes(v) ? v : initial
+    const ok = typeof allowed === "function" ? (x: string) => allowed(x) : (x: string) => allowed.includes(x as T)
+    return v && ok(v) ? v : initial
   }
   const [value, setValue] = useState<T>(read)
   useEffect(() => {

@@ -2,7 +2,7 @@ import { HeroIcon, Panel, SiteBar, SiteFoot } from "@/components/report/parts"
 import { asFilter, FilterBar, useFilter } from "@/components/report/filters"
 import { Bar, SortTable, type Column } from "@/components/report/sort-table"
 import {
-  allMaps, filterMaps, heroTable, latestPatch, pct, shortDate, type HeroStat, type HeroTable,
+  allMaps, filterMaps, heroPath, heroTable, latestPatch, pct, shortDate, type HeroStat, type HeroTable,
 } from "@/lib/stats"
 import { cn } from "@/lib/utils"
 
@@ -62,7 +62,7 @@ const heroCol: Column<{ hero: string }> = {
   render: (r) => (
     <span className="flex items-center gap-2">
       <HeroIcon hero={r.hero} size={24} />
-      <span className="max-w-[104px] truncate font-sans max-sm:max-w-[76px]">{r.hero}</span>
+      <a href={heroPath(r.hero)} className="max-w-[104px] truncate font-sans text-ink max-sm:max-w-[76px]">{r.hero}</a>
     </span>
   ),
 }

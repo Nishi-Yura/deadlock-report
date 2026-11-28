@@ -259,3 +259,5 @@ export const mapShort = (m: MapData) => `${m.region} ${stageOf(m)} M${m.no}`
 
 /** レポートのそのマップへのリンク */
 export const mapLink = (ctx: MapCtx) => `/deadlock-report/${ctx.report.id}/#${ctx.map.id}`
+
+export const heroPath = (name: string) => `/deadlock-report/hero/${slug(name)}/`

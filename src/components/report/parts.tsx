@@ -9,8 +9,10 @@ import { cn } from "@/lib/utils"
 /** サイト共通の上部バー */
 const NAV = [
   { key: "stats", href: "/deadlock-report/stats/", label: "ヒーロー" },
+  { key: "trends", href: "/deadlock-report/trends/", label: "傾向" },
   { key: "teams", href: "/deadlock-report/teams/", label: "チーム" },
   { key: "players", href: "/deadlock-report/players/", label: "選手" },
+  { key: "compare", href: "/deadlock-report/compare/", label: "比べる" },
 ] as const
 
 export type NavKey = (typeof NAV)[number]["key"]
@@ -19,7 +21,7 @@ export function SiteBar({ current }: { current?: NavKey } = {}) {
   const link = "py-3.5 text-panel hover:no-underline hover:underline-offset-4 hover:[text-decoration-line:underline]"
   return (
     <header className="bg-ink text-panel">
-      <nav className="mx-auto flex max-w-[760px] items-center gap-4 overflow-x-auto px-4 text-[12px] whitespace-nowrap [scrollbar-width:none]">
+      <nav className="mx-auto flex max-w-[760px] items-center gap-4 overflow-x-auto max-sm:gap-3 px-4 text-[12px] whitespace-nowrap [scrollbar-width:none]">
         <a href="/deadlock-report/" className={cn(link, "mr-auto font-bold")}>Deadlock レポート</a>
         {NAV.map((n) => (
           <a
