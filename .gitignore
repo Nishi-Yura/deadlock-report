@@ -5,3 +5,4 @@ public/deadlock-report/**/og.png
 public/deadlock-report/og.png
 public/deadlock-report/feed.xml
 .cache
+*.tsbuildinfo
